@@ -21,6 +21,7 @@ namespace MyInvestAPI.ViewModels
             user.Password = this.Password;
             user.Email = this.Email;
             user.Phone = this.Phone;
+            user.LastUpdatedAt = DateTime.UtcNow;
             return user;
         }
     }

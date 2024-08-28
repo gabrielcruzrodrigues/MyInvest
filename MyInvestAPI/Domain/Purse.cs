@@ -24,5 +24,17 @@ namespace MyInvestAPI.Domain
         public User? User { get; set; }
 
         public ICollection<Active> Actives { get; set; } = new List<Active>();
+
+        public Purse()
+        { }
+
+        public Purse(string description, int user_id)
+        {
+            this.Description = description;
+            this.CreatedAt = DateTime.UtcNow;
+            this.LastUpdatedAt = DateTime.UtcNow;
+            this.User_Id = user_id;
+            this.Actives = new List<Active>();
+        }
     }
 }

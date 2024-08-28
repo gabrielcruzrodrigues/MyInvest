@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MyInvestAPI.Domain
 {
@@ -16,6 +17,7 @@ namespace MyInvestAPI.Domain
         [Required]
         [StringLength(80)]
         [MinLength(8)]
+        [JsonIgnore]
         public string? Password { get; set; }
 
         [Required]

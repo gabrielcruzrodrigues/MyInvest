@@ -45,6 +45,15 @@ namespace MyInvestAPI.Controllers
                 .ToListAsync();
         }
 
+        [HttpGet("purses")]
+        public async Task<IEnumerable<User>> GetAllUsersWithPurses()
+        {
+            return await _context.Users
+                .Include(user => user.Purses)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         [HttpGet("{id:int}", Name ="GetUser")]
         public async Task<ActionResult<User>> GetById(int id)
         {
@@ -57,6 +66,21 @@ namespace MyInvestAPI.Controllers
 
             return Ok(user);
         }
+
+        [HttpGet("{id:int}/purses")]
+        public async Task<ActionResult<User>> GetUserWithAllPurses(int id)
+        {
+            var user = await _context.Users
+                .AsNoTracking()
+                .Include(user => user.Purses)
+                .FirstOrDefaultAsync(user => user.User_Id.Equals(id));
+
+            if (user is null)
+                return NotFound("User not found.");
+
+            return Ok(user);
+        }
+
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, CreateUserViewModel userViewModel)
@@ -72,8 +96,7 @@ namespace MyInvestAPI.Controllers
             User user = userViewModel.UpdateUser(userVerify);
 
             try
-            {
-                user.LastUpdatedAt = DateTime.UtcNow;
+            { 
                 _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
