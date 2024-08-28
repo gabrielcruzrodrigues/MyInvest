@@ -46,11 +46,34 @@ namespace MyInvestAPI.Controllers
                 .ToListAsync();
         }
 
+        [HttpGet("actives")]
+        public async Task<ActionResult<IEnumerable<Purse>>> GetAllWithActives()
+        {
+            return await _context.Purses
+                .Include(purse => purse.Actives)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         [HttpGet("{id:int}", Name = "GetPurse")]
         public async Task<ActionResult<Purse>> getById(int id)
         {
             var purse = await _context.Purses
                 .AsNoTracking()
+                .FirstOrDefaultAsync(purse => purse.Purse_Id == id);
+
+            if (purse is null)
+                return NotFound($"Purse with id {id} not found.");
+
+            return Ok(purse);
+        }
+
+        [HttpGet("{id:int}/actives")]
+        public async Task<ActionResult<Purse>> getByIdWithActives(int id)
+        {
+            var purse = await _context.Purses
+                .AsNoTracking()
+                .Include(purse => purse.Actives)
                 .FirstOrDefaultAsync(purse => purse.Purse_Id == id);
 
             if (purse is null)

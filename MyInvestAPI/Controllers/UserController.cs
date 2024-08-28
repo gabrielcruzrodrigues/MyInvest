@@ -54,6 +54,16 @@ namespace MyInvestAPI.Controllers
                 .ToListAsync();
         }
 
+        [HttpGet("purses/actives")]
+        public async Task<IEnumerable<User>> GetAllUsersWithPursesAndActives()
+        {
+            return await _context.Users
+                .Include(user => user.Purses)
+                    .ThenInclude(purse => purse.Actives)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         [HttpGet("{id:int}", Name ="GetUser")]
         public async Task<ActionResult<User>> GetById(int id)
         {
@@ -73,6 +83,21 @@ namespace MyInvestAPI.Controllers
             var user = await _context.Users
                 .AsNoTracking()
                 .Include(user => user.Purses)
+                .FirstOrDefaultAsync(user => user.User_Id.Equals(id));
+
+            if (user is null)
+                return NotFound("User not found.");
+
+            return Ok(user);
+        }
+
+        [HttpGet("{id:int}/purses/actives")]
+        public async Task<ActionResult<User>> GetUserWithAllPursesAndActives(int id)
+        {
+            var user = await _context.Users
+                .AsNoTracking()
+                .Include(user => user.Purses)
+                    .ThenInclude(purse => purse.Actives)
                 .FirstOrDefaultAsync(user => user.User_Id.Equals(id));
 
             if (user is null)
