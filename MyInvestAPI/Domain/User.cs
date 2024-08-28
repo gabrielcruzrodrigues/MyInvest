@@ -32,5 +32,19 @@ namespace MyInvestAPI.Domain
         public DateTime LastUpdatedAt { get; set; }
 
         public ICollection<Purse>? Purses { get; set; }
+
+        public User()
+        { }
+
+        public User(string name, string password, string email, string phone)
+        {
+            this.Name = name;
+            this.Password = password;
+            this.Email = email;
+            this.Phone = phone;
+            this.CreatedAt = DateTime.UtcNow;
+            this.LastUpdatedAt = DateTime.UtcNow;
+            this.Purses = new List<Purse>();
+        }
     }
 }

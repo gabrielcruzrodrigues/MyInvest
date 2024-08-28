@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace MyInvestAPI.Domain
@@ -16,6 +17,7 @@ namespace MyInvestAPI.Domain
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
 
+        [ForeignKey("User")]
         public int User_Id { get; set; }
 
         [JsonIgnore]

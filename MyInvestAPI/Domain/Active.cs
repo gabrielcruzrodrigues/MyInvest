@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MyInvestAPI.Domain
 {
@@ -6,12 +7,16 @@ namespace MyInvestAPI.Domain
     {
         [Key]
         public int Active_Id { get; set; }
+        [Required]
         public string? Code { get; set; }
+        [Required]
+        [StringLength(300)]
         public string? Description { get; set; }
+        [Required]
         public TypeEnum type { get; set; }
+        [Required]
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
-
         public ICollection<Purse> Purses { get; set; } = new List<Purse>();
     } 
 }

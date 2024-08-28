@@ -1,11 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Data;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => 
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -14,8 +17,6 @@ string postgreSqlConnection = builder.Configuration.GetConnectionString("Default
 
 builder.Services.AddDbContext<MyInvestContext>(options =>
     options.UseNpgsql(postgreSqlConnection));
-
-builder.Services.AddControllers();
 
 var app = builder.Build();
 
