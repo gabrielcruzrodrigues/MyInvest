@@ -1,0 +1,13 @@
+services:
+  web:
+    build: ./src/MyInvestApi
+    ports:
+      - "8080:80"
+    networks:
+      - mynetwork
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+networks:
+  mynetwork:
+    driver: bridge
