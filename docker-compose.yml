@@ -1,12 +1,27 @@
 services:
-  web:
-    build: ./src/MyInvestApi
+  postgres-db:
+    image: postgres:15
     ports:
-      - "8080:80"
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=MyInvestDB
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+    networks:
+      - mynetwork
+
+  api:
+    build: 
+      context: ./MyInvestAPI
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-db
     networks:
       - mynetwork
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
 
 networks:
   mynetwork:
