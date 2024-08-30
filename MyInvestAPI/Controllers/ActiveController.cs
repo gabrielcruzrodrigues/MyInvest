@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MyInvestAPI.Api;
 using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
 using MyInvestAPI.ViewModels;
@@ -130,6 +131,12 @@ namespace MyInvestAPI.Controllers
             {
                 return BadRequest("An error occured when tryning to delete the user");
             }
+        }
+
+        [HttpGet("/finances")]
+        public async Task<string> GetActivesInfo()
+        {
+            return await YahooFinanceApiClient.Operations();
         }
     }
 }

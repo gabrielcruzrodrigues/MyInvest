@@ -31,8 +31,8 @@ using (var scope = app.Services.CreateScope())
     context.Database.Migrate();
 }
 
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     {
         app.UseSwagger();
         app.UseSwaggerUI(c =>
