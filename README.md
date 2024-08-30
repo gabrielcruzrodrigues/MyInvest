@@ -1,4 +1,4 @@
-# MyInvestAPI
+# MyInvest
 API REST com o objetivo de fornecer informações sobre carteira de ativos de usuários cadastrados, como o preço-teto (modelo de Bazin) e, se estiver abaixo do preço atual, sugerir ou não a compra do ativo.
 
 ## Como rodar o projeto:
@@ -9,7 +9,7 @@ https://github.com/gabrielcruzrodrigues/MyInvestAPI.git
 ```
 3. Acesse a pasta do projeto:
 ```
-cd MyInvestAPI/
+cd MyInvest/
 ```
 4. Execute o comando para acionar o Docker-compose:
 ```
