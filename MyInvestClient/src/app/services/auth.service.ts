@@ -24,4 +24,12 @@ export class AuthService {
     }
     return true;
   }
+
+  getId() {
+    if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
+      const userId = localStorage.getItem('userId');
+      return userId !== null ? userId : '';
+    }
+    return ''; 
+  }
 }

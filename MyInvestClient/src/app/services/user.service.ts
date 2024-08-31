@@ -12,12 +12,17 @@ export class UserService {
     private http: HttpClient
   ) { }
 
-  url: string = development_environments.url + "/User";
+  url: string = development_environments.url + "/user";
 
   create(data: any): Observable<any>
   {
-    const urlForRequest = this.url + "/user"
     return this.http.post(this.url, data, {observe: 'response'});
+  }
+
+  getPurses(userId: any): Observable<any>
+  {
+    const urlForRequest = this.url + `/${userId}/purses`;
+    return this.http.get(urlForRequest, {observe: 'response'});
   }
 
 }

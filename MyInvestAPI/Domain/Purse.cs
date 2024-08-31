@@ -30,8 +30,9 @@ namespace MyInvestAPI.Domain
         public Purse()
         { }
 
-        public Purse(string description, int user_id)
+        public Purse(string name, string description, int user_id)
         {
+            this.Name = name;
             this.Description = description;
             this.CreatedAt = DateTime.UtcNow;
             this.LastUpdatedAt = DateTime.UtcNow;
