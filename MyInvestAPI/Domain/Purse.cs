@@ -8,6 +8,8 @@ namespace MyInvestAPI.Domain
     {
         [Key]
         public int Purse_Id { get; set; }
+        [Required]
+        public string? Name { get; set; }
 
         [Required]
         [StringLength(300)]
