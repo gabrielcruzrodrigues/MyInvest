@@ -9,6 +9,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(options => 
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
+//cors
+var OriginsWithAllowedAccess = "OriginsWithAllowedAccess";
+
+builder.Services.AddCors(options =>
+    options.AddPolicy(name: OriginsWithAllowedAccess,
+    policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+            .WithHeaders("Content-Type");
+    })
+);
+
 //Disable the automatic redirect to Https
 builder.Services.AddHttpsRedirection(options => options.HttpsPort = null);
 
@@ -16,6 +28,8 @@ builder.Services.AddHttpsRedirection(options => options.HttpsPort = null);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+//database
 string postgreSqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<MyInvestContext>(options =>
@@ -43,6 +57,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
     }
 
 //app.UseHttpsRedirection();
+app.UseCors(OriginsWithAllowedAccess);
 
 app.UseAuthorization();
 

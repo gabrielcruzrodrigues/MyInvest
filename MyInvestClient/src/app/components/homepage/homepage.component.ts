@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavbarComponent } from '../layout/navbar/navbar.component';
-
 @Component({
   selector: 'app-homepage',
   standalone: true,
@@ -11,5 +10,5 @@ import { NavbarComponent } from '../layout/navbar/navbar.component';
   styleUrl: './homepage.component.scss'
 })
 export class HomepageComponent {
-
+  
 }
