@@ -53,7 +53,6 @@ export class CreateAccountComponent implements OnInit{
         },
         error: (error) => {
           alert("Ocorreu um erro ao tentar criar o usuário.");
-          console.log(error);
         }
       })
     }

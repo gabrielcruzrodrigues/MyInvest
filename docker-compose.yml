@@ -22,6 +22,17 @@ services:
       - mynetwork
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
+  
+  client:
+    build:
+      context: ./MyInvestClient
+      dockerfile: Dockerfile
+    ports:
+     - "9090:9090"
+    depends_on:
+      - api
+    networks:
+      - mynetwork
 
 networks:
   mynetwork:

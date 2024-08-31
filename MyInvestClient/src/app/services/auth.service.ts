@@ -11,7 +11,7 @@ export class AuthService {
   {
     if (body) 
     {
-      localStorage.setItem('userId', body.User_Id);
+      localStorage.setItem('userId', body.user_Id);
     }
   }
 

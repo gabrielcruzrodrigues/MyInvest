@@ -16,8 +16,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: OriginsWithAllowedAccess,
     policy =>
     {
-        policy.WithOrigins("http://localhost:4200")
+        policy.WithOrigins("http://localhost:4200", "http://localhost:9090")
             .WithHeaders("Content-Type");
+
     })
 );
 
