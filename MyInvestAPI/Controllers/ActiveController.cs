@@ -142,7 +142,7 @@ namespace MyInvestAPI.Controllers
             }
             catch(Exception)
             {
-                return BadRequest("The active not found!");
+                return NotFound("The active not found!");
             }
         }
     }

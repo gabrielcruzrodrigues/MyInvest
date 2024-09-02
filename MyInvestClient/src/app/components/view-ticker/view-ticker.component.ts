@@ -1,0 +1,93 @@
+import { Component, OnInit } from '@angular/core';
+import { ActiveService } from '../../services/active.service';
+import { AuthService } from '../../services/auth.service';
+import { ActivatedRoute } from '@angular/router';
+import { HttpResponse } from '@angular/common/http';
+
+interface Active {
+  data: string,
+  ativo: string,
+  nomeDoAtivo: string,
+  tipo: string,
+  dividentYield: string,
+  precoAtual: string,
+  p_VP: string,
+  preco_Teto: string,
+  indicacao: string,
+  p_L: string,
+  roe: string,
+  crecimentoDeDividendos: string
+}
+
+@Component({
+  selector: 'app-view-ticker',
+  standalone: true,
+  imports: [],
+  templateUrl: './view-ticker.component.html',
+  styleUrl: './view-ticker.component.scss'
+})
+export class ViewTickerComponent implements OnInit{
+  userId: string = '';
+  activeName: string = '';
+  active: Active = {
+    data: '',
+    ativo: '',
+    nomeDoAtivo: '',
+    tipo: '',
+    dividentYield: '',
+    precoAtual: '',
+    p_VP: '',
+    preco_Teto: '',
+    indicacao: '',
+    p_L: '',
+    roe: '',
+    crecimentoDeDividendos: ''
+  }
+
+  constructor(
+    private activeService: ActiveService,
+    private authService: AuthService,
+    private activedRoute: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.userId = this.authService.getId();
+    var param = this.activedRoute.snapshot.paramMap.get('name');
+
+    param !== null ? this.activeName = param : alert("Aconteceu um erro ao tentar buscar o ticker!");
+
+    this.activeService.search(this.activeName).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.status === 200)
+        {
+          this.populateActiveFields(response.body);
+        }
+        else 
+        {
+          alert("Ocorreu um erro interno no sistema!");
+        }
+      },
+      error: (err) => {
+        alert("Aconteceu um erro ao tentar buscar o ticker!");
+      }
+    })
+  }
+
+  populateActiveFields(body: any): void
+  {
+    this.active = {
+      data: body.data || '',
+      ativo: body.ativo || '',
+      nomeDoAtivo: body.nomeDoAtivo || '',
+      tipo: body.tipo || '',
+      dividentYield: body.dividentYield || '',
+      precoAtual: body.precoAtual || '',
+      p_VP: body.p_VP || '',
+      preco_Teto: body.preco_Teto || '',
+      indicacao: body.indicacao || '',
+      p_L: body.p_L || '',
+      roe: body.roe || '',
+      crecimentoDeDividendos: body.crecimentoDeDividendos || ''
+    } 
+  }
+}

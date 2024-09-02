@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActiveService } from '../../services/active.service';
 import { HttpResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-ticker',
@@ -16,7 +17,8 @@ export class SearchTickerComponent {
 
   constructor(
     private fb: FormBuilder,
-    private activeService: ActiveService
+    private activeService: ActiveService,
+    private route: Router
   ) {
     this.form = this.fb.group({
       name: ['', Validators.required]
@@ -31,10 +33,16 @@ export class SearchTickerComponent {
         next: (response: HttpResponse<any>) => {
           if (response.status === 200)
           {
-            console.log(response);
+            var name = this.form.get('name')?.value;
+            this.route.navigate(["/view-ticker/" + name]);
           }
         },
         error: (err) => {
+          if (err.status === 404)
+          {
+            alert("Não foi encontrado nenhum ativo com o ticker informado.");
+            return;
+          }
           console.log(err);
         }
       })

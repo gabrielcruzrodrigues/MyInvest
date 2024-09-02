@@ -4,10 +4,11 @@ import { CreateAccountComponent } from './components/create-account/create-accou
 import { ViewPursesComponent } from './components/view-purses/view-purses.component';
 import { CreatePurseComponent } from './components/create-purse/create-purse.component';
 import { SearchTickerComponent } from './components/search-ticker/search-ticker.component';
+import { ViewTickerComponent } from './components/view-ticker/view-ticker.component';
 
 export const routes: Routes = [
      {
-          path: '', component: HomepageComponent
+          path: '', component: SearchTickerComponent
      },
      {
           path: 'create-account', component: CreateAccountComponent
@@ -20,5 +21,8 @@ export const routes: Routes = [
      },
      {
           path: 'search-ticker', component: SearchTickerComponent
+     },
+     {
+          path: 'view-ticker/:name', component: ViewTickerComponent
      }
 ];
