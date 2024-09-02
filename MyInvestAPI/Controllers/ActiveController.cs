@@ -133,10 +133,17 @@ namespace MyInvestAPI.Controllers
             }
         }
 
-        [HttpGet("/finances")]
-        public async Task<string> GetActivesInfo()
+        [HttpGet("/search-active/{active}")]
+        public async Task<ActionResult<ActiveReturn>> GetActive(string active)
         {
-            return await YahooFinanceApiClient.Operations();
+            try
+            {
+                return await YahooFinanceApiClient.GetActive(active);
+            }
+            catch(Exception)
+            {
+                return BadRequest("The active not found!");
+            }
         }
     }
 }

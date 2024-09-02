@@ -2,16 +2,16 @@
 {
     public class ActiveReturn
     {
-        public DateOnly Data { get; set; }
+        public string? Data { get; set; }
         public string? Ativo { get; set; }
         public string? NomeDoAtivo { get; set; }
-        public TypeEnum Tipo { get; set; }
-        public double DividentYield { get; set; }
-        public decimal PrecoAtual { get; set; }
-        public double P_VP { get; set; }
-        public decimal Preco_Teto { get; set; }
-        public bool Indicacao { get; set; }
-        public double P_L { get; set; }
+        public string? Tipo { get; set; }
+        public string? DividentYield { get; set; }
+        public string? PrecoAtual { get; set; }
+        public string? P_VP { get; set; }
+        public string? Preco_Teto { get; set; }
+        public string? Indicacao { get; set; }
+        public string? P_L { get; set; }
         public double ROE { get; set; }
         public double CrecimentoDeDividendos { get; set; }
     }

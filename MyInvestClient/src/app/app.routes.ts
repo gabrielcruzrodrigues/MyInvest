@@ -3,6 +3,7 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 import { CreateAccountComponent } from './components/create-account/create-account.component';
 import { ViewPursesComponent } from './components/view-purses/view-purses.component';
 import { CreatePurseComponent } from './components/create-purse/create-purse.component';
+import { SearchTickerComponent } from './components/search-ticker/search-ticker.component';
 
 export const routes: Routes = [
      {
@@ -16,5 +17,8 @@ export const routes: Routes = [
      },
      {
           path: 'create-purse', component: CreatePurseComponent
+     },
+     {
+          path: 'search-ticker', component: SearchTickerComponent
      }
 ];
