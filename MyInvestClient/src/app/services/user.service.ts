@@ -24,5 +24,4 @@ export class UserService {
     const urlForRequest = this.url + `/${userId}/purses`;
     return this.http.get(urlForRequest, {observe: 'response'});
   }
-
 }

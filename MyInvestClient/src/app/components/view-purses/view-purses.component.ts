@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NavbarComponent } from '../layout/navbar/navbar.component';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
@@ -17,21 +17,15 @@ interface Purse {
   selector: 'app-view-purses',
   standalone: true,
   imports: [
-    NavbarComponent, CommonModule
+    CommonModule
   ],
   templateUrl: './view-purses.component.html',
   styleUrl: './view-purses.component.scss'
 })
 export class ViewPursesComponent implements OnInit{
-  purse: Purse = {
-    purse_Id: 1,
-    name: "Luxury Leather Bag",
-    description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
-    createdAt: "2024-08-31T10:00:00Z",
-  }
   userId: string = '';
   purses: Purse[] = [];
-
+  @ViewChild('message', { static: false }) message!: ElementRef;
 
   constructor(
     private authService: AuthService,
@@ -40,42 +34,48 @@ export class ViewPursesComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
-    // this.purses.push(this.purse, this.purse, this.purse, this.purse);
-    // if (!this.authService.verifyIfUserIdLogged())
-    // {
-    //   this.route.navigate(["/create-account"])
-    // }
+    if (!this.authService.verifyIfUserIdLogged())
+    {
+      this.route.navigate(["/create-account"])
+      return;
+    }
+
     this.userId = this.authService.getId();
     this.userService.getPurses(this.userId).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log(response);
         if (response.status === 200)
         {
           this.refactorDateAndPushToArray(response.body.purses)
         }
       },
       error: (err) => {
-        alert("Houve um erro ao tentar buscar as carteiras do usuário.");
-        console.log(err);
+        console.log("Houve um erro ao tentar buscar as carteiras do usuário: " + err);
       }
     })
   }
 
   refactorDateAndPushToArray(purses: any): void 
   {
-    purses.forEach((purse: Purse) => {
-      const date = new Date(purse.createdAt);
-      purse.createdAt = date.toLocaleDateString('pt-BR');
-      this.purses.push(purse);
-    });
+    if (purses.length > 0) 
+    {
+      purses.forEach((purse: Purse) => {
+        const date = new Date(purse.createdAt);
+        purse.createdAt = date.toLocaleDateString('pt-BR');
+        this.purses.push(purse);
+      });
+    }
+    else {
+      this.message.nativeElement.classList.add('active');
+    }
   }
 
-  redirectToPurse()
+  redirectToPurse(purseId: number)
   {
-
+    // this.route.navigate(["/create-purse"])
   }
 
-
-
-
+  createPurse(): void 
+  {
+    this.route.navigate(["/create-purse"]);
+  }
 }

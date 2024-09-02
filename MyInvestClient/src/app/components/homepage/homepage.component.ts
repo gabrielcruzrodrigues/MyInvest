@@ -4,7 +4,7 @@ import { NavbarComponent } from '../layout/navbar/navbar.component';
   selector: 'app-homepage',
   standalone: true,
   imports: [
-    NavbarComponent
+    
   ],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss'

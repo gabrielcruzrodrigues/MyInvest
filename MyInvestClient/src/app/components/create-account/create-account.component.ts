@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-create-account',
   standalone: true,
-  imports: [NavbarComponent, ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './create-account.component.html',
   styleUrl: './create-account.component.scss'
 })

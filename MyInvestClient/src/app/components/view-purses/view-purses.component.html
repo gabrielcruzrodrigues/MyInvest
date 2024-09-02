@@ -1,11 +1,12 @@
-<app-navbar></app-navbar>
-
 <section class="main-section">
      <h1>Minhas carteiras</h1>
 
+     <div class="message" #message>
+          <p>Você não tem carteiras cadastradas...</p>
+     </div>
      <div class="cards">
           <ng-container class="container" *ngFor="let purse of purses">
-               <div class="card" (click)="redirectToPurse()">
+               <div class="card" (click)="redirectToPurse(purse.purse_Id)">
                     <div class="title">
                          <img src="/assets/purse.png">
                          <p>{{ purse.name }}</p>
@@ -17,7 +18,8 @@
                </div>
           </ng-container>
      </div>
+
 </section>
-<div class="add">
+<div class="add" (click)="createPurse()">
      <img src="/assets/add.png" class="add-icon">
 </div>

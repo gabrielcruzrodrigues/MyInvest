@@ -78,6 +78,17 @@
      width: 80px;
 }
 
+.message {
+     text-align: center;
+     font-size: 18px;
+     color: #272727;
+     display: none;
+}
+
+.message.active {
+     display: block;
+}
+
 @media (min-width: 910px)
 {
      .cards {

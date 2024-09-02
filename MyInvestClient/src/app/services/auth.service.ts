@@ -18,11 +18,12 @@ export class AuthService {
   verifyIfUserIdLogged() : boolean
   {
     if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
-      if (!localStorage.getItem('userId')) {
-        return false
+      var userId = localStorage.getItem('userId');
+      if (userId != null) {
+        return true;
       };
     }
-    return true;
+    return false;
   }
 
   getId() {
