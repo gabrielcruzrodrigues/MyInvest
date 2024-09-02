@@ -11,7 +11,9 @@
 
 .main-section {
      width: 100%;
-     padding: 2% 10%;
+     height: 600px;
+     margin: 5% auto;
+     padding: 2% 5%;
      animation: fadeIn 0.2s ease-in;
 }
 
@@ -37,7 +39,7 @@
 }
 
 .main-section form {
-     margin-top: 60px;
+     margin-top: 40px;
 }
 
 .main-section input {
@@ -88,5 +90,9 @@
           width: 740px;
           margin: 0 auto;
           display: block;
+     }
+
+     .main-section button {
+          width: 740px;
      }
 }

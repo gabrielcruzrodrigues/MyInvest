@@ -51,6 +51,16 @@
        </thead>
      </table>
 
+     <div class="purses">
+      <label for="purseSelect">Selecione uma carteira:</label>
+      <select id="purseSelect">
+        <option value="" disabled selected>Clique para selecionar</option>
+        <option *ngFor="let purse of purses" [value]="purse.id">
+          {{ purse.name }}
+        </option>
+      </select>
+     </div>
+
      <button>Comprar ativo</button>
    </section>
    

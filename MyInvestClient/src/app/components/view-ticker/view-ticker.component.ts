@@ -3,6 +3,8 @@ import { ActiveService } from '../../services/active.service';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
+import { UserService } from '../../services/user.service';
+import { CommonModule } from '@angular/common';
 
 interface Active {
   data: string,
@@ -19,16 +21,23 @@ interface Active {
   crecimentoDeDividendos: string
 }
 
+interface Purse {
+  id: string,
+  name: string
+}
+
 @Component({
   selector: 'app-view-ticker',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './view-ticker.component.html',
   styleUrl: './view-ticker.component.scss'
 })
 export class ViewTickerComponent implements OnInit{
   userId: string = '';
   activeName: string = '';
+  purses: Purse[] = [];
+
   active: Active = {
     data: '',
     ativo: '',
@@ -47,7 +56,8 @@ export class ViewTickerComponent implements OnInit{
   constructor(
     private activeService: ActiveService,
     private authService: AuthService,
-    private activedRoute: ActivatedRoute
+    private activedRoute: ActivatedRoute,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +79,24 @@ export class ViewTickerComponent implements OnInit{
       },
       error: (err) => {
         alert("Aconteceu um erro ao tentar buscar o ticker!");
+      }
+    })
+    
+    this.userService.getPurses(this.userId).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.status === 200)
+        {
+          response.body.purses.forEach((purse: any) => {
+            const newPurse: Purse = {
+              id: purse.purse_Id,
+              name: purse.name
+            };
+            this.purses.push(newPurse);
+          });
+        }
+      },
+      error: (err) => {
+        // console.log(err);
       }
     })
   }

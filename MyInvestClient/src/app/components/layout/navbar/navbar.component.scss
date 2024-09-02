@@ -6,6 +6,11 @@ a {
      color: white;
 }
 
+.logo {
+     width: 80px;
+     cursor: pointer;
+}
+
 .header {
      background-color: $primary-color;
      padding-inline: 16px;
