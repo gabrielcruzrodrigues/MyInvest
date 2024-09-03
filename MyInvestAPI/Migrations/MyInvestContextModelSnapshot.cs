@@ -52,16 +52,12 @@ namespace MyInvestAPI.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("type")
-                        .HasColumnType("integer");
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Active_Id");
 

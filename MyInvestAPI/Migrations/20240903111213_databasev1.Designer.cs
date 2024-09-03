@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyInvestAPI.Migrations
 {
     [DbContext(typeof(MyInvestContext))]
-    [Migration("20240828131641_refactorActive")]
-    partial class refactorActive
+    [Migration("20240903111213_databasev1")]
+    partial class databasev1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,16 +55,12 @@ namespace MyInvestAPI.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("character varying(300)");
-
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("type")
-                        .HasColumnType("integer");
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Active_Id");
 
@@ -90,15 +86,16 @@ namespace MyInvestAPI.Migrations
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("User_Id")
-                        .HasColumnType("integer");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<int?>("User_Id1")
+                    b.Property<int>("User_Id")
                         .HasColumnType("integer");
 
                     b.HasKey("Purse_Id");
 
-                    b.HasIndex("User_Id1");
+                    b.HasIndex("User_Id");
 
                     b.ToTable("Purses");
                 });
@@ -161,7 +158,9 @@ namespace MyInvestAPI.Migrations
                 {
                     b.HasOne("MyInvestAPI.Domain.User", "User")
                         .WithMany("Purses")
-                        .HasForeignKey("User_Id1");
+                        .HasForeignKey("User_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

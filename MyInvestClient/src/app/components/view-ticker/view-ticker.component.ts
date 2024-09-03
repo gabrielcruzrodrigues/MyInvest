@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActiveService } from '../../services/active.service';
 import { AuthService } from '../../services/auth.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 interface Active {
   data: string,
@@ -29,7 +30,7 @@ interface Purse {
 @Component({
   selector: 'app-view-ticker',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './view-ticker.component.html',
   styleUrl: './view-ticker.component.scss'
 })
@@ -37,6 +38,8 @@ export class ViewTickerComponent implements OnInit{
   userId: string = '';
   activeName: string = '';
   purses: Purse[] = [];
+  selectedPurseId: string = '';
+  @ViewChild('containerError', { static : false }) containerError!: ElementRef;
 
   active: Active = {
     data: '',
@@ -57,7 +60,8 @@ export class ViewTickerComponent implements OnInit{
     private activeService: ActiveService,
     private authService: AuthService,
     private activedRoute: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -117,5 +121,26 @@ export class ViewTickerComponent implements OnInit{
       roe: body.roe || '',
       crecimentoDeDividendos: body.crecimentoDeDividendos || ''
     } 
+  }
+
+  buyActive(): void 
+  {
+    if (this.selectedPurseId !== '')
+    {
+      this.activeService.create(this.selectedPurseId, this.active.tipo, this.active.ativo).subscribe({
+        next: (response: HttpResponse<any>) => {
+          if (response.status === 201)
+          {
+            this.router.navigate(["/purses"]);
+          }
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    }
+    else {
+      this.containerError.nativeElement.classList.add('active');
+    }
   }
 }

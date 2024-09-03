@@ -10,19 +10,6 @@ services:
     networks:
       - mynetwork
 
-  api:
-    build: 
-      context: ./MyInvestAPI
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - postgres-db
-    networks:
-      - mynetwork
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-  
   client:
     build:
       context: ./MyInvestClient
@@ -30,9 +17,22 @@ services:
     ports:
      - "9090:9090"
     depends_on:
-      - api
+      - postgres-db
     networks:
       - mynetwork
+
+  api:
+    build: 
+      context: ./MyInvestAPI
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - client
+    networks:
+      - mynetwork
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
 
 networks:
   mynetwork:

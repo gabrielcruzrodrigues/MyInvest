@@ -53,7 +53,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyInvestAPI");
-            c.RoutePrefix = "api-doc";
+            c.RoutePrefix = "swagger";
         });
     }
 

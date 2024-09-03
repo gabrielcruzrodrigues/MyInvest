@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyInvestAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class ConfigFirstTables : Migration
+    public partial class databasev1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -18,9 +18,8 @@ namespace MyInvestAPI.Migrations
                 {
                     Active_Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Code = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    type = table.Column<int>(type: "integer", nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: false),
+                    type = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -53,20 +52,21 @@ namespace MyInvestAPI.Migrations
                 {
                     Purse_Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    User_Id = table.Column<int>(type: "integer", nullable: false),
-                    User_Id1 = table.Column<int>(type: "integer", nullable: true)
+                    User_Id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Purses", x => x.Purse_Id);
                     table.ForeignKey(
-                        name: "FK_Purses_Users_User_Id1",
-                        column: x => x.User_Id1,
+                        name: "FK_Purses_Users_User_Id",
+                        column: x => x.User_Id,
                         principalTable: "Users",
-                        principalColumn: "User_Id");
+                        principalColumn: "User_Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -99,9 +99,9 @@ namespace MyInvestAPI.Migrations
                 column: "PursesPurse_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Purses_User_Id1",
+                name: "IX_Purses_User_Id",
                 table: "Purses",
-                column: "User_Id1");
+                column: "User_Id");
         }
 
         /// <inheritdoc />
