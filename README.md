@@ -26,5 +26,5 @@ http://localhost:9090
 ### 📓Documentação da API
 A documentação está disponível utilizando o Swagger, você pode acessá-la e ver todos os endpoints e seus detalhes acessando:
 ```
-http://localhost:8080/api-doc/index.html
+http://localhost:8080/swagger/index.html
 ```
