@@ -145,5 +145,20 @@ namespace MyInvestAPI.Controllers
                 return NotFound("The active not found!");
             }
         }
+
+        [HttpGet("/get-actives/{purseId}")]
+        public async Task<ActionResult> GetActivesByPurseId(int purseId)
+        {
+            var actives = await _context.Purses
+                .Include(p => p.Actives)
+                .FirstOrDefaultAsync(p => p.Purse_Id == purseId);
+
+            if (actives is null || !actives.Actives.Any())
+            {
+                return NotFound("No actives found for the given purse ID.");
+            }
+
+            return Ok(actives);
+        }
     }
 }

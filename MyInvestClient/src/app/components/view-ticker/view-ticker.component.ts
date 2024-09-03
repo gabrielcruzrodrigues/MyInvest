@@ -125,6 +125,12 @@ export class ViewTickerComponent implements OnInit{
 
   buyActive(): void 
   {
+    if (!this.authService.verifyIfUserIdLogged())
+    {
+      this.router.navigate(["/create-account"]);
+      return;
+    }
+
     if (this.selectedPurseId !== '')
     {
       this.activeService.create(this.selectedPurseId, this.active.tipo, this.active.ativo).subscribe({

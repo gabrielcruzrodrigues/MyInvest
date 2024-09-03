@@ -31,4 +31,10 @@ export class ActiveService {
     }
     return this.http.post(urlForRequest, objForRequest, { observe: 'response' });
   }
+
+  searchActivesByPurseId(purseId: string): Observable<any>
+  {
+    const urlForRequest = this.url + "/get-actives/" + purseId;
+    return this.http.get(urlForRequest, { observe: 'response' });
+  }
 }

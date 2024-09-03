@@ -5,6 +5,8 @@ import { ViewPursesComponent } from './components/view-purses/view-purses.compon
 import { CreatePurseComponent } from './components/create-purse/create-purse.component';
 import { SearchTickerComponent } from './components/search-ticker/search-ticker.component';
 import { ViewTickerComponent } from './components/view-ticker/view-ticker.component';
+import { ViewActivesComponent } from './components/view-actives/view-actives.component';
+import { ViewTickerFinalComponent } from './components/view-ticker-final/view-ticker-final.component';
 
 export const routes: Routes = [
      {
@@ -24,5 +26,11 @@ export const routes: Routes = [
      },
      {
           path: 'view-ticker/:name', component: ViewTickerComponent
+     },
+     {
+          path: 'view-actives/:purse', component: ViewActivesComponent
+     },
+     {
+          path: 'view-active-info/:name', component: ViewTickerFinalComponent
      }
 ];

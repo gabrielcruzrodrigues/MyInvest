@@ -71,7 +71,7 @@ export class ViewPursesComponent implements OnInit{
 
   redirectToPurse(purseId: number)
   {
-    // this.route.navigate(["/create-purse"])
+    this.route.navigate(["/view-actives/" + purseId]);
   }
 
   createPurse(): void 

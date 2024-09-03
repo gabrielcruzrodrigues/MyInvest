@@ -8,6 +8,15 @@
      }
 }
 
+.logo img {
+     width: 50px;
+}
+
+.info p {
+     font-size: 16px;
+     margin-left: 5px;
+}
+
 .main-section h1 {
      text-align: center;
      font-size: 36px;
@@ -25,8 +34,10 @@
 }
 
 .card {
+     border: 1px solid #ccc;
+     box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
      border-radius: 10px;
-     padding: 5%;
+     padding: 2%;
      cursor: pointer;
      margin-bottom: 25px;
      animation: fadeIn 0.5s ease-in;
@@ -39,16 +50,10 @@
 
 .title {
      display: flex;
-     justify-content: left;
+     justify-content: center;
      flex-direction: row;
      align-items: center;
-     margin-bottom: 12px;
-}
 
-.title p {
-     font-size: 22px;
-     align-items: center;
-     margin-left: 10px;
 }
 
 .description {
@@ -99,7 +104,7 @@
 
      .card {
           padding: 2%;
-          height: 200px;
+          height: 100px;
           width: 48%;
      }
 }
@@ -117,5 +122,6 @@
 
      .card {
           width: 31%;
+          height: 120px;
      }
 }
