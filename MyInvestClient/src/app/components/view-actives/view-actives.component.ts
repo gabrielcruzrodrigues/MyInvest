@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActiveService } from '../../services/active.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { LoadingComponent } from '../layout/loading/loading.component';
 
 interface Active {
   id: string,
@@ -13,13 +14,15 @@ interface Active {
 @Component({
   selector: 'app-view-actives',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingComponent],
   templateUrl: './view-actives.component.html',
   styleUrl: './view-actives.component.scss'
 })
 export class ViewActivesComponent implements OnInit{
   purseId: string = '';
   actives: Active[] = [];
+  @ViewChild('message', {static: false}) message!:ElementRef;
+  isLoading: boolean = true;
 
   constructor(
     private activeService: ActiveService,
@@ -41,12 +44,19 @@ export class ViewActivesComponent implements OnInit{
 
     this.activeService.searchActivesByPurseId(param).subscribe({
       next: (response: HttpResponse<any>) => {
+        this.isLoading = false;
         if (response.status === 200)
         {
           this.populateTheArrayOfActives(response.body);
         }
       },
       error: (err) => {
+        this.isLoading = false;
+        if (err.status === 404)
+        {
+          this.message.nativeElement.classList.add('active');
+          return;
+        }
         console.log(err);
       }
     })
@@ -54,14 +64,14 @@ export class ViewActivesComponent implements OnInit{
 
   populateTheArrayOfActives(body: any): void
   {
-    this.actives = body.actives.map((active: any) => {
-      return {
-        id: active.active_Id,
-        code: active.code,
-        type: active.type,
-      }
-    });
-    console.log(this.actives);
+      this.actives = body.actives.map((active: any) => {
+        return {
+          id: active.active_Id,
+          code: active.code,
+          type: active.type,
+        }
+      });
+      console.log(this.actives);
   }
 
   redirectToActive(code: string): void

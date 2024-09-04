@@ -3,7 +3,7 @@
      <h1>Meus ativos</h1>
 
      <div class="message" #message>
-          <p>Você não tem carteiras cadastradas...</p>
+          <p>Você ainda não tem ativos...</p>
      </div>
      <div class="cards">
           <ng-container class="container" *ngFor="let active of actives">
@@ -25,3 +25,4 @@
 <div class="add" (click)="createActive()">
      <img src="/assets/add.png" class="add-icon">
 </div>
+<app-loading [isLoading]="isLoading"></app-loading>

@@ -5,17 +5,19 @@ import { AuthService } from '../../services/auth.service';
 import { PurseService } from '../../services/purse.service';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { LoadingComponent } from '../layout/loading/loading.component';
 
 @Component({
   selector: 'app-create-purse',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoadingComponent],
   templateUrl: './create-purse.component.html',
   styleUrl: './create-purse.component.scss'
 })
 export class CreatePurseComponent implements OnInit{
   form: FormGroup;
   userId: string = '';
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -41,23 +43,31 @@ export class CreatePurseComponent implements OnInit{
   { 
     if (this.form.valid)
     {
+      this.isLoading = true;
       this.purseService.create(this.form.value).subscribe({
         next: (response: HttpResponse<any>) => {
           if (response.status === 201)
           {
+            this.isLoading = false;
             if (typeof window !== 'undefined')
             {
               alert("Carteira criada com sucesso!");
             }
-  
+            
             this.route.navigate(["/purses"]);
           }
           else 
           {
-            console.log("Houve uma resposta inesperada do servidor.")
-          }
-        },
-        error: (err) => {
+            this.isLoading = false;
+            console.log("Houve uma resposta inesperada do servidor.");
+            if (typeof window !== 'undefined')
+              {
+                alert("Houve um problema ao criar a carteira!");
+              }
+            }
+          },
+          error: (err) => {
+          this.isLoading = false;
           console.log(err);
           if (typeof window !== 'undefined')
           {

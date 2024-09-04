@@ -5,6 +5,7 @@ import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
+import { LoadingComponent } from '../layout/loading/loading.component';
 
 interface Purse {
   purse_Id: number;
@@ -17,7 +18,7 @@ interface Purse {
   selector: 'app-view-purses',
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule, LoadingComponent
   ],
   templateUrl: './view-purses.component.html',
   styleUrl: './view-purses.component.scss'
@@ -26,6 +27,7 @@ export class ViewPursesComponent implements OnInit{
   userId: string = '';
   purses: Purse[] = [];
   @ViewChild('message', { static: false }) message!: ElementRef;
+  isLoading: boolean = true;
 
   constructor(
     private authService: AuthService,
@@ -37,6 +39,7 @@ export class ViewPursesComponent implements OnInit{
     if (!this.authService.verifyIfUserIdLogged())
     {
       this.route.navigate(["/create-account"])
+      this.isLoading = false;
       return;
     }
 
@@ -49,7 +52,8 @@ export class ViewPursesComponent implements OnInit{
         }
       },
       error: (err) => {
-        console.log("Houve um erro ao tentar buscar as carteiras do usuário: " + err);
+        this.isLoading = false;
+        alert("Houve um erro ao tentar buscar as carteiras");
       }
     })
   }
@@ -63,9 +67,11 @@ export class ViewPursesComponent implements OnInit{
         purse.createdAt = date.toLocaleDateString('pt-BR');
         this.purses.push(purse);
       });
+      this.isLoading = false;
     }
     else {
       this.message.nativeElement.classList.add('active');
+      this.isLoading = false;
     }
   }
 

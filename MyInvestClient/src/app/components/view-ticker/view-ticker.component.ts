@@ -6,6 +6,7 @@ import { HttpResponse } from '@angular/common/http';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LoadingComponent } from '../layout/loading/loading.component';
 
 interface Active {
   data: string,
@@ -30,7 +31,7 @@ interface Purse {
 @Component({
   selector: 'app-view-ticker',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingComponent],
   templateUrl: './view-ticker.component.html',
   styleUrl: './view-ticker.component.scss'
 })
@@ -40,6 +41,7 @@ export class ViewTickerComponent implements OnInit{
   purses: Purse[] = [];
   selectedPurseId: string = '';
   @ViewChild('containerError', { static : false }) containerError!: ElementRef;
+  isLoading: boolean = true;
 
   active: Active = {
     data: '',
@@ -73,8 +75,8 @@ export class ViewTickerComponent implements OnInit{
     this.activeService.search(this.activeName).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.status === 200)
-        {
-          this.populateActiveFields(response.body);
+          {
+            this.populateActiveFields(response.body);
         }
         else 
         {
@@ -82,12 +84,14 @@ export class ViewTickerComponent implements OnInit{
         }
       },
       error: (err) => {
+        this.isLoading = false;
         alert("Aconteceu um erro ao tentar buscar o ticker!");
       }
     })
     
     this.userService.getPurses(this.userId).subscribe({
       next: (response: HttpResponse<any>) => {
+        this.isLoading = false;
         if (response.status === 200)
         {
           response.body.purses.forEach((purse: any) => {
@@ -100,7 +104,8 @@ export class ViewTickerComponent implements OnInit{
         }
       },
       error: (err) => {
-        // console.log(err);
+        this.isLoading = false;
+        console.log(err);
       }
     })
   }
@@ -133,14 +138,17 @@ export class ViewTickerComponent implements OnInit{
 
     if (this.selectedPurseId !== '')
     {
+      this.isLoading = true;
       this.activeService.create(this.selectedPurseId, this.active.tipo, this.active.ativo).subscribe({
         next: (response: HttpResponse<any>) => {
+          this.isLoading = false;
           if (response.status === 201)
           {
             this.router.navigate(["/purses"]);
           }
         },
         error: (err) => {
+          this.isLoading = false;
           console.log(err);
         }
       })

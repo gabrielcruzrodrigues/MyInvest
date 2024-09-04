@@ -2,6 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ActiveService } from '../../services/active.service';
+import { LoadingComponent } from '../layout/loading/loading.component';
 
 interface Active {
   data: string,
@@ -21,12 +22,13 @@ interface Active {
 @Component({
   selector: 'app-view-ticker-final',
   standalone: true,
-  imports: [],
+  imports: [LoadingComponent],
   templateUrl: './view-ticker-final.component.html',
   styleUrl: './view-ticker-final.component.scss'
 })
 export class ViewTickerFinalComponent implements OnInit{
   activeName: string = '';
+  isLoading: boolean = true;
 
   constructor(
     private activedRoute: ActivatedRoute,
@@ -55,6 +57,7 @@ export class ViewTickerFinalComponent implements OnInit{
 
     this.activeService.search(this.activeName).subscribe({
       next: (response: HttpResponse<any>) => {
+        this.isLoading = false;
         if (response.status === 200)
         {
           this.populateActiveFields(response.body);
@@ -65,6 +68,7 @@ export class ViewTickerFinalComponent implements OnInit{
         }
       },
       error: (err) => {
+        this.isLoading = false;
         alert("Aconteceu um erro ao tentar buscar o ticker!");
       }
     })

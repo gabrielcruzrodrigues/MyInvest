@@ -6,16 +6,18 @@ import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { LoadingComponent } from '../layout/loading/loading.component';
 
 @Component({
   selector: 'app-create-account',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoadingComponent],
   templateUrl: './create-account.component.html',
   styleUrl: './create-account.component.scss'
 })
 export class CreateAccountComponent implements OnInit{
   form: FormGroup;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -42,16 +44,19 @@ export class CreateAccountComponent implements OnInit{
   {
     if (this.form.valid)
     {
+      this.isLoading = true;
       this.userService.create(this.form.value).subscribe({
         next: (response: HttpResponse<any>) => {
           if (response.status === 201)
           {
             this.authService.configureLocalStorage(response.body);
+            this.isLoading = false;
             alert("Usuário criado com sucesso!");
             this.route.navigate(["/"]);
           }
         },
         error: (error) => {
+          this.isLoading = false;
           alert("Ocorreu um erro ao tentar criar o usuário.");
         }
       })

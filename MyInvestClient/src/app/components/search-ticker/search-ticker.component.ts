@@ -4,16 +4,18 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActiveService } from '../../services/active.service';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { LoadingComponent } from '../layout/loading/loading.component';
 
 @Component({
   selector: 'app-search-ticker',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, LoadingComponent],
   templateUrl: './search-ticker.component.html',
   styleUrl: './search-ticker.component.scss'
 })
 export class SearchTickerComponent {
   form: FormGroup;
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -29,8 +31,10 @@ export class SearchTickerComponent {
   {
     if (this.form.valid) 
     {
+      this.isLoading = true;
       this.activeService.search(this.form.get('name')?.value).subscribe({
         next: (response: HttpResponse<any>) => {
+          this.isLoading = false;
           if (response.status === 200)
           {
             var name = this.form.get('name')?.value;
@@ -38,6 +42,7 @@ export class SearchTickerComponent {
           }
         },
         error: (err) => {
+          this.isLoading = false;
           if (err.status === 404)
           {
             alert("Não foi encontrado nenhum ativo com o ticker informado.");
