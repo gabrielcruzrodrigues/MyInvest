@@ -20,7 +20,7 @@ interface Active {
   indicacao: string,
   p_L: string,
   roe: string,
-  crecimentoDeDividendos: string
+  crecimento_De_Dividendos_5_anos: string
 }
 
 interface Purse {
@@ -55,7 +55,7 @@ export class ViewTickerComponent implements OnInit{
     indicacao: '',
     p_L: '',
     roe: '',
-    crecimentoDeDividendos: ''
+    crecimento_De_Dividendos_5_anos: ''
   }
 
   constructor(
@@ -124,7 +124,7 @@ export class ViewTickerComponent implements OnInit{
       indicacao: body.indicacao || '',
       p_L: body.p_L || '',
       roe: body.roe || '',
-      crecimentoDeDividendos: body.crecimentoDeDividendos || ''
+      crecimento_De_Dividendos_5_anos: body.crecimento_De_Dividendos_5_anos || ''
     } 
   }
 

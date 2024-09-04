@@ -16,7 +16,7 @@ interface Active {
   indicacao: string,
   p_L: string,
   roe: string,
-  crecimentoDeDividendos: string
+  crecimento_De_Dividendos_5_anos: string
 }
 
 @Component({
@@ -47,7 +47,7 @@ export class ViewTickerFinalComponent implements OnInit{
     indicacao: '',
     p_L: '',
     roe: '',
-    crecimentoDeDividendos: ''
+    crecimento_De_Dividendos_5_anos: ''
   }
 
   ngOnInit(): void {
@@ -88,7 +88,7 @@ export class ViewTickerFinalComponent implements OnInit{
       indicacao: body.indicacao || '',
       p_L: body.p_L || '',
       roe: body.roe || '',
-      crecimentoDeDividendos: body.crecimentoDeDividendos || ''
+      crecimento_De_Dividendos_5_anos: body.crecimentoDeDividendos || ''
     } 
   }
 }
