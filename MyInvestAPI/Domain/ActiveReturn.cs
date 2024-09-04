@@ -13,6 +13,6 @@
         public string? Indicacao { get; set; }
         public string? P_L { get; set; }
         public double ROE { get; set; }
-        public double CrecimentoDeDividendos { get; set; }
+        public string? Crecimento_De_Dividendos_5_anos { get; set; }
     }
 }
