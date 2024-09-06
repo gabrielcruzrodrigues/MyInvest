@@ -4,20 +4,28 @@
      <div class="message" #message>
           <p>Você não tem carteiras cadastradas...</p>
      </div>
-     <div class="cards">
-          <ng-container class="container" *ngFor="let purse of purses">
-               <div class="card" (click)="redirectToPurse(purse.purse_Id)">
-                    <div class="title">
-                         <img src="/assets/purse.png">
-                         <p>{{ purse.name }}</p>
+
+     <div class="purses">
+          <div class="titles">
+               <div>Nome</div>
+               <div>Descrição</div>
+               <div>Ações</div>
+          </div>
+          <div class="container" *ngFor="let purse of purses">
+               <div class="column">{{ purse.name }}</div>
+               <div class="column divisor">{{ purse.description }}</div>
+               <div class="actions-container column divisor">
+                    <div class="actions edit">
+                         <img src="assets/edit.png">
                     </div>
-                    <div class="description">
-                         <p>{{ purse.description }}</p>
+                    <div class="actions delete">
+                         <img src="assets/delete.png">
                     </div>
-                    <p class="date">{{ purse.createdAt }}</p>
                </div>
-          </ng-container>
+          </div>
      </div>
+    
+
 
 </section>
 <div class="add" (click)="createPurse()">

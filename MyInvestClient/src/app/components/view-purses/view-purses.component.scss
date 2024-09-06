@@ -15,54 +15,49 @@
      margin: 20px 0;
 }
 
-.cards {
-     width: 100%;
-     padding: 0 10%;
-     height: 400px;
-     display: flex;
-     justify-content: start;
-     flex-direction: column;
-}
-
-.card {
+.purses {
+     padding: 10px;
+     background-color: white;
+     width: 90%;
+     // height: 200px;
+     margin: 0 auto;
      border-radius: 10px;
-     padding: 5%;
-     cursor: pointer;
-     margin-bottom: 25px;
-     animation: fadeIn 0.5s ease-in;
 }
 
-.card:hover {
+.container{
+     display: grid;
+     grid-template-columns: 1.5fr 2fr 1.5fr;
+     gap: 10px;
+     padding: 5px 0;
+     border-bottom: 2px solid #ccc;
+     text-align: center;
+}
+
+.titles {
+     display: grid;
+     grid-template-columns: 1.5fr 2fr 1.5fr;
      background-color: $primary-color;
+     padding: 7px;
+     margin-bottom: 10px;
+     border-radius: 5px;
+}
+
+.titles div {
+     text-align: center;
+     font-size: 18px;
      color: white;
 }
 
-.title {
+.column {
      display: flex;
-     justify-content: left;
-     flex-direction: row;
+     justify-content: center;
+     font-size: 16px;
+     width: 100%;
      align-items: center;
-     margin-bottom: 12px;
-}
+} 
 
-.title p {
-     font-size: 22px;
-     align-items: center;
-     margin-left: 10px;
-}
-
-.description {
-     padding: 2%;
-}
-
-.description p {
-     font-size: 18px;
-}
-
-.date {
-     text-align: end;
-     margin-right: 15px;
-     margin-top: 10px;
+.divisor {
+     border-left: 2px solid #CCC;
 }
 
 .add {
@@ -85,6 +80,45 @@
 
 .message.active {
      display: block;
+}
+
+.actions-container {
+     display: flex;
+     justify-content: center;
+     gap: 10px
+}
+
+.actions {
+     border-radius: 5px;
+     cursor: pointer;
+}
+
+.actions img{
+     width: 20px;
+     margin: 1px 3px;
+}
+
+.edit {
+     background-color: yellow;
+}
+
+.delete {
+     background-color: red;
+}
+
+@media (min-width: 600px)
+{
+     .container{
+          grid-template-columns: 2fr 2fr 1fr;
+     }
+     
+     .titles {
+          grid-template-columns: 2fr 2fr 1fr;
+     }
+
+     .actions-container {
+          gap: 20px
+     }
 }
 
 @media (min-width: 910px)
