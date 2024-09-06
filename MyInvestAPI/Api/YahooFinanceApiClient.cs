@@ -19,7 +19,6 @@ public class YahooFinanceApiClient
                 Field.PriceToBook, // P/VPs
                 Field.TrailingPE  // P/L
                                   // Roe
-                                  //Crecimento de dividendos
             ).QueryAsync();
 
         var result = securitie[$"{active}"];
@@ -52,7 +51,7 @@ public class YahooFinanceApiClient
 
     //static async Task<string> CalculateRoe(string symbol)
     //{
-    //    var financials = await Yahoo.Symbols(symbol).Fields(Field.Equity);
+    //    var stock = await Yahoo.GetStockAsync(ticker);
     //}
 
     static async Task<string> CalculateDividendGrowth(string symbol)

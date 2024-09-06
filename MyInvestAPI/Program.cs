@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Data;
+using MyInvestAPI.Extensions;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,23 +40,30 @@ builder.Services.AddDbContext<MyInvestContext>(options =>
 var app = builder.Build();
 
 //update the database
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<MyInvestContext>();
-    context.Database.Migrate();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    var context = services.GetRequiredService<MyInvestContext>();
+//    context.Database.Migrate();
+//}
 
 // Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
     {
-        app.UseSwagger();
-        app.UseSwaggerUI(c =>
-        {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyInvestAPI");
-            c.RoutePrefix = "swagger";
-        });
-    }
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyInvestAPI");
+        c.RoutePrefix = "swagger";
+    });
+    app.ConfigureExceptionHandler();
+}
+
+if (app.Environment.IsProduction())
+{
+    app.ActiveUpdateDatabaseMigrations();
+}
 
 //app.UseHttpsRedirection();
 app.UseCors(OriginsWithAllowedAccess);
