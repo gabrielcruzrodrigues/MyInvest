@@ -12,8 +12,8 @@
                <div>Ações</div>
           </div>
           <div class="container" *ngFor="let purse of purses">
-               <div class="column">{{ purse.name }}</div>
-               <div class="column divisor">{{ purse.description }}</div>
+               <div class="column" (click)="redirectToViewActives(purse.purse_Id)">{{ purse.name }}</div>
+               <div class="column divisor" (click)="redirectToViewActives(purse.purse_Id)">{{ purse.description }}</div>
                <div class="actions-container column divisor">
                     <div class="actions edit">
                          <img src="assets/edit.png">

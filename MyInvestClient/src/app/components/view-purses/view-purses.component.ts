@@ -74,14 +74,14 @@ export class ViewPursesComponent implements OnInit{
       this.isLoading = false;
     }
   }
-
-  redirectToPurse(purseId: number)
-  {
-    this.route.navigate(["/view-actives/" + purseId]);
-  }
-
+  
   createPurse(): void 
   {
     this.route.navigate(["/create-purse"]);
+  }
+  
+  redirectToViewActives(purseId: number): void 
+  {
+    this.route.navigate(["/view-actives/" + purseId]);
   }
 }
