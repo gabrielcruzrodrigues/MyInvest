@@ -88,6 +88,11 @@ export class ViewPursesComponent implements OnInit{
   {
     this.route.navigate(["/view-actives/" + purseId]);
   }
+  
+  redirectToUpdatePurse(purseId: number): void
+  {
+    this.route.navigate(["/edit-purse/" + purseId]);
+  }
 
   deletePurse(id: number): void 
   {
@@ -95,7 +100,6 @@ export class ViewPursesComponent implements OnInit{
       next: (response: HttpResponse<any>) => {
         if (response.status === 204)
         {
-          alert("Carteira excluída com sucesso!");
           this.purses = this.purses.filter(purse => purse.purse_Id !== id);
           
           if (this.purses.length == 0) {
@@ -105,7 +109,8 @@ export class ViewPursesComponent implements OnInit{
         }
         else 
         {
-          console.log("Uma responsta inesperada foi retornada pelo servidor!");        }
+          console.log("Uma responsta inesperada foi retornada pelo servidor!");        
+        }
       },
       error: (error) => {
         if (error.status === 404)

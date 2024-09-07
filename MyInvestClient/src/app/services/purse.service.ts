@@ -24,4 +24,16 @@ export class PurseService {
     const urlForRequest = this.url + "/" + id;
     return this.http.delete(urlForRequest, {observe: 'response'});
   }
+
+  getById(id: any): Observable<any>
+  {
+    const urlForRequest = this.url + "/" + id;
+    return this.http.get(urlForRequest, { observe: 'response' });
+  }
+
+  update(body: any): Observable<any>
+  {
+    const urlForRequest = this.url + "/" + body.user_Id;
+    return this.http.put(urlForRequest, body, {observe: 'response'});
+  }
 }

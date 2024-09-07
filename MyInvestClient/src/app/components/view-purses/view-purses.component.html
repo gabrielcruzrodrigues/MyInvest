@@ -15,12 +15,12 @@
                <div class="column" (click)="redirectToViewActives(purse.purse_Id)">{{ purse.name }}</div>
                <div class="column divisor" (click)="redirectToViewActives(purse.purse_Id)">{{ purse.description }}</div>
                <div class="actions-container column divisor">
-                    <div class="actions edit">
+                    <button class="actions edit" (click)="redirectToUpdatePurse(purse.purse_Id)">
                          <img src="assets/edit.png">
-                    </div>
-                    <div class="actions delete" (click)="deletePurse(purse.purse_Id)">
+                    </button>
+                    <button class="actions delete" (click)="deletePurse(purse.purse_Id)">
                          <img src="assets/delete.png">
-                    </div>
+                    </button>
                </div>
           </div>
      </div>

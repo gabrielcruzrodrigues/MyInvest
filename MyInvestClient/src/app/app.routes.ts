@@ -6,6 +6,7 @@ import { SearchTickerComponent } from './components/search-ticker/search-ticker.
 import { ViewTickerComponent } from './components/view-ticker/view-ticker.component';
 import { ViewActivesComponent } from './components/view-actives/view-actives.component';
 import { ViewTickerFinalComponent } from './components/view-ticker-final/view-ticker-final.component';
+import { EditPurseComponent } from './components/edit-purse/edit-purse.component';
 
 export const routes: Routes = [
      {
@@ -19,6 +20,9 @@ export const routes: Routes = [
      },
      {
           path: 'create-purse', component: CreatePurseComponent
+     },
+     {
+          path: 'edit-purse/:id', component: EditPurseComponent
      },
      {
           path: 'search-ticker', component: SearchTickerComponent

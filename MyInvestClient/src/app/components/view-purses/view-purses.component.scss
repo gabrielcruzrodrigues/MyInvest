@@ -22,6 +22,7 @@
      // height: 200px;
      margin: 0 auto;
      border-radius: 10px;
+     animation: fadeIn 0.5s ease-in-out;
 }
 
 .container{
@@ -117,6 +118,10 @@
 
 .delete {
      background-color: red;
+}
+
+button {
+     border: none;
 }
 
 @media (min-width: 600px)
