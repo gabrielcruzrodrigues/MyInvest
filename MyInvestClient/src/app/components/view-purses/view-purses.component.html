@@ -6,7 +6,7 @@
      </div>
 
      <div class="purses">
-          <div class="titles">
+          <div class="titles" #titles>
                <div>Nome</div>
                <div>Descrição</div>
                <div>Ações</div>
@@ -18,7 +18,7 @@
                     <div class="actions edit">
                          <img src="assets/edit.png">
                     </div>
-                    <div class="actions delete">
+                    <div class="actions delete" (click)="deletePurse(purse.purse_Id)">
                          <img src="assets/delete.png">
                     </div>
                </div>

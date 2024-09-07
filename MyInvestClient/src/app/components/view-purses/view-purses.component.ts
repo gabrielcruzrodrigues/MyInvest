@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
 import { LoadingComponent } from '../layout/loading/loading.component';
+import { PurseService } from '../../services/purse.service';
 
 interface Purse {
   purse_Id: number;
@@ -27,11 +28,13 @@ export class ViewPursesComponent implements OnInit{
   userId: string = '';
   purses: Purse[] = [];
   @ViewChild('message', { static: false }) message!: ElementRef;
+  @ViewChild('titles', { static: false }) titles!: ElementRef;
   isLoading: boolean = true;
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
+    private purseService: PurseService,
     private route: Router
   ) {}
 
@@ -66,6 +69,7 @@ export class ViewPursesComponent implements OnInit{
         const date = new Date(purse.createdAt);
         purse.createdAt = date.toLocaleDateString('pt-BR');
         this.purses.push(purse);
+        this.titles.nativeElement.classList.add('active');
       });
       this.isLoading = false;
     }
@@ -83,5 +87,36 @@ export class ViewPursesComponent implements OnInit{
   redirectToViewActives(purseId: number): void 
   {
     this.route.navigate(["/view-actives/" + purseId]);
+  }
+
+  deletePurse(id: number): void 
+  {
+    this.purseService.delete(id).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.status === 204)
+        {
+          alert("Carteira excluída com sucesso!");
+          this.purses = this.purses.filter(purse => purse.purse_Id !== id);
+          
+          if (this.purses.length == 0) {
+            this.titles.nativeElement.classList.remove('active');
+            this.message.nativeElement.classList.add('active');
+          }
+        }
+        else 
+        {
+          console.log("Uma responsta inesperada foi retornada pelo servidor!");        }
+      },
+      error: (error) => {
+        if (error.status === 404)
+        {
+          alert("Carteira não encontrada!")
+        }
+        if (error.status === 500)
+        {
+          alert("Ocorreu um erro ao tentar deletar a carteira!");
+        }
+      }
+    })
   }
 }

@@ -18,8 +18,8 @@ builder.Services.AddCors(options =>
     policy =>
     {
         policy.WithOrigins("http://localhost:4200", "http://localhost:9090")
-            .WithHeaders("Content-Type");
-
+            .WithHeaders("Content-Type")
+            .WithMethods("*");
     })
 );
 
@@ -38,14 +38,6 @@ builder.Services.AddDbContext<MyInvestContext>(options =>
     options.UseNpgsql(postgreSqlConnection));
 
 var app = builder.Build();
-
-//update the database
-//using (var scope = app.Services.CreateScope())
-//{
-//    var services = scope.ServiceProvider;
-//    var context = services.GetRequiredService<MyInvestContext>();
-//    context.Database.Migrate();
-//}
 
 // Configure the HTTP request pipeline.
 

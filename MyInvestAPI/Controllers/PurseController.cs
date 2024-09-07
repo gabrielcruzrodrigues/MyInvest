@@ -114,7 +114,7 @@ namespace MyInvestAPI.Controllers
             var purseVerify = await _context.Purses.FirstOrDefaultAsync(purse => purse.Purse_Id.Equals(id));
 
             if (purseVerify is null)
-                return BadRequest("Purse not found.");
+                return NotFound("Purse not found.");
 
             try
             {
@@ -125,7 +125,7 @@ namespace MyInvestAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("An error occured when tryning to delete the user");
+                return StatusCode(500, "An error occured when tryning to delete the user");
             }
         }
     }

@@ -18,4 +18,10 @@ export class PurseService {
   {
     return this.http.post(this.url, body, { observe: 'response'});
   }
+
+  delete(id: any): Observable<any>
+  {
+    const urlForRequest = this.url + "/" + id;
+    return this.http.delete(urlForRequest, {observe: 'response'});
+  }
 }

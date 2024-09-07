@@ -35,7 +35,7 @@
 
 .container:hover 
 {
-     background-color: $primary-color;
+     background-color: #466be7;
      border-radius: 10px;
      color: white;
      cursor: pointer;
@@ -48,6 +48,11 @@
      padding: 7px;
      margin-bottom: 10px;
      border-radius: 5px;
+     display: none;
+}
+
+.titles.active{
+     display: grid;
 }
 
 .titles div {

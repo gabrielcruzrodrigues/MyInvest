@@ -138,11 +138,15 @@ namespace MyInvestAPI.Controllers
         {
             try
             {
-                return await YahooFinanceApiClient.GetActive(active);
+                var resultActive = await YahooFinanceApiClient.GetActive(active);
+                if (resultActive is null)
+                    return NotFound("The active not found!");
+
+                return resultActive;
             }
             catch(Exception)
             {
-                return NotFound("The active not found!");
+                return StatusCode(500, "Houve um problema interno ao tentar buscar o ativo");
             }
         }
 
