@@ -75,8 +75,8 @@ export class ViewTickerComponent implements OnInit{
     this.activeService.search(this.activeName).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.status === 200)
-          {
-            this.populateActiveFields(response.body);
+        {
+          this.populateActiveFields(response.body);
         }
         else 
         {
@@ -91,7 +91,6 @@ export class ViewTickerComponent implements OnInit{
     
     this.userService.getPurses(this.userId).subscribe({
       next: (response: HttpResponse<any>) => {
-        this.isLoading = false;
         if (response.status === 200)
         {
           response.body.purses.forEach((purse: any) => {
@@ -123,9 +122,10 @@ export class ViewTickerComponent implements OnInit{
       preco_Teto: body.preco_Teto || '',
       indicacao: body.indicacao || '',
       p_L: body.p_L || '',
-      roe: body.roe || '',
+      roe: body.roe || body.roe,
       crecimento_De_Dividendos_5_anos: body.crecimento_De_Dividendos_5_anos || ''
     } 
+    this.isLoading = false;
   }
 
   buyActive(): void 

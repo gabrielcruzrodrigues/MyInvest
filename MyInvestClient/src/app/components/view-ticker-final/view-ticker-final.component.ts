@@ -87,8 +87,8 @@ export class ViewTickerFinalComponent implements OnInit{
       preco_Teto: body.preco_Teto || '',
       indicacao: body.indicacao || '',
       p_L: body.p_L || '',
-      roe: body.roe || '',
-      crecimento_De_Dividendos_5_anos: body.crecimentoDeDividendos || ''
+      roe: body.roe || body.roe,
+      crecimento_De_Dividendos_5_anos: body.crecimento_De_Dividendos_5_anos || ''
     } 
   }
 }

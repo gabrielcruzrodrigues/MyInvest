@@ -12,7 +12,7 @@
         public string? Preco_Teto { get; set; }
         public string? Indicacao { get; set; }
         public string? P_L { get; set; }
-        public double ROE { get; set; }
+        public string? ROE { get; set; }
         public string? Crecimento_De_Dividendos_5_anos { get; set; }
     }
 }

@@ -48,6 +48,10 @@ export class SearchTickerComponent {
             alert("Não foi encontrado nenhum ativo com o ticker informado.");
             return;
           }
+          if (err.status === 500)
+          {
+            alert("Houve um erro ao tentar buscar esse ativo!");
+          }
           console.log(err);
         }
       })

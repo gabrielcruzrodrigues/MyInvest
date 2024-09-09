@@ -21,7 +21,8 @@ interface Active {
 export class ViewActivesComponent implements OnInit{
   purseId: string = '';
   actives: Active[] = [];
-  @ViewChild('message', {static: false}) message!:ElementRef;
+  @ViewChild('message', { static: false }) message!: ElementRef;
+  @ViewChild('titles', { static: false }) titles!: ElementRef;
   isLoading: boolean = true;
 
   constructor(
@@ -57,6 +58,10 @@ export class ViewActivesComponent implements OnInit{
           this.message.nativeElement.classList.add('active');
           return;
         }
+        if (err.status === 500)
+        {
+          alert("Ocorreu um erro ao tentar buscar os ativos!");
+        }
         console.log(err);
       }
     })
@@ -64,6 +69,8 @@ export class ViewActivesComponent implements OnInit{
 
   populateTheArrayOfActives(body: any): void
   {
+    if (body.actives.length > 0)
+    {
       this.actives = body.actives.map((active: any) => {
         return {
           id: active.active_Id,
@@ -71,7 +78,14 @@ export class ViewActivesComponent implements OnInit{
           type: active.type,
         }
       });
-      console.log(this.actives);
+      this.titles.nativeElement.classList.add('active');
+      this.isLoading = false;
+    }
+    else
+    {
+      this.message.nativeElement.classList.add('active');
+      this.isLoading = false;
+    }
   }
 
   redirectToActive(code: string): void

@@ -144,9 +144,9 @@ namespace MyInvestAPI.Controllers
 
                 return resultActive;
             }
-            catch(Exception)
+            catch(Exception ex)
             {
-                return StatusCode(500, "Houve um problema interno ao tentar buscar o ativo");
+                return StatusCode(500, $"Houve um problema interno ao tentar buscar o ativo: {ex}");
             }
         }
 

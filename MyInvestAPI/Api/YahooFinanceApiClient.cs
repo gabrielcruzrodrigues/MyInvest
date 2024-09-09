@@ -44,6 +44,7 @@ public class YahooFinanceApiClient
         activeReturn.Preco_Teto = $"R$ {tetoPrice.ToString("F2")}";
         activeReturn.Indicacao = recomendation;
         activeReturn.P_L = (result.TrailingPE).ToString("F1");
+        activeReturn.ROE = "Atualmente indisponível no nosso sistema";
         activeReturn.Crecimento_De_Dividendos_5_anos = await CalculateDividendGrowth(result.Symbol);
 
         return activeReturn;
@@ -58,9 +59,21 @@ public class YahooFinanceApiClient
     {
         DateTime startDate = DateTime.Now.AddYears(-5);
         DateTime endDate = DateTime.Now;
+        IEnumerable<DividendTick> history;
 
-        var history = await Yahoo.GetDividendsAsync(symbol, startDate, endDate);
+        try
+        {
+            history = await Yahoo.GetDividendsAsync(symbol, startDate, endDate);
+        }
+        catch (Exception)
+        {
+            return "Serviço indisponível";
+        }
 
+        if (history == null || !history.Any())
+        {
+            return "Dados indisponíveis";
+        }
 
         var dividends = history.Where(x => x.Dividend != null && x.Dividend > 0)
                                .Select(c => new

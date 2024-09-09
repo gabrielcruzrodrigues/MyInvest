@@ -1,19 +1,19 @@
 <section class="main-section">
-     <h1>Minhas carteiras</h1>
+     <h1>Meus ativos</h1>
 
      <div class="message" #message>
-          <p>Você não tem carteiras cadastradas...</p>
+          <p>Você não tem ativos cadastrados...</p>
      </div>
 
      <div class="purses">
-          <div class="titles">
-               <div>Nome</div>
+          <div class="titles" #titles>
+               <div>Codigo</div>
                <div>Tipo</div>
                <div>Ações</div>
           </div>
           <div class="container" *ngFor="let active of actives">
-               <div class="column" (click)="redirectToActive(active.id)">{{ active.code }}</div>
-               <div class="column divisor" (click)="redirectToActive(active.id)">{{ active.type }}</div>
+               <div class="column" (click)="redirectToActive(active.code)">{{ active.code }}</div>
+               <div class="column divisor" (click)="redirectToActive(active.code)">{{ active.type }}</div>
                <div class="actions-container column divisor">
                     <div class="actions edit">
                          <img src="assets/edit.png">
@@ -24,10 +24,8 @@
                </div>
           </div>
      </div>
-    
-
-
 </section>
+
 <div class="add" (click)="createActive()">
      <img src="/assets/add.png" class="add-icon">
 </div>
