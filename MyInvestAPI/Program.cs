@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using MyInvestAPI.Controllers;
 using MyInvestAPI.Data;
 using MyInvestAPI.Extensions;
 using MyInvestAPI.Repositories;
@@ -32,6 +33,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPurseRepository, PurseRepository>();
 
 //database
 string postgreSqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -51,8 +53,6 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyInvestAPI");
         c.RoutePrefix = "swagger";
     });
-    //configure middleware for global exception handler
-    app.ConfigureExceptionHandler();
 }
 
 if (app.Environment.IsProduction())
