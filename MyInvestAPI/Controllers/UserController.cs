@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
+using MyInvestAPI.Repositories;
 using MyInvestAPI.ViewModels;
 
 namespace MyInvestAPI.Controllers
@@ -10,11 +10,11 @@ namespace MyInvestAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        public readonly MyInvestContext _context;
+        public readonly IUserRepository _repository;
 
-        public UserController(MyInvestContext context)
+        public UserController(IUserRepository IUserRepository)
         {
-            _context = context;
+            _repository = IUserRepository;
         }
 
         [HttpPost]
@@ -27,9 +27,8 @@ namespace MyInvestAPI.Controllers
 
             try
             {
-                await _context.Users.AddAsync(user);
-                await _context.SaveChangesAsync();
-                return new CreatedAtRouteResult("GetUser", new { id = user.User_Id }, user);
+                var userCreated = await _repository.CreateAsync(user);
+                return new CreatedAtRouteResult("GetUser", new { id = userCreated.User_Id }, userCreated);
             }
             catch(Exception)
             {
@@ -40,36 +39,28 @@ namespace MyInvestAPI.Controllers
         [HttpGet]
         public async Task<IEnumerable<User>> GetAllUsers()
         {
-            return await _context.Users
-                .AsNoTracking()
-                .ToListAsync();
+            return await _repository.GetAllUsersAsync();
         }
 
         [HttpGet("purses")]
         public async Task<IEnumerable<User>> GetAllUsersWithPurses()
         {
-            return await _context.Users
-                .Include(user => user.Purses)
-                .AsNoTracking()
-                .ToListAsync();
+            return await _repository.GetAllUsersWithPursesAsync();
         }
 
         [HttpGet("purses/actives")]
         public async Task<IEnumerable<User>> GetAllUsersWithPursesAndActives()
         {
-            return await _context.Users
-                .Include(user => user.Purses)
-                    .ThenInclude(purse => purse.Actives)
-                .AsNoTracking()
-                .ToListAsync();
+            return await _repository.GetAllUsersWithPursesAndActivesAsync();
         }
 
         [HttpGet("{id:int}", Name ="GetUser")]
         public async Task<ActionResult<User>> GetById(int id)
         {
-            var user = await _context.Users
-                .AsNoTracking()
-                .FirstOrDefaultAsync(user => user.User_Id == id);
+            if (id <= 0)
+                return BadRequest("The ID is not valid for search!");
+
+            var user = await _repository.GetByIdAsync(id);
 
             if (user is null)
                 return BadRequest("User not found.");
@@ -78,12 +69,12 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpGet("{id:int}/purses")]
-        public async Task<ActionResult<User>> GetUserWithAllPurses(int id)
+        public async Task<ActionResult<User>> GetUserWithAllPursesById(int id)
         {
-            var user = await _context.Users
-                .AsNoTracking()
-                .Include(user => user.Purses)
-                .FirstOrDefaultAsync(user => user.User_Id.Equals(id));
+            if (id <= 0)
+                return BadRequest("The ID is not valid for search!");
+
+            var user = await _repository.GetUserWithAllPursesByIdAsync(id);
 
             if (user is null)
                 return NotFound("User not found.");
@@ -92,13 +83,12 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpGet("{id:int}/purses/actives")]
-        public async Task<ActionResult<User>> GetUserWithAllPursesAndActives(int id)
+        public async Task<ActionResult<User>> GetUserWithAllPursesAndActivesById(int id)
         {
-            var user = await _context.Users
-                .AsNoTracking()
-                .Include(user => user.Purses)
-                    .ThenInclude(purse => purse.Actives)
-                .FirstOrDefaultAsync(user => user.User_Id.Equals(id));
+            if (id <= 0)
+                return BadRequest("The ID is not valid for search!");
+
+            var user = await _repository.GetUserWithAllPursesAndActivesByIdAsync(id);
 
             if (user is null)
                 return NotFound("User not found.");
@@ -113,46 +103,27 @@ namespace MyInvestAPI.Controllers
             if (userViewModel is null)
                 return BadRequest("The data for update must not be null.");
 
-            var userVerify = _context.Users.FirstOrDefault(user => user.User_Id == id);
-
-            if (userVerify is null)
-                return NotFound("User not found.");
-
-            User user = userViewModel.UpdateUser(userVerify);
-
-            try
-            { 
-                _context.Entry(user).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-
+            bool result = await _repository.UpdateAsync(id, userViewModel);
+            
+            if (result)
+            {
                 return NoContent();
             }
-            catch(Exception)
+            else
             {
-                return BadRequest("An error occured when tryning to update the user");
+                return BadRequest("An error occured when tryning to update the user");  
             }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var user = _context.Users.FirstOrDefault(user => user.User_Id == id);
+            var result = await _repository.DeleteAsync(id);
 
-            if (user is null)
-                return NotFound($"User with id {id} not found.");
-
-            try
-            {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-
-                return NoContent();
-            }
-            catch (Exception)
-            {
+            if (!result)
                 return BadRequest("An error occured when tryning to delete the user");
-            }
-        }
 
+            return NoContent();
+        }
     }
 }
