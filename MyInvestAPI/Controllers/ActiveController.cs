@@ -73,10 +73,10 @@ namespace MyInvestAPI.Controllers
             return NoContent();
         }
 
-        [HttpGet("/search-active/{active}")]
-        public async Task<ActionResult<ActiveReturn>> SearchActive(string active)
+        [HttpGet("/search-active/{active}/{dYDesiredPercentage}")]
+        public async Task<ActionResult<ActiveReturn>> SearchActive(string active, string dYDesiredPercentage)
         {
-            return Ok(await _repository.SearchActiveAsync(active));
+            return Ok(await _repository.SearchActiveAsync(active, dYDesiredPercentage));
         }
 
         [HttpGet("/get-actives/{purseId}")]

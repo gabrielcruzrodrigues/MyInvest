@@ -40,12 +40,14 @@ namespace MyInvestAPI.Repositories
                 throw new HttpResponseException(500, "An Error occured when tryning create active!");
             }
         }
+
         public async Task<IEnumerable<Active>> GetAllAsync()
         {
             return await _context.Actives
                 .AsNoTracking()
                 .ToListAsync();
         }
+
         public async Task<IEnumerable<Active>> GetAllWithPursesAsync()
         {
             return await _context.Actives
@@ -53,6 +55,7 @@ namespace MyInvestAPI.Repositories
                 .Include(p => p.Purses)
                 .ToListAsync();
         }
+
         public async Task<Active> GetByIdAsync(int id)
         {
             if (id <= 0)
@@ -67,6 +70,7 @@ namespace MyInvestAPI.Repositories
 
             return active;
         }
+
         public async Task<Active> GetByIdWithPursesAsync(int id)
         {
             if (id <= 0)
@@ -82,6 +86,7 @@ namespace MyInvestAPI.Repositories
 
             return active;
         }
+
         public void Update(int id, UpdateActiveViewModel updateActiveViewModel)
         {
             var activeVerify = _context.Actives.FirstOrDefault(active => active.Active_Id.Equals(id));
@@ -122,21 +127,22 @@ namespace MyInvestAPI.Repositories
                 throw new HttpResponseException(500, "An Erro occured when tryning delete active!"); ;
             }
         }
-        public async Task<ActiveReturn> SearchActiveAsync(string active)
+
+        public async Task<ActiveReturn> SearchActiveAsync(string active, string dYDesiredPercentage)
         {
             try
             {
-                var resultActive = await YahooFinanceApiClient.GetActive(active);
-                
-                if (resultActive is null)
-                    throw new HttpResponseException(404, $"The active with name ({active}) not found!");
-
-                return resultActive;
+                return await YahooFinanceApiClient.GetActive(active, dYDesiredPercentage);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                _logger.LogError($"The active {active} not found! err: {ex.Message}");
+                throw new HttpResponseException(404, $"The active {active} not found!");
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Un error occured when tryning search actives! err: {ex.Message}");
-                throw new HttpResponseException(500, "Un error occured when tryning search actives"); ;
+                throw new HttpResponseException(500, "Un error occured when tryning search actives");
             }
         }
 

@@ -1,34 +1,42 @@
-﻿using Flurl.Util;
-using MyInvestAPI.Domain;
-using System.Runtime.CompilerServices;
+﻿using MyInvestAPI.Domain;
 using YahooFinanceApi;
+using MyInvestAPI.Extensions;
 
 namespace MyInvestAPI.Api;
 
 public class YahooFinanceApiClient
 {
-    public async static Task<ActiveReturn> GetActive(string active)
+    public async static Task<ActiveReturn> GetActive(string active, string dYDesiredPercentage)
     {
-        var securitie = await Yahoo.Symbols(active).Fields(
-                Field.DividendDate, //data
-                Field.Symbol, //ativo
-                Field.LongName, //nome do ativo
-                Field.QuoteType, //tipo do ativo
-                Field.TrailingAnnualDividendYield, //divident yield
-                Field.RegularMarketPrice, //preço atual
-                Field.PriceToBook, // P/VPs
-                Field.TrailingPE  // P/L
-                                  // Roe
-            ).QueryAsync();
+        var search = await Yahoo.Symbols(active).Fields(
+            Field.DividendDate, //data
+            Field.Symbol, //ativo
+            Field.LongName, //nome do ativo
+            Field.QuoteType, //tipo do ativo
+            Field.TrailingAnnualDividendYield, //divident yield
+            Field.RegularMarketPrice, //preço atual
+            Field.PriceToBook, // P/VPs
+            Field.TrailingPE  // P/L
+                                // Roe
+        ).QueryAsync();
 
-        var result = securitie[$"{active}"];
+        if (search is null)
+            throw new KeyNotFoundException();
 
-        return await CreateActiveReturn(result);
+        var result = search[$"{active}"];
+
+        return await CreateActiveReturn(result, dYDesiredPercentage);
     }
 
-    static async Task<ActiveReturn> CreateActiveReturn(Security result)
+    static async Task<ActiveReturn> CreateActiveReturn(Security result, string dYDesiredPercentage)
     {
-        decimal tetoPrice = CalculatePriceTeto((decimal)result.TrailingAnnualDividendYield, (decimal)result.RegularMarketPrice);
+        if (!decimal.TryParse(dYDesiredPercentage, out decimal dyDesired))
+            throw new ArgumentException("Porcentagem inválida.");
+
+        decimal dYCurrent = result[Field.TrailingAnnualDividendYield] != null ? Convert.ToDecimal(result[Field.TrailingAnnualDividendYield]) : 0;
+        decimal currentPrice = result[Field.RegularMarketPrice] != null ? Convert.ToDecimal(result[Field.RegularMarketPrice]) : 0;
+
+        decimal tetoPrice = CalculatePriceTeto(dYCurrent, currentPrice, dyDesired);
         string recomendation = Recomendation((decimal)result.RegularMarketPrice, tetoPrice);
 
         DateTime currentDate = DateTime.Now;
@@ -38,7 +46,7 @@ public class YahooFinanceApiClient
         activeReturn.Ativo = result.Symbol;
         activeReturn.NomeDoAtivo = result.LongName;
         activeReturn.Tipo = VerifyType(result.QuoteType);
-        activeReturn.DividentYield = (result.TrailingAnnualDividendYield * 100).ToString("F2") + "%";
+        activeReturn.DividentYield = (dyDesired).ToString() + "%";
         activeReturn.PrecoAtual = $"R$ {result.RegularMarketPrice.ToString("F2")}";
         activeReturn.P_VP = (result.PriceToBook).ToString("F1");
         activeReturn.Preco_Teto = $"R$ {tetoPrice.ToString("F2")}";
@@ -101,14 +109,18 @@ public class YahooFinanceApiClient
         return $"{(averageDividends * 100).ToString("0.##") + "%"} por ano.";
     }
 
-    static decimal CalculatePriceTeto(decimal dividendYield, decimal RegularMarketPrice)
+    static decimal CalculatePriceTeto(decimal dYCurrent, decimal currentPrice, decimal dYDesiredPercentage)
     {
-        decimal desiredReturnRate = 0.06M;
+        dYDesiredPercentage /= 100;
 
-        //calculates the average dividend per share
-        decimal dividendPerShare = RegularMarketPrice * dividendYield;
+        if (dYCurrent <= 0 || currentPrice <= 0)
+            throw new InvalidOperationException("Data of Dividend Yield or Active price are invalid!");
 
-        return dividendPerShare / desiredReturnRate;
+        decimal AnnualDividends = dYCurrent * currentPrice;
+
+        decimal priceTeto = AnnualDividends / dYDesiredPercentage;
+
+        return priceTeto;
     }
 
     static string Recomendation(decimal regularMarketPrice, decimal tetoPrice)
