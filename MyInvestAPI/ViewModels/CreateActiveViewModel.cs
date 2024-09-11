@@ -7,13 +7,15 @@ namespace MyInvestAPI.ViewModels
     {
         public string? Type { get; set; }
         public string? Code { get; set; }
+        public float DYDesiredPercentage { get; set; }
         public int Purse_Id { get; set; }
 
         public Active CreateActive(Purse purse)
         {
             Active active = new();
             active.Code = Code;
-            active.type = this.Type;
+            active.DYDesiredPercentage = DYDesiredPercentage;
+            active.Type = this.Type;
             active.CreatedAt = DateTime.UtcNow;
             active.LastUpdatedAt = DateTime.UtcNow;
             active.Purses = new List<Purse>() { purse };

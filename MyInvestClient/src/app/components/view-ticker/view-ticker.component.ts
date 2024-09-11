@@ -75,7 +75,7 @@ export class ViewTickerComponent implements OnInit{
 
     param !== null ? this.activeName = param : alert("Aconteceu um erro ao tentar buscar o ticker!");
 
-    this.activeService.search(this.activeName).subscribe({
+    this.activeService.search(this.activeName, this.displayValue).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.status === 200)
         {

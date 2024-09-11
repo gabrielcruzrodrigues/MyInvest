@@ -14,20 +14,21 @@ export class ActiveService {
     private http: HttpClient
   ) { }
 
-  search(active: string): Observable<any>
+  search(active: string, percentage: string): Observable<any>
   {
-    const urlForRequest = this.url + `/search-active/${active}`;
+    const urlForRequest = this.url + `/search-active/${active}/${percentage}`;
     return this.http.get(urlForRequest, { observe: 'response' });
   }
 
-  create(purseId: string, type: string, code: string): Observable<any>
+  create(purseId: string, type: string, code: string, DYDesiredPercentage: string): Observable<any>
   {
     const urlForRequest = this.url + "/active";
 
     const objForRequest = {
       type: type,
       purse_Id: purseId,
-      code: code
+      code: code,
+      dyDesiredPercentage: DYDesiredPercentage
     }
     return this.http.post(urlForRequest, objForRequest, { observe: 'response' });
   }

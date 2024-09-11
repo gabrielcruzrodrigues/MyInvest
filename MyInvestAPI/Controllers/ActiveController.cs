@@ -20,7 +20,7 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Action>> Create(CreateActiveViewModel activeViewModel)
+        public async Task<ActionResult<Active>> Create(CreateActiveViewModel activeViewModel)
         {
             if (activeViewModel is null)
                 return BadRequest("The body for create a new active must not be null.");
