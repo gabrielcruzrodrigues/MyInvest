@@ -12,8 +12,8 @@
                <div>Ações</div>
           </div>
           <div class="container" *ngFor="let active of actives">
-               <div class="column" (click)="redirectToActive(active.code)">{{ active.code }}</div>
-               <div class="column divisor" (click)="redirectToActive(active.code)">{{ active.type }}</div>
+               <div class="column" (click)="redirectToActive(active.code, active.dyDesiredPercentage)">{{ active.code }}</div>
+               <div class="column divisor" (click)="redirectToActive(active.code, active.dyDesiredPercentage)">{{ active.type }}</div>
                <div class="actions-container column divisor">
                     <div class="actions edit">
                          <img src="assets/edit.png">

@@ -70,6 +70,28 @@
      background-color: $secundary-color;
 }
 
+.DY {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     text-align: center;
+     margin-top: 20px;
+     padding: 10px 0;
+}
+
+.DY label {
+     font-size: 16px;
+     margin-bottom: 5px;
+}
+
+.DY input {
+     border-radius: 10px;
+     width: 100%;
+     border: 1px solid #626262;
+     margin-top: 3px;
+}
+
 .error-container {
      height: 2px; 
      margin-bottom: 20px; 

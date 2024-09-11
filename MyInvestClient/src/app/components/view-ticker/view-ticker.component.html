@@ -51,30 +51,30 @@
        </thead>
      </table>
 
-     <div class="actions">
-       <div class="purses">
-        <label for="purseSelect">Selecione uma carteira:</label>
-        <select id="purseSelect" [(ngModel)]="selectedPurseId">
-          <option value="" disabled selected>Clique para selecionar</option>
-          <option *ngFor="let purse of purses" [value]="purse.id">
-            {{ purse.name }}
-          </option>
-        </select>
-       </div>
+  <div class="actions">
+    <div class="DY">
+      <label>Informe o DY (Dividend Yield) desejado:</label>
+      <input type="text" placeholder="Ex: 5%" (input)="onInputChange($event)" [value]="dYDisplayValue">
+    </div>
 
-       <div class="DY">
-        <label>Informe o DY (Dividend Yield) desejado:</label>
-        <input type="text" placeholder="Ex: 5%" (input)="onInputChange($event)" [value]="displayValue">
-       </div>
-     </div>
+    <div class="purses">
+      <label for="purseSelect">Selecione uma carteira:</label>
+      <select id="purseSelect" [(ngModel)]="selectedPurseId">
+        <option value="" disabled selected>Clique para selecionar</option>
+        <option *ngFor="let purse of purses" [value]="purse.id">
+          {{ purse.name }}
+        </option>
+      </select>
+    </div>
+  </div>
+    
+    <div class="error-container" #containerError>
+     <p class="error-message" >
+       Selecione uma carteira para continuar!
+     </p>
+    </div>
 
-     <div class="error-container" #containerError>
-      <p class="error-message" >
-        Selecione uma carteira para continuar!
-      </p>
-     </div>
-
-     <button (click)="buyActive()">Comprar ativo</button>
+     <button (click)="buyActive()">Adicionar ativo</button>
 </section>
 <app-loading [isLoading]="isLoading"></app-loading>
 

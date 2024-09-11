@@ -44,7 +44,7 @@ export class ViewTickerComponent implements OnInit{
   isLoading: boolean = true;
 
   percentValue: number | null = null;
-  displayValue: string = '';
+  dYDisplayValue: string = '';
 
   active: Active = {
     data: '',
@@ -72,10 +72,18 @@ export class ViewTickerComponent implements OnInit{
   ngOnInit(): void {
     this.userId = this.authService.getId();
     var param = this.activedRoute.snapshot.paramMap.get('name');
+    var percentValueParam = this.activedRoute.snapshot.paramMap.get('percentValue');
 
     param !== null ? this.activeName = param : alert("Aconteceu um erro ao tentar buscar o ticker!");
+    percentValueParam !== null ? this.percentValue = parseInt(percentValueParam) : alert("Aconteceu um erro ao tentar buscar o ticker!");
+    
+    if (this.percentValue === null)
+    {
+      alert("O DY (Dividend Yield) não pode ser nulo111!");
+      return;
+    }
 
-    this.activeService.search(this.activeName, this.displayValue).subscribe({
+    this.activeService.search(this.activeName, this.percentValue).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.status === 200)
         {
@@ -128,6 +136,7 @@ export class ViewTickerComponent implements OnInit{
       roe: body.roe || body.roe,
       crecimento_De_Dividendos_5_anos: body.crecimento_De_Dividendos_5_anos || ''
     } 
+    this.dYDisplayValue = body.dividentYield;
     this.isLoading = false;
   }
 
@@ -142,7 +151,17 @@ export class ViewTickerComponent implements OnInit{
     if (this.selectedPurseId !== '')
     {
       this.isLoading = true;
-      this.activeService.create(this.selectedPurseId, this.active.tipo, this.active.ativo).subscribe({
+
+      if (this.percentValue === null)
+      {
+        if (typeof window !== 'undefined')
+          {
+            alert("O DY (Dividend Yield) não pode ser nulo !");
+          }
+          return;
+      }
+
+      this.activeService.create(this.selectedPurseId, this.active.tipo, this.active.ativo, this.percentValue?.toString()).subscribe({
         next: (response: HttpResponse<any>) => {
           this.isLoading = false;
           if (response.status === 201)
@@ -169,12 +188,12 @@ export class ViewTickerComponent implements OnInit{
     if (!isNaN(numericValue))
     {
       this.percentValue = numericValue;
-      this.displayValue = `${numericValue}%`;
+      this.dYDisplayValue = `${numericValue}%`;
     }
     else
     {
       this.percentValue = null;
-      this.displayValue = '';
+      this.dYDisplayValue = '';
     }
   }
 }

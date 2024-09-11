@@ -28,12 +28,12 @@ export const routes: Routes = [
           path: 'search-ticker', component: SearchTickerComponent
      },
      {
-          path: 'view-ticker/:name', component: ViewTickerComponent
+          path: 'view-ticker/:name/:percentValue', component: ViewTickerComponent
      },
      {
           path: 'view-actives/:purse', component: ViewActivesComponent
      },
      {
-          path: 'view-active-info/:name', component: ViewTickerFinalComponent
+          path: 'view-active-info/:name/:dividentYield', component: ViewTickerFinalComponent
      }
 ];

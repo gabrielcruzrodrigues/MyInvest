@@ -28,6 +28,7 @@ interface Active {
 })
 export class ViewTickerFinalComponent implements OnInit{
   activeName: string = '';
+  dividentYield: number | null = null;
   isLoading: boolean = true;
 
   constructor(
@@ -52,10 +53,21 @@ export class ViewTickerFinalComponent implements OnInit{
 
   ngOnInit(): void {
     var param = this.activedRoute.snapshot.paramMap.get('name');
+    var dividentYieldParam = this.activedRoute.snapshot.paramMap.get('dividentYield');
 
     param !== null ? this.activeName = param : alert("Aconteceu um erro ao tentar buscar o ticker!");
+    dividentYieldParam !== null ? this.dividentYield = parseInt(dividentYieldParam) : alert("Aconteceu um erro ao tentar buscar o ticker!");
 
-    this.activeService.search(this.activeName).subscribe({
+    if (this.dividentYield === null)
+      {
+        if (typeof window !== 'undefined')
+          {
+            alert("O DY (Dividend Yield) não pode ser nulo !");
+          }
+          return;
+      }
+
+    this.activeService.search(this.activeName, this.dividentYield).subscribe({
       next: (response: HttpResponse<any>) => {
         this.isLoading = false;
         if (response.status === 200)

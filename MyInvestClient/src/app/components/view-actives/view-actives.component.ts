@@ -9,6 +9,7 @@ interface Active {
   id: string,
   code: string,
   type: string,
+  dyDesiredPercentage: string
 }
 
 @Component({
@@ -76,6 +77,7 @@ export class ViewActivesComponent implements OnInit{
           id: active.active_Id,
           code: active.code,
           type: active.type,
+          dyDesiredPercentage: active.dyDesiredPercentage
         }
       });
       this.titles.nativeElement.classList.add('active');
@@ -88,9 +90,9 @@ export class ViewActivesComponent implements OnInit{
     }
   }
 
-  redirectToActive(code: string): void
+  redirectToActive(code: string, dyDesiredPercentage: string): void
   {
-    this.router.navigate(["/view-active-info/" + code]);
+    this.router.navigate([`/view-active-info/${code}/${dyDesiredPercentage}`]);
   }
 
   createActive(): void 

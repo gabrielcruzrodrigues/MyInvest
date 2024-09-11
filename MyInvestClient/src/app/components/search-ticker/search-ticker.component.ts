@@ -17,6 +17,9 @@ export class SearchTickerComponent {
   form: FormGroup;
   isLoading: boolean = false;
 
+  percentValue: number | null = null;
+  dYDisplayValue: string = '';
+
   constructor(
     private fb: FormBuilder,
     private activeService: ActiveService,
@@ -32,13 +35,23 @@ export class SearchTickerComponent {
     if (this.form.valid) 
     {
       this.isLoading = true;
-      this.activeService.search(this.form.get('name')?.value).subscribe({
+      
+      if (this.percentValue === null)
+      {
+        if (typeof window !== 'undefined')
+          {
+            alert("O DY (Dividend Yield) não pode ser nulo !");
+          }
+          return;
+      }
+    
+      this.activeService.search(this.form.get('name')?.value, this.percentValue).subscribe({
         next: (response: HttpResponse<any>) => {
           this.isLoading = false;
           if (response.status === 200)
           {
             var name = this.form.get('name')?.value;
-            this.route.navigate(["/view-ticker/" + name]);
+            this.route.navigate([`/view-ticker/${name}/${this.percentValue}`]);
           }
         },
         error: (err) => {
@@ -59,6 +72,23 @@ export class SearchTickerComponent {
     else 
     {
       this.form.markAllAsTouched()
+    }
+  }
+
+  onInputChange(event: any): void
+  {
+    const inputValue = event.target.value.replace('%', '').trim();
+    const numericValue = parseFloat(inputValue);
+
+    if (!isNaN(numericValue))
+    {
+      this.percentValue = numericValue;
+      this.dYDisplayValue = `${numericValue}%`;
+    }
+    else
+    {
+      this.percentValue = null;
+      this.dYDisplayValue = '';
     }
   }
 }
