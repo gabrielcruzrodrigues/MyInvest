@@ -2,7 +2,9 @@
 using MyInvestAPI.Api;
 using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
+using MyInvestAPI.Extensions;
 using MyInvestAPI.ViewModels;
+using System;
 
 namespace MyInvestAPI.Repositories
 {
@@ -22,10 +24,7 @@ namespace MyInvestAPI.Repositories
             var purse = await _context.Purses.FirstOrDefaultAsync(purse => purse.Purse_Id.Equals(activeViewModel.Purse_Id));
 
             if (purse is null)
-            {
-                _logger.LogError("The purse not found");
-                return null;
-            }
+                throw new HttpResponseException(404, $"The purse with id {activeViewModel.Purse_Id} not found!");
 
             Active active = activeViewModel.CreateActive(purse);
 
@@ -38,7 +37,7 @@ namespace MyInvestAPI.Repositories
             catch(Exception ex)
             {
                 _logger.LogError($"An Error occured when tryning create active! err: {ex.Message}");
-                return null;
+                throw new HttpResponseException(500, "An Error occured when tryning create active!");
             }
         }
         public async Task<IEnumerable<Active>> GetAllAsync()
@@ -56,64 +55,71 @@ namespace MyInvestAPI.Repositories
         }
         public async Task<Active> GetByIdAsync(int id)
         {
-            return await _context.Actives
+            if (id <= 0)
+                throw new HttpResponseException(400, "The ID must be greater than 0!");
+
+            var active = await _context.Actives
                 .AsNoTracking()
                 .FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
+
+            if (active is null)
+                throw new HttpResponseException(404, $"The active with id {id} not found!");
+
+            return active;
         }
         public async Task<Active> GetByIdWithPursesAsync(int id)
         {
-            return await _context.Actives
+            if (id <= 0)
+                throw new HttpResponseException(400, "The ID must be greater than 0!");
+
+            var active = await _context.Actives
                 .AsNoTracking()
                 .Include(p => p.Purses)
                 .FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
+
+            if (active is null)
+                throw new HttpResponseException(404, $"The active with id {id} not found!");
+
+            return active;
         }
-        public async Task<bool> UpdateAsync(int id, UpdateActiveViewModel updateActiveViewModel)
+        public void Update(int id, UpdateActiveViewModel updateActiveViewModel)
         {
-            var activeVerify = await _context.Actives.FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
+            var activeVerify = _context.Actives.FirstOrDefault(active => active.Active_Id.Equals(id));
 
             if (activeVerify is null)
-            {
-                _logger.LogError($"Active with id: {id} not found!");
-                return false;
-            }
+                throw new HttpResponseException(404, $"The active with id {id} not found!");
 
             var active = updateActiveViewModel.UpdateActive(activeVerify);
 
             try
             {
                 _context.Entry(active).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-
-                return true;
+                _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
                 _logger.LogError($"An error occured when tryning to update the user! err: {ex.Message}");
-                return false;
+                throw new HttpResponseException(500, "An Erro occured when tryning update active!");;
             }
         }
-        public async Task<bool> DeleteAsync(int id)
+
+        public void Delete(int id)
         {
-            var active = await _context.Actives
-                .FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
+            Active active = _context.Actives
+                .FirstOrDefault(active => active.Active_Id.Equals(id));
 
             if (active is null)
-            {
-                _logger.LogError($"Active with id {id} not found");
-                return false;
-            }
+                throw new HttpResponseException(404, $"The active with id {id} not found!");
 
             try
             {
                 _context.Actives.Remove(active);
-                await _context.SaveChangesAsync();
-
-                return true;
+                _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
                 _logger.LogError($"An error occured when tryning to delete the user! err: {ex.Message}");
-                return false;
+                throw new HttpResponseException(500, "An Erro occured when tryning delete active!"); ;
             }
         }
         public async Task<ActiveReturn> SearchActiveAsync(string active)
@@ -123,33 +129,27 @@ namespace MyInvestAPI.Repositories
                 var resultActive = await YahooFinanceApiClient.GetActive(active);
                 
                 if (resultActive is null)
-                {
-                    _logger.LogError("The active not found!");
-                    return null;
-                }
+                    throw new HttpResponseException(404, $"The active with name ({active}) not found!");
 
                 return resultActive;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Houve um problema interno ao tentar buscar o ativo: {ex.Message}");
-                return null;
+                _logger.LogError($"Un error occured when tryning search actives! err: {ex.Message}");
+                throw new HttpResponseException(500, "Un error occured when tryning search actives"); ;
             }
         }
 
         public async Task<Purse> GetActivesByPurseId(int purseId)
         {
-            var actives = await _context.Purses
+            var Purse = await _context.Purses
                 .Include(p => p.Actives)
                 .FirstOrDefaultAsync(p => p.Purse_Id == purseId);
 
-            if (actives is null || !actives.Actives.Any())
-            {
-                _logger.LogError("No actives found for the given purse ID.");
-                return null;
-            }
+            if (Purse is null || !Purse.Actives.Any())
+                throw new HttpResponseException(404, $"The purse with id {purseId} not found!");
 
-            return actives;
+            return Purse;
         }
     }
 }

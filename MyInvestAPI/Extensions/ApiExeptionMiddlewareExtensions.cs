@@ -13,18 +13,30 @@ namespace MyInvestAPI.Extensions
             {
                 appError.Run(async context =>
                 {
-                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                    context.Response.ContentType = "application/json";
+                    var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
 
-                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    if (contextFeature != null)
+                    if (exceptionHandlerPathFeature?.Error is HttpResponseException httpResponseException)
                     {
-                        await context.Response.WriteAsync(new ErrorDetails()
-                        {
-                            StatusCode = context.Response.StatusCode,
-                            Message = contextFeature.Error.Message
-                        }.ToString());
+                        context.Response.StatusCode = httpResponseException.StatusCode;
+                        context.Response.ContentType = "application/json";
+                        await context.Response.WriteAsJsonAsync(httpResponseException.Value);
                     }
+                    else
+                    {
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                        await context.Response.WriteAsJsonAsync(new { message = "An unexpected error occurred." });
+                    }
+
+
+                    //var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    //if (contextFeature != null)
+                    //{
+                    //    await context.Response.WriteAsync(new ErrorDetails()
+                    //    {
+                    //        StatusCode = context.Response.StatusCode,
+                    //        Message = contextFeature.Error.Message
+                    //    }.ToString());
+                    //}
                 });
             });
         }

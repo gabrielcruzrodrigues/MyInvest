@@ -26,9 +26,6 @@ namespace MyInvestAPI.Controllers
                 return BadRequest("The body for create a new active must not be null.");
 
             Active activeCreated = await _repository.CreateAsync(activeViewModel);
-            
-            if (activeCreated is null)
-                return BadRequest("An error occured when tryning to create the user");
 
             return new CreatedAtRouteResult("SearchActive", new { id = activeCreated.Active_Id }, activeCreated);
         }
@@ -36,26 +33,19 @@ namespace MyInvestAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Active>>> GetAll()
         {
-            var result = await _repository.GetAllAsync();
-            return Ok(result);
+            return Ok(await _repository.GetAllAsync());
         }
 
         [HttpGet("purses")]
         public async Task<ActionResult<IEnumerable<Active>>> GetAllWithPurses()
         {
-            var result = await _repository.GetAllWithPursesAsync();
-            return Ok(result);
+            return Ok(await _repository.GetAllWithPursesAsync());
         }
 
         [HttpGet("{id}", Name ="SearchActive")]
         public async Task<ActionResult<Active>> GetById(int id)
         {
-            var ActiveVerify = await _repository.GetByIdAsync(id);
-
-            if (ActiveVerify is null)
-                return NotFound("Active not found.");
-
-            return Ok(ActiveVerify);
+            return Ok(await _repository.GetByIdAsync(id));
         }
 
         [HttpGet("{id}/purses")]
@@ -72,45 +62,27 @@ namespace MyInvestAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateActiveViewModel activeViewModel)
         {
-            var result = await _repository.UpdateAsync(id, activeViewModel);
-
-            if (!result)
-                return BadRequest("An error occured when tryning to update the user");
-
+            _repository.Update(id, activeViewModel);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _repository.DeleteAsync(id);
-
-            if (!result)
-                return BadRequest("An error occured when tryning to delete the user");
-
+            _repository.Delete(id);
             return NoContent();
         }
 
         [HttpGet("/search-active/{active}")]
         public async Task<ActionResult<ActiveReturn>> SearchActive(string active)
         {
-            var result = await _repository.SearchActiveAsync(active);
-
-            if (result is null)
-                return StatusCode(500, "Un error occured when tryning search actives");
-
-            return Ok(result);
+            return Ok(await _repository.SearchActiveAsync(active));
         }
 
         [HttpGet("/get-actives/{purseId}")]
         public async Task<ActionResult> GetActivesByPurseId(int purseId)
         {
-            var result = await _repository.GetActivesByPurseId(purseId);
-
-            if (result is null)
-                return StatusCode(500, "Un error occured when tryning search actives");
-
-            return Ok(result);
+            return Ok(await _repository.GetActivesByPurseId(purseId));
         }
     }
 }

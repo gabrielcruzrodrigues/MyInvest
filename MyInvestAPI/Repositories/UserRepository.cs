@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
+using MyInvestAPI.Extensions;
 using MyInvestAPI.ViewModels;
 
 namespace MyInvestAPI.Repositories
@@ -16,11 +17,21 @@ namespace MyInvestAPI.Repositories
             _logger = logger;
         }
 
-        public async Task<User> CreateAsync(User user)
+        public async Task<User> CreateAsync(CreateUserViewModel userViewModel)
         {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return user;
+            User user = userViewModel.CreateUser();
+
+            try
+            {
+                await _context.Users.AddAsync(user);
+                await _context.SaveChangesAsync();
+                return user;
+            } 
+            catch(Exception ex)
+            {
+                _logger.LogError($"An error occured when tryning to create the user! err: {ex.Message}");
+                throw new HttpResponseException(500, "An error occured when tryning to create the user");
+            }
         }
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
@@ -48,67 +59,89 @@ namespace MyInvestAPI.Repositories
 
         public async Task<User> GetByIdAsync(int id)
         {
-            return await _context.Users
+            if (id <= 0)
+                throw new HttpResponseException(400, "The ID must be greater than 0!");
+
+            var user = await _context.Users
                 .AsNoTracking()
                 .FirstOrDefaultAsync(user => user.User_Id == id);
+
+            if (user is null)
+                throw new HttpResponseException(404, $"The user with id {id} not found!");
+
+            return user;
         }
 
         public async Task<User> GetUserWithAllPursesByIdAsync(int id)
         {
-            return await _context.Users
+            if (id <= 0)
+                throw new HttpResponseException(400, "The ID must be greater than 0!");
+
+            var user = await _context.Users
                 .AsNoTracking()
                 .Include(user => user.Purses)
                 .FirstOrDefaultAsync(user => user.User_Id == id);
+
+            if (user is null)
+                throw new HttpResponseException(404, $"The user with id {id} not found!");
+
+            return user;
         }
 
         public async Task<User> GetUserWithAllPursesAndActivesByIdAsync(int id)
         {
-            return await _context.Users
+            if (id <= 0)
+                throw new HttpResponseException(400, "The ID must be greater than 0!");
+
+            var user = await _context.Users
                 .Include(user => user.Purses)
                 .ThenInclude(purse => purse.Actives)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(user => user.User_Id == id);
+
+            if (user is null)
+                throw new HttpResponseException(404, $"The user with id {id} not found!");
+
+            return user;
         }
 
-        public async Task<bool> UpdateAsync(int id, CreateUserViewModel userViewModel)
+        public void Update(int id, CreateUserViewModel userViewModel)
         {
-            var userVerify = await _context.Users.FirstOrDefaultAsync(user => user.User_Id == id);
+            User userVerify = _context.Users.FirstOrDefault(user => user.User_Id == id);
 
             if (userVerify == null)
-                return false;
+                throw new HttpResponseException(404, $"The user with ID {id} not found!");
 
             User user = userViewModel.UpdateUser(userVerify);
 
             try
             {
                 _context.Entry(userVerify).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return true;
+                _context.SaveChangesAsync();
             }
             catch (Exception err)
             {
                 _logger.LogError($"========= Ocorreu um erro ao tentar atualizar o usuário! err: {err.Message}");
-                return false;
+                throw new HttpResponseException(500, "An error occured when tryning to update the user");
             }
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public void Delete(int id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(user => user.User_Id == id);
+            User user = _context.Users.FirstOrDefault(user => user.User_Id == id);
 
             if (user == null)
-                return false;
+                throw new HttpResponseException(404, $"The user with ID {id} not found!");
 
             try
             {
                 _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-                return true;
+                _context.SaveChangesAsync();
             }
             catch(Exception ex)
             {
                 _logger.LogError($"========= Ocorreu um erro ao tentar deletar o usuário! err: {ex.Message}");
-                return false;
+                throw new HttpResponseException(500, "An error occured when tryning to delete the user");
             }
         }
     }

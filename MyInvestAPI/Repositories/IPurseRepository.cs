@@ -11,6 +11,6 @@ public interface IPurseRepository
     Task<IEnumerable<Purse>> GetAllWithActivesAsync();
     Task<Purse> GetByIdAsync(int id);
     Task<Purse> GetByIdWithActivesAsync(int id);
-    Task<bool> UpdateAsync(int id, UpdatePurseViewModel updatePurseViewModel);
-    Task<bool> DeleteAsync(int id); 
+    void Update(int id, UpdatePurseViewModel updatePurseViewModel);
+    void Delete(int id); 
 }

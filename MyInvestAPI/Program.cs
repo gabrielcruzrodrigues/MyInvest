@@ -53,6 +53,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyInvestAPI");
         c.RoutePrefix = "swagger";
     });
+    app.ConfigureExceptionHandler();
 }
 
 if (app.Environment.IsProduction())

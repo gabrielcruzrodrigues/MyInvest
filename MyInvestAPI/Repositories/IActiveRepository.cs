@@ -10,8 +10,8 @@ namespace MyInvestAPI.Repositories
         Task<IEnumerable<Active>> GetAllWithPursesAsync();
         Task<Active> GetByIdAsync(int id);
         Task<Active> GetByIdWithPursesAsync(int id);
-        Task<bool> UpdateAsync(int id, UpdateActiveViewModel updateActiveViewModel);
-        Task<bool> DeleteAsync(int id);
+        void Update(int id, UpdateActiveViewModel updateActiveViewModel);
+        void Delete(int id);
         Task<ActiveReturn> SearchActiveAsync(string active);
         Task<Purse> GetActivesByPurseId(int purseId);
     }
