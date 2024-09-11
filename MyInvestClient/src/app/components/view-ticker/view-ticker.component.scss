@@ -28,7 +28,7 @@ th {
      display: block;
      padding: 15px;
      font-size: 18px;
-     margin: 10px auto;
+     margin: 25px auto 10px auto;
      background-color: $primary-color;
      color: #fff;
      border: 1px solid #ccc;
@@ -36,7 +36,12 @@ th {
      cursor: pointer;
      width: 70%;
      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-     margin-top: 40px;
+}
+
+.actions {
+     display: block;
+     justify-content: center;
+     margin-top: 15px;
 }
 
 .purses {
@@ -58,6 +63,29 @@ select {
      padding: 10px;
      width: 80%;
      cursor: pointer;
+}
+
+.DY {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     text-align: center;
+     margin-top: 20px;
+     padding: 10px 10px 0 10px;
+}
+
+.DY label {
+     font-size: 16px;
+     margin-bottom: 5px;
+}
+
+.DY input {
+     border-radius: 10px;
+     padding: 10px;
+     width: 75%;
+     border: 1px solid #626262;
+     margin-top: 3px;
 }
 
 .error-container {
@@ -97,6 +125,10 @@ select {
      }
 
      .main-section select {
+          width: 600px;
+     }
+
+     .DY input {
           width: 600px;
      }
 }

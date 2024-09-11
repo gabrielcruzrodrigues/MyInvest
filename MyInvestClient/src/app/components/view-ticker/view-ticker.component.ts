@@ -43,6 +43,9 @@ export class ViewTickerComponent implements OnInit{
   @ViewChild('containerError', { static : false }) containerError!: ElementRef;
   isLoading: boolean = true;
 
+  percentValue: number | null = null;
+  displayValue: string = '';
+
   active: Active = {
     data: '',
     ativo: '',
@@ -155,6 +158,23 @@ export class ViewTickerComponent implements OnInit{
     }
     else {
       this.containerError.nativeElement.classList.add('active');
+    }
+  }
+
+  onInputChange(event: any): void
+  {
+    const inputValue = event.target.value.replace('%', '').trim();
+    const numericValue = parseFloat(inputValue);
+
+    if (!isNaN(numericValue))
+    {
+      this.percentValue = numericValue;
+      this.displayValue = `${numericValue}%`;
+    }
+    else
+    {
+      this.percentValue = null;
+      this.displayValue = '';
     }
   }
 }

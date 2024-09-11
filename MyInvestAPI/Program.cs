@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using MyInvestAPI.Controllers;
 using MyInvestAPI.Data;
 using MyInvestAPI.Extensions;
 using MyInvestAPI.Repositories;
@@ -34,6 +33,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPurseRepository, PurseRepository>();
+builder.Services.AddScoped<IActiveRepository, ActiveRepository>();
 
 //database
 string postgreSqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");

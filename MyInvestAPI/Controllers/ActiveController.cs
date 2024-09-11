@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Api;
 using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
+using MyInvestAPI.Repositories;
 using MyInvestAPI.ViewModels;
 
 namespace MyInvestAPI.Controllers
@@ -11,11 +12,11 @@ namespace MyInvestAPI.Controllers
     [ApiController]
     public class ActiveController : ControllerBase
     {
-        public readonly MyInvestContext _context;
+        public readonly IActiveRepository _repository;
 
-        public ActiveController(MyInvestContext context)
+        public ActiveController(IActiveRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         [HttpPost]
@@ -24,49 +25,32 @@ namespace MyInvestAPI.Controllers
             if (activeViewModel is null)
                 return BadRequest("The body for create a new active must not be null.");
 
-            Purse purse = _context.Purses.FirstOrDefault(purse => purse.Purse_Id.Equals(activeViewModel.Purse_Id));
-
-            if (purse is null)
-                return NotFound("Purse not found.");
-
-            Active active = activeViewModel.CreateActive(purse);
-
-            try
-            {
-                _context.Actives.Add(active);
-                await _context.SaveChangesAsync();
-
-                return new CreatedAtRouteResult("GetActive", new { id = active.Active_Id }, active);
-            }
-            catch(Exception)
-            {
+            Active activeCreated = await _repository.CreateAsync(activeViewModel);
+            
+            if (activeCreated is null)
                 return BadRequest("An error occured when tryning to create the user");
-            }
+
+            return new CreatedAtRouteResult("SearchActive", new { id = activeCreated.Active_Id }, activeCreated);
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Active>>> GetAll()
         {
-            return await _context.Actives
-                .AsNoTracking()
-                .ToListAsync();
+            var result = await _repository.GetAllAsync();
+            return Ok(result);
         }
 
         [HttpGet("purses")]
         public async Task<ActionResult<IEnumerable<Active>>> GetAllWithPurses()
         {
-            return await _context.Actives
-                .AsNoTracking()
-                .Include(p => p.Purses)
-                .ToListAsync();
+            var result = await _repository.GetAllWithPursesAsync();
+            return Ok(result);
         }
 
-        [HttpGet("{id}", Name ="GetActive")]
-        public async Task<ActionResult<Action>> GetById(int id)
+        [HttpGet("{id}", Name ="SearchActive")]
+        public async Task<ActionResult<Active>> GetById(int id)
         {
-            var ActiveVerify = await _context.Actives
-                .AsNoTracking()
-                .FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
+            var ActiveVerify = await _repository.GetByIdAsync(id);
 
             if (ActiveVerify is null)
                 return NotFound("Active not found.");
@@ -75,12 +59,9 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpGet("{id}/purses")]
-        public async Task<ActionResult<Action>> GetByIdWithPurses(int id)
+        public async Task<ActionResult<Active>> GetByIdWithPurses(int id)
         {
-            var ActiveVerify = await _context.Actives
-                .AsNoTracking()
-                .Include(p => p.Purses)
-                .FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
+            var ActiveVerify = await _repository.GetByIdWithPursesAsync(id);
 
             if (ActiveVerify is null)
                 return NotFound("Active not found.");
@@ -91,78 +72,45 @@ namespace MyInvestAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UpdateActiveViewModel activeViewModel)
         {
-            var activeVerify = await _context.Actives.FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
+            var result = await _repository.UpdateAsync(id, activeViewModel);
 
-            if (activeVerify is null)
-                return NotFound("Active not found.");
-
-            var active = activeViewModel.UpdateActive(activeVerify);
-
-            try
-            {
-                _context.Entry(active).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-
-                return NoContent();
-            }
-            catch(Exception)
-            {
+            if (!result)
                 return BadRequest("An error occured when tryning to update the user");
-            }
+
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var active = await _context.Actives
-                .FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
+            var result = await _repository.DeleteAsync(id);
 
-            if (active is null)
-                return NotFound("Active not found.");
-
-            try
-            {
-                _context.Actives.Remove(active);
-                await _context.SaveChangesAsync();
-
-                return NoContent();
-            }
-            catch(Exception)
-            {
+            if (!result)
                 return BadRequest("An error occured when tryning to delete the user");
-            }
+
+            return NoContent();
         }
 
         [HttpGet("/search-active/{active}")]
-        public async Task<ActionResult<ActiveReturn>> GetActive(string active)
+        public async Task<ActionResult<ActiveReturn>> SearchActive(string active)
         {
-            try
-            {
-                var resultActive = await YahooFinanceApiClient.GetActive(active);
-                if (resultActive is null)
-                    return NotFound("The active not found!");
+            var result = await _repository.SearchActiveAsync(active);
 
-                return resultActive;
-            }
-            catch(Exception ex)
-            {
-                return StatusCode(500, $"Houve um problema interno ao tentar buscar o ativo: {ex}");
-            }
+            if (result is null)
+                return StatusCode(500, "Un error occured when tryning search actives");
+
+            return Ok(result);
         }
 
         [HttpGet("/get-actives/{purseId}")]
         public async Task<ActionResult> GetActivesByPurseId(int purseId)
         {
-            var actives = await _context.Purses
-                .Include(p => p.Actives)
-                .FirstOrDefaultAsync(p => p.Purse_Id == purseId);
+            var result = await _repository.GetActivesByPurseId(purseId);
 
-            if (actives is null || !actives.Actives.Any())
-            {
-                return NotFound("No actives found for the given purse ID.");
-            }
+            if (result is null)
+                return StatusCode(500, "Un error occured when tryning search actives");
 
-            return Ok(actives);
+            return Ok(result);
         }
     }
 }
