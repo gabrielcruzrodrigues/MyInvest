@@ -60,9 +60,9 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, UpdateActiveViewModel activeViewModel)
+        public async Task<IActionResult> Update(int activeId, UpdateActiveViewModel activeViewModel)
         {
-            _repository.Update(id, activeViewModel);
+            _repository.Update(activeId, activeViewModel);
             return NoContent();
         }
 

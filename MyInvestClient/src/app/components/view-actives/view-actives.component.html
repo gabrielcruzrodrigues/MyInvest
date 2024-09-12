@@ -18,7 +18,7 @@
                <div class="column divisor">{{ active.dyDesiredPercentage }}%</div>
                <div class="actions-container column divisor">
                     <button class="actions edit">
-                         <img src="assets/edit.png">
+                         <img src="assets/edit.png" (click)="updateActive(active.id, active.code, active.dyDesiredPercentage)">
                     </button>
                     <button class="actions delete" (click)="deleteActive(active.id)">
                          <img src="assets/delete.png">

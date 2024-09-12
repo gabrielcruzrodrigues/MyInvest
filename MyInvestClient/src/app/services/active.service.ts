@@ -45,4 +45,15 @@ export class ActiveService {
     console.log(urlForRequest)
     return this.http.delete(urlForRequest, { observe: 'response' });
   }
+
+  update(activeId: string, dYDesiredPercentage: number): Observable<any>
+  {
+    const urlForRequest = this.url + "/active/" + activeId;
+    console.log(urlForRequest);
+
+    const objForRequest = {
+      dyDesiredPercentage: dYDesiredPercentage
+    }
+    return this.http.put(urlForRequest, objForRequest, { observe: 'response' });
+  }
 }

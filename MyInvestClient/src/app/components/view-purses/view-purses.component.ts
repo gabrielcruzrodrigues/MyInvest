@@ -47,6 +47,7 @@ export class ViewPursesComponent implements OnInit{
     }
 
     this.userId = this.authService.getId();
+
     this.userService.getPurses(this.userId).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.status === 200)
@@ -55,8 +56,9 @@ export class ViewPursesComponent implements OnInit{
         }
       },
       error: (err) => {
+        console.log("Houve um erro ao tentar buscar as carteiras " + err.message);
         this.isLoading = false;
-        alert("Houve um erro ao tentar buscar as carteiras");
+        return;
       }
     })
   }

@@ -7,6 +7,7 @@ import { ViewTickerComponent } from './components/view-ticker/view-ticker.compon
 import { ViewActivesComponent } from './components/view-actives/view-actives.component';
 import { ViewTickerFinalComponent } from './components/view-ticker-final/view-ticker-final.component';
 import { EditPurseComponent } from './components/edit-purse/edit-purse.component';
+import { EditActiveComponent } from './components/edit-active/edit-active.component';
 
 export const routes: Routes = [
      {
@@ -29,6 +30,9 @@ export const routes: Routes = [
      },
      {
           path: 'view-ticker/:name/:percentValue', component: ViewTickerComponent
+     },
+     {
+          path: 'edit-ticker/:activeId/:name/:percentValue', component: EditActiveComponent
      },
      {
           path: 'view-actives/:purse', component: ViewActivesComponent

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../layout/loading/loading.component';
+import { AuthService } from '../../services/auth.service';
 
 interface Active {
   id: string,
@@ -21,6 +22,7 @@ interface Active {
 })
 export class ViewActivesComponent implements OnInit{
   purseId: string = '';
+  userId: string = '';
   actives: Active[] = [];
   @ViewChild('message', { static: false }) message!: ElementRef;
   @ViewChild('titles', { static: false }) titles!: ElementRef;
@@ -29,10 +31,13 @@ export class ViewActivesComponent implements OnInit{
   constructor(
     private activeService: ActiveService,
     private activedRoute: ActivatedRoute,
+    private authService: AuthService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.userId = this.authService.getId();
+
     var param = this.activedRoute.snapshot.paramMap.get('purse');
     if (param != null)
     {
@@ -126,5 +131,10 @@ export class ViewActivesComponent implements OnInit{
         }
       }
     })
+  }
+
+  updateActive(activeId: string, activeCode: string, percentValue: string)
+  {
+    this.router.navigate(["/edit-ticker/" + activeId + "/" +  activeCode + "/" + percentValue])
   }
 }
