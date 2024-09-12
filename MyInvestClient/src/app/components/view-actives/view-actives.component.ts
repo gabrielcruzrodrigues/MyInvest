@@ -34,7 +34,8 @@ export class ViewActivesComponent implements OnInit{
 
   ngOnInit(): void {
     var param = this.activedRoute.snapshot.paramMap.get('purse');
-    if (param !== null)
+    console.log("param" + param);
+    if (param != null)
     {
       this.purseId = param; 
     } 
@@ -61,7 +62,10 @@ export class ViewActivesComponent implements OnInit{
         }
         if (err.status === 500)
         {
-          alert("Ocorreu um erro ao tentar buscar os ativos!");
+          if (typeof window !== 'undefined')
+          {
+            alert("Carteira criada com sucesso!");
+          }
         }
         console.log(err);
       }

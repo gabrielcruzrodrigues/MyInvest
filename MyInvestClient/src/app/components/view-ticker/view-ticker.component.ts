@@ -46,6 +46,8 @@ export class ViewTickerComponent implements OnInit{
   percentValue: number | null = null;
   dYDisplayValue: string = '';
 
+  hasUpdatedInputAutomatically: boolean = false;
+
   active: Active = {
     data: '',
     ativo: '',
@@ -77,28 +79,7 @@ export class ViewTickerComponent implements OnInit{
     param !== null ? this.activeName = param : alert("Aconteceu um erro ao tentar buscar o ticker!");
     percentValueParam !== null ? this.percentValue = parseInt(percentValueParam) : alert("Aconteceu um erro ao tentar buscar o ticker!");
     
-    if (this.percentValue === null)
-    {
-      alert("O DY (Dividend Yield) não pode ser nulo111!");
-      return;
-    }
-
-    this.activeService.search(this.activeName, this.percentValue).subscribe({
-      next: (response: HttpResponse<any>) => {
-        if (response.status === 200)
-        {
-          this.populateActiveFields(response.body);
-        }
-        else 
-        {
-          alert("Ocorreu um erro interno no sistema!");
-        }
-      },
-      error: (err) => {
-        this.isLoading = false;
-        alert("Aconteceu um erro ao tentar buscar o ticker!");
-      }
-    })
+    this.searchTicker();
     
     this.userService.getPurses(this.userId).subscribe({
       next: (response: HttpResponse<any>) => {
@@ -120,6 +101,35 @@ export class ViewTickerComponent implements OnInit{
     })
   }
 
+  searchTicker()
+  {
+    if (this.percentValue === null)
+    {
+      alert("O DY (Dividend Yield) não pode ser nulo111!");
+      return;
+    }
+
+    this.activeService.search(this.activeName, this.percentValue).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.status === 200)
+        {
+          this.populateActiveFields(response.body);
+        }
+        else 
+        {
+          alert("Ocorreu um erro interno no sistema!");
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        if (typeof window !== 'undefined')
+        {
+          alert("Aconteceu um erro ao tentar buscar o ticker!");
+        }
+      }
+    })
+  }
+
   populateActiveFields(body: any): void
   {
     this.active = {
@@ -136,11 +146,15 @@ export class ViewTickerComponent implements OnInit{
       roe: body.roe || body.roe,
       crecimento_De_Dividendos_5_anos: body.crecimento_De_Dividendos_5_anos || ''
     } 
-    this.dYDisplayValue = body.dividentYield;
+    if (!this.hasUpdatedInputAutomatically){
+      this.dYDisplayValue = body.dividentYield;
+      this.hasUpdatedInputAutomatically = false;
+    }
+
     this.isLoading = false;
   }
 
-  buyActive(): void 
+  addActive(): void 
   {
     if (!this.authService.verifyIfUserIdLogged())
     {
@@ -185,15 +199,17 @@ export class ViewTickerComponent implements OnInit{
     const inputValue = event.target.value.replace('%', '').trim();
     const numericValue = parseFloat(inputValue);
 
-    if (!isNaN(numericValue))
+    if (numericValue !== this.percentValue && numericValue > 0)
     {
       this.percentValue = numericValue;
       this.dYDisplayValue = `${numericValue}%`;
     }
-    else
+      
+    if (numericValue !== 0 && numericValue > 0 && numericValue !== null && !isNaN(numericValue))
     {
-      this.percentValue = null;
-      this.dYDisplayValue = '';
+      this.searchTicker();
     }
   }
+    
 }
+

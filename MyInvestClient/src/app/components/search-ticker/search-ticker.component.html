@@ -10,14 +10,16 @@
                     O nome não pode ser nulo ao realizar uma pesquisa!
                </p>
           </div>
-          <input type="text" placeholder="Digite aqui o ticker, Ex: 'AAPL'" formControlName="name">
+          <label>Título do ticker:</label>
+          <input type="text" placeholder="Ex: 'AAPL'" formControlName="name">
 
           <div class="error-container">
                <p class="error-message" *ngIf="form.get('dy')?.errors?.['required'] && form.get('dy')?.touched">
                     O DY (Dividend Yield) não pode ser nulo
                </p>
           </div>
-          <input type="text" placeholder="DY (Dividend Yield) - Ex: 5%" formControlName="dy" (input)="onInputChange($event)" [value]="dYDisplayValue">
+          <label>DY (Dividend Yield) esperado:</label>
+          <input type="text" placeholder="Ex: 5%" formControlName="dy" (input)="onInputChange($event)" [value]="dYDisplayValue">
 
           <button type="submit">Buscar ativo</button>
      </form>

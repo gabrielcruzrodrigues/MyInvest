@@ -42,6 +42,13 @@
      margin-top: 40px;
 }
 
+.main-section label {
+     color: $primary-color;
+     display: block;
+     margin: 5px auto;
+     text-align: left;
+}
+
 .main-section input {
      width: 100%;
      font-size: 16px;
@@ -72,8 +79,9 @@
 
 .error-container {
      height: 2px; 
-     margin-bottom: 20px; 
+     margin-bottom: 30px; 
      text-align: center;
+     display: block;
 }
 
 .error-message {
@@ -90,6 +98,10 @@
           width: 740px;
           margin: 0 auto;
           display: block;
+     }
+
+     .main-section label {
+          width: 740px;
      }
 
      .main-section button {
