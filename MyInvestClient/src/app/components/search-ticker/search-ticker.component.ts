@@ -26,7 +26,8 @@ export class SearchTickerComponent {
     private route: Router
   ) {
     this.form = this.fb.group({
-      name: ['', Validators.required]
+      name: ['', Validators.required],
+      dy: ['', Validators.required]
     })
   }
 
@@ -39,10 +40,11 @@ export class SearchTickerComponent {
       if (this.percentValue === null)
       {
         if (typeof window !== 'undefined')
-          {
-            alert("O DY (Dividend Yield) não pode ser nulo !");
-          }
-          return;
+        {
+          alert("O DY (Dividend Yield) não pode ser nulo !");
+        }
+        this.isLoading = false;
+        return;
       }
     
       this.activeService.search(this.form.get('name')?.value, this.percentValue).subscribe({
