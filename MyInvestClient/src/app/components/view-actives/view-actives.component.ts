@@ -34,7 +34,6 @@ export class ViewActivesComponent implements OnInit{
 
   ngOnInit(): void {
     var param = this.activedRoute.snapshot.paramMap.get('purse');
-    console.log("param" + param);
     if (param != null)
     {
       this.purseId = param; 
@@ -102,5 +101,30 @@ export class ViewActivesComponent implements OnInit{
   createActive(): void 
   {
     this.router.navigate(["/"]);
+  }
+
+  deleteActive(purseId: any): void 
+  {
+    this.activeService.delete(purseId).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.status === 204)
+        {
+          this.actives.filter(active => active.id !== purseId);
+        }
+
+        if (this.actives.length == 0) {
+          this.titles.nativeElement.classList.remove('active');
+          this.message.nativeElement.classList.add('active');
+        }
+      },
+      error: (err) => {
+        if (typeof window !== 'undefined')
+        {
+          alert("Ocorreu um erro ao tentar deletar o ativo!");
+          console.log(`Ocorreu um erro ao tentar deletar o ativo! err: ${err.message}`);
+          return;
+        }
+      }
+    })
   }
 }

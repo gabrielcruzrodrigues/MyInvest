@@ -25,7 +25,7 @@
 
 .container{
      display: grid;
-     grid-template-columns: 1.5fr 2fr 1.5fr;
+     grid-template-columns: 1.5fr 2fr 1fr 1.5fr;
      gap: 10px;
      padding: 5px 0;
      border-bottom: 2px solid #ccc;
@@ -41,12 +41,12 @@
 }
 
 .titles {
-     display: grid;
-     grid-template-columns: 1.5fr 2fr 1.5fr;
+     grid-template-columns: 1.5fr 2fr 1fr 1.5fr;
      background-color: $primary-color;
      padding: 7px;
      margin-bottom: 10px;
      border-radius: 5px;
+     align-items: center;
      display: none;
 }
 
@@ -103,6 +103,7 @@
 .actions {
      border-radius: 5px;
      cursor: pointer;
+     border: 2px solid $primary-color;
 }
 
 .actions img{
@@ -121,11 +122,11 @@
 @media (min-width: 600px)
 {
      .container{
-          grid-template-columns: 2fr 2fr 1fr;
+          grid-template-columns: 2fr 2fr 1fr 1fr;
      }
      
      .titles {
-          grid-template-columns: 2fr 2fr 1fr;
+          grid-template-columns: 2fr 2fr 1fr 1fr;
      }
 
      .actions-container {
@@ -135,6 +136,14 @@
 
 @media (min-width: 910px)
 {
+     .container{
+          grid-template-columns: 2fr 2fr 0.5fr 1fr;
+     }
+     
+     .titles {
+          grid-template-columns: 2fr 2fr 0.5fr 1fr;
+     }
+
      .cards {
           justify-content: space-between;
           flex-direction: row;

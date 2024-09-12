@@ -207,6 +207,7 @@ export class ViewTickerComponent implements OnInit{
       
     if (numericValue !== 0 && numericValue > 0 && numericValue !== null && !isNaN(numericValue))
     {
+      this.isLoading = true;
       this.searchTicker();
     }
   }

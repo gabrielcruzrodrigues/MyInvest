@@ -9,18 +9,20 @@
           <div class="titles" #titles>
                <div>Codigo</div>
                <div>Tipo</div>
+               <div>DY desejado</div>
                <div>Ações</div>
           </div>
           <div class="container" *ngFor="let active of actives">
                <div class="column" (click)="redirectToActive(active.code, active.dyDesiredPercentage)">{{ active.code }}</div>
                <div class="column divisor" (click)="redirectToActive(active.code, active.dyDesiredPercentage)">{{ active.type }}</div>
+               <div class="column divisor">{{ active.dyDesiredPercentage }}%</div>
                <div class="actions-container column divisor">
-                    <div class="actions edit">
+                    <button class="actions edit">
                          <img src="assets/edit.png">
-                    </div>
-                    <div class="actions delete">
+                    </button>
+                    <button class="actions delete" (click)="deleteActive(active.id)">
                          <img src="assets/delete.png">
-                    </div>
+                    </button>
                </div>
           </div>
      </div>

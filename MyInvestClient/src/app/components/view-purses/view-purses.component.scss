@@ -1,4 +1,5 @@
 @import '../../scss/color-variables.scss';
+
 @keyframes fadeIn {
      from {
           opacity: 0;
@@ -105,6 +106,7 @@
 .actions {
      border-radius: 5px;
      cursor: pointer;
+     border: 2px solid $primary-color;
 }
 
 .actions img{
