@@ -1,18 +1,101 @@
-# MyInvest.NET
+# MyInvest
 
+**MyInvest** é uma aplicação web composta por uma API desenvolvida em **C# | ASP.NET** e um cliente web em **Angular**. O objetivo do sistema é fornecer informações detalhadas sobre a carteira de ativos dos usuários, calculando o preço-teto (modelo de Bazin) para ações e FIIs e sugerindo a compra ou não do ativo com base no preço atual.
 
+## 🎯 Objetivo
 
-## Getting started
+O principal objetivo do **MyInvest** é ajudar investidores a tomar decisões informadas sobre a compra de ações e FIIs, com base no cálculo do preço-teto segundo o modelo de Décio Bazin. A aplicação oferece uma interface intuitiva para que os usuários possam visualizar e gerenciar suas carteiras de ativos, recebendo sugestões de compra ou venda.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## ✅ Funcionalidades Principais
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+- **Cálculo do Preço-Teto**: Utiliza o modelo de Décio Bazin para calcular o preço-teto de ações e FIIs, indicando se o ativo está abaixo do valor ideal para compra.
+- **Sugestão de Compra**: Com base no preço-teto e no preço atual, a aplicação sugere se o usuário deve comprar ou não o ativo.
+- **Gestão de Carteira**: Permite que os usuários visualizem, adicionem e removam ativos de sua carteira, mantendo um histórico de decisões.
+- **Interface Amigável**: O sistema conta com uma interface moderna e responsiva desenvolvida em Angular, facilitando o acesso às informações.
 
-## Add your files
+## 🧩 Arquitetura do Sistema
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+O sistema é composto por dois principais componentes:
 
+1. **MyInvestAPI**: API desenvolvida em C# | ASP.NET, responsável por processar os dados financeiros, calcular o preço-teto dos ativos e expor os endpoints necessários para que o cliente web consuma essas informações.
+2. **MyInvestClient**: Cliente web desenvolvido em Angular, que consome a API e oferece uma interface amigável para os usuários visualizarem e gerenciarem suas carteiras de ativos.
+
+## 📊 Diagrama do Sistema
+
+Abaixo está o diagrama do sistema **MyInvest**, que ilustra a arquitetura e os principais componentes da aplicação:
+
+![Diagrama do Sistema](imagens/diagrama.png)
+
+Este diagrama descreve a interação entre os módulos **MyInvestAPI** e **MyInvestClient**, destacando como os dados de ativos são processados e apresentados ao usuário final. A API calcula o preço-teto (segundo o modelo Bazin) e, com base nesse cálculo, o cliente web sugere se o usuário deve ou não comprar o ativo.
+
+## 📘 Fórmula do Preço-Teto segundo Décio Bazin
+
+### Fórmula
+
+$$
+\text{Preço Teto} = \frac{\text{Dividendo Médio por Ação}}{\text{Taxa de Retorno Desejada}}
+$$
+
+### Explicação dos Elementos
+
+- **Preço Teto**: Valor máximo que você deve pagar por uma ação para que o investimento atenda à taxa de retorno desejada com base nos dividendos.
+- **Dividendo Médio por Ação**: Média dos dividendos pagos por ativo ao longo de um período específico (geralmente 5 anos).
+- **Taxa de Retorno Desejada**: Taxa mínima de retorno desejada pelo investidor (geralmente ≥ 6% ao ano para ações e ≥ 8% para FIIs).
+
+### Exemplo de Cálculo
+
+- **Dividendo Médio por Ação**: R$ 3,00
+- **Taxa de Retorno Desejada**: 8% (ou 0,08)
+
+O cálculo seria:
+$$
+\text{Preço Teto} = \frac{R\$ 3,00}{0,08} = R\$ 37,50
+$$
+
+Se o preço de mercado da ação estiver abaixo de R$ 37,50, pode ser considerada uma boa compra.
+
+## 📄 Exemplos de Retorno
+
+### Modelo para listar os ativos (ações e FIIs):
+
+Exemplo de retorno para um ativo:
+
+```
+- Data..........................................: 16/08/2024
+- Ativo.........................................: PETR4
+- Nome do ativo.................................: Petróleo Brasileiro S.A
+- Tipo (Ação ou FII)............................: Ação
+- Dividend Yield (DY)...........................: 8.5%
+- Preço atual...................................: R$ 28,50
+- P/VP (Preço/Valor Patrimonial)................: 1.2
+- Preço-Teto (modelo Bazin).....................: R$ 30,00
+- Indicação (🟢 comprar ou 🔴 não-comprar).....: 🟢 Comprar
+- Outros campos relevantes:
+  - P/L (Preço/Lucro)...........................: 6.5
+  - ROE (Retorno sobre Patrimônio)..............: 18%
+  - Crescimento de Dividendos (5 anos)..........: 4% ao ano
+```
+
+### Tabela Exemplo
+
+| **ID** | **Ativo** | **Empresa**             | **Tipo** | **Dividend Yield (DY)** | **Preço atual** | **P/VP** | **Preço-Teto** | **Indicação** | **P/L** | **ROE** |
+| ------ | --------- | ----------------------- | -------- | ----------------------- | --------------- | -------- | -------------- | ------------- | ------- | ------- |
+| 1      | PETR4     | Petróleo Brasileiro S.A | Ação     | 8.5%                    | R$ 28,50        | 1.2      | R$ 30,00       | 🟢             | 6.5     | 18%     |
+| 2      | PORD11    | PORD Imobiliário FII    | FII      | 7.2%                    | R$ 100,00       | 0.9      | R$ 105,00      | 🟢             | 10.0    | 12%     |
+| 3      | BBSA4     | Banco do Brasil S.A     | Ação     | 6.7%                    | R$ 45,00        | 1.3      | R$ 47,00       | 🟢             | 8.0     | 15%     |
+| 4      | GARE11    | GARE Imobiliário FII    | FII      | 5.8%                    | R$ 120,00       | 1.1      | R$ 115,00      | 🔴             | 12.0    | 10%     |
+
+**Legenda**: 🟢 Comprar ou 🔴 Não-comprar  
+**Carteira**: 01 Aposentadoria  
+**Última Atualização**: 16/08/2024 09h03  
+
+## ⚙️ Como Rodar o Projeto
+
+### Pré-requisitos
+
+- **Docker**: Certifique-se de ter o Docker instalado e rodando na sua máquina.recebendo sugestões de compra ou venda.
+
+### Adicione arquivos usando a linha de comando ou envie um repositório Git existente com o seguinte comando:
 ```
 cd existing_repo
 git remote add origin https://gitlab.com/marcosmoraisjr/myinvest.net.git
@@ -20,74 +103,37 @@ git branch -M main
 git push -uf origin main
 ```
 
-## Integrate with your tools
+## ⚙️Como rodar o projeto:
+1. Tenha o Docker instalado e rodando na sua máquina.
+2. Clone o projeto na sua máquina:
+```
+git clone https://gitlab.com/marcosmoraisjr/myinvest.net.git
+```
+3. Acesse a pasta do projeto:
+```
+cd MyInvest/
+```
+4. Execute o comando para acionar o Docker-compose:
+```
+docker-compose up --build
+```
 
-- [ ] [Set up project integrations](https://gitlab.com/marcosmoraisjr/myinvest.net/-/settings/integrations)
+## 🌐 Como Acessar o Projeto
 
-## Collaborate with your team
+### 🖥️ Interface do Usuário
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+A interface do programa pode ser acessada logo após a inicialização do projeto, utilizando a seguinte URL:
+```
+http://localhost:9090
+```
 
-## Test and Deploy
+### 📚 Documentação da API
 
-Use the built-in continuous integration in GitLab.
+A documentação completa da API, incluindo todos os endpoints e detalhes, está disponível via Swagger:
+```
+http://localhost:8080/swagger/index.html
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+## 📝 Licença
 
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Este projeto é licenciado sob a [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). Você pode usar, modificar e distribuir este software, desde que cumpra os termos da licença.
