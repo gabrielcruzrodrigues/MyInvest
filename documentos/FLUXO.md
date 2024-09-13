@@ -10,7 +10,7 @@ A **Tela Inicial** é o ponto de entrada do sistema, onde o usuário pode buscar
 ### Elementos Principais:
 - **Campo de Busca**: Permite a pesquisa de um ativo específico pelo código (ex: PETR4) ou nome.
 - **Botões**:
-  - `<BUSCAR OUTRO ATIVO>`: Reseta a busca atual e permite ao usuário realizar uma nova consulta.
+  - `<CONSULTAR ATIVO>`: Reseta a busca atual e permite ao usuário realizar uma nova consulta.
   - `<VOLTAR>`: Retorna o usuário para a tela inicial sem depender de login ou da existência de uma carteira.
 
 ### Fluxo de Interação:
@@ -34,7 +34,7 @@ Essa tela exibe as informações detalhadas sobre o ativo que o usuário buscou.
 - Outros dados financeiros (Dividend Yield, P/L, ROE, etc.).
 
 ### Botões Disponíveis:
-- `<BUSCAR OUTRO ATIVO>`: Permite ao usuário retornar à tela de busca para consultar um novo ativo.
+- `<CONSULTAR OUTRO ATIVO>`: Permite ao usuário retornar à tela de busca para consultar um novo ativo.
 - `<VOLTAR>`: Retorna à tela inicial.
 - `<ADICIONAR ATIVO EM CARTEIRA>`: Permite adicionar o ativo à carteira do usuário.
 
@@ -74,7 +74,8 @@ Ao clicar em **<ADICIONAR ATIVO EM CARTEIRA>**, o sistema verifica se o usuário
   - Após a criação da carteira, o ativo é adicionado automaticamente.
 
 ### Botões Disponíveis:
-- `<BUSCAR OUTRO ATIVO>`: Retorna à tela inicial para realizar uma nova consulta.
+- `<CONSULTAR CARTEIRA>`: Reseta a busca atual e permite ao usuário realizar uma nova consulta.
+- `<BUSCAR ATIVO NA CARTEIRA>`: Retorna à tela inicial para realizar uma nova consulta.
 - `<VOLTAR>`: Volta para a tela de detalhes do ativo.
 
 ---
@@ -82,7 +83,8 @@ Ao clicar em **<ADICIONAR ATIVO EM CARTEIRA>**, o sistema verifica se o usuário
 ## 4. Tela de Login
 
 ### Descrição:
-Se o usuário não estiver logado, ele será redirecionado para a tela de login ao tentar adicionar um ativo à sua carteira. Esta tela também pode ser acessada diretamente, caso o usuário deseje entrar no sistema para gerenciar suas carteiras.
+Se o usuário não estiver logado, ele será redirecionado para a tela de login ao tentar adicionar um ativo à sua carteira. Esta tela também pode ser acessada diretamente, caso o usuário deseje entrar no sistema para gerenciar suas carteiras. 
+Ela pode ser acessada diretamente ou redirecionada via guarda de rota (AuthGuard no Angular).
 
 ### Elementos Principais:
 - **Campos de Entrada**:
@@ -91,12 +93,20 @@ Se o usuário não estiver logado, ele será redirecionado para a tela de login 
 - **Botões**:
   - `<LOGIN>`: Realiza a autenticação do usuário.
   - `<CRIAR CONTA>`: Redireciona para a tela de criação de conta.
+  - `<ESQUECI MINHA SENHA>`: Redireciona para a tela de recuperação de senha.
 
 ### Fluxo de Interação:
-1. O usuário insere suas credenciais e clica em `<LOGIN>`.
+1. O usuário insere suas credenciais (email e senha) e clica em `<LOGIN>`.
 2. Se as credenciais estiverem corretas, o sistema redireciona o usuário de volta à ação anterior (adicionar ativo à carteira).
 3. Caso contrário, uma mensagem de erro é exibida.
 
+### Validações:
+* Front-End (Angular):
+  * Validação de email (formato correto).
+  * Validação de senha (comprimento mínimo e caracteres exigidos).
+* Back-End (API .NET):
+  * Verificação de email existente.
+  * Validação de senha com hashing e comparação com o banco de dados.
 ---
 
 ## 5. Tela de Criação de Carteira
