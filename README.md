@@ -107,7 +107,7 @@ git clone https://gitlab.com/marcosmoraisjr/myinvest.net.git
 ```
 3. Acesse a pasta do projeto:
 ```
-cd MyInvest/
+cd myinvest.net
 ```
 4. Execute o comando para acionar o Docker-compose:
 ```
