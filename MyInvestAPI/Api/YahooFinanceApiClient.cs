@@ -52,7 +52,7 @@ public class YahooFinanceApiClient
         activeReturn.Preco_Teto = $"R$ {tetoPrice.ToString("F2")}";
         activeReturn.Indicacao = recomendation;
         activeReturn.P_L = (result.TrailingPE).ToString("F1");
-        activeReturn.ROE = "Atualmente indisponível no nosso sistema";
+        activeReturn.ROE = "Indisponível";
         activeReturn.Crecimento_De_Dividendos_5_anos = await CalculateDividendGrowth(result.Symbol);
 
         return activeReturn;
@@ -75,12 +75,12 @@ public class YahooFinanceApiClient
         }
         catch (Exception)
         {
-            return "Serviço indisponível";
+            return "Indisponível";
         }
 
         if (history == null || !history.Any())
         {
-            return "Dados indisponíveis";
+            return "Indisponível";
         }
 
         var dividends = history.Where(x => x.Dividend != null && x.Dividend > 0)
@@ -93,7 +93,7 @@ public class YahooFinanceApiClient
 
         if (dividends.Count == 0)
         {
-            return "Dados indisponíveis";
+            return "Indisponível";
         }
 
         var dividendsPerYear = dividends.GroupBy(d => d.DateTime.Year)
