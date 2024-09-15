@@ -9,10 +9,41 @@
 
 .active-title h1 {
      font-size: 25px;
+     color: white;
+     font-weight: 700;
 }
 
 .active-title p {
+     color: white;
      font-size: 18px;
+     font-weight: 700;
+}
+
+.navigate-section {
+     width: 95%;
+     margin: 20px auto 0 auto;
+     display: flex;
+     justify-content: space-between;
+}
+
+.navigate-a {
+     padding: 6px;
+     border: 1px solid #ccc;
+     border-radius: 10px;
+     width: 48%;
+     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+     font-size: 18px;
+     font-weight: 700;
+     background-color: $secundary-color;
+     color: white;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     text-decoration: none;
+}
+
+.navigate-a img {
+     width: 30px;
 }
 
 .principal-active-insides {
@@ -38,6 +69,7 @@
      height: 50vh;
      background-color: $primary-color;
      color: white;
+     font-weight: 700;
      display: flex;
      align-items: center;
      justify-content: center;
@@ -143,22 +175,30 @@
      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.action-section button {
-     display: block;
-     padding: 15px;
-     font-size: 18px;
-     margin: 25px auto 10px auto;
-     background-color: $primary-color;
-     color: #fff;
-     border: 1px solid #ccc;
-     border-radius: 12px;
-     cursor: pointer;
-     width: 70%;
-     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+.add-active-title {
+     display: flex;
+     background-color: white;
+     width: 100%;
+     margin: 0 auto;
+     border-radius: 10px 10px 0 0;
 }
 
-.action-section button:hover {
-     background-color: $third-color;
+.add-active-title img {
+     width: 20px;
+}
+
+.add-active-title .image {
+     background-color: $primary-color;
+     border-radius: 10px 0 0 0;
+     padding: 10px;
+}
+
+.add-active-title .title {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     width: 100%;
+     border-bottom: 1px solid #ccc;
 }
 
 .DY {
@@ -208,6 +248,25 @@
      border: 1px solid #ccc;
 }
 
+.action-section button {
+     display: block;
+     padding: 15px;
+     font-size: 18px;
+     font-weight: 700;
+     margin: 25px auto 10px auto;
+     background-color: $primary-color;
+     color: #fff;
+     border: 1px solid #ccc;
+     border-radius: 12px;
+     cursor: pointer;
+     width: 70%;
+     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.action-section button:hover {
+     background-color: $third-color;
+}
+
 .error-container {
      height: 2px; 
      margin: 10px 0; 
@@ -251,6 +310,14 @@
 
 @media (min-width: 1120px)
 {
+     .navigate-section {
+          width: 80%;
+     }
+
+     .navigate-a img {
+          margin-right: 2%;
+     }
+
      .active-title {
           padding: 1%;
      }
@@ -293,5 +360,19 @@
 
      .action-section {
           width: 80%;
+     }
+
+     .add-active-title .image {
+          padding: 20px;
+     }
+
+     .add-active-title img {
+          width: 40px;
+     }
+
+     .add-active-title .title {
+          font-size: 25px;
+          font-weight: 700;
+          color: $primary-color;
      }
 }

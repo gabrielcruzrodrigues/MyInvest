@@ -3,6 +3,11 @@
   <p>{{ active.nomeDoAtivo }}</p>
 </section>
 
+<section class="navigate-section">
+  <a class="navigate-a" href="/"><img src="/assets/back.png">Página inicial</a>
+  <a class="navigate-a" href="/search-ticker"><img src="/assets/search.png">Pesquisar ativo</a>
+</section>
+
 <section class="principal-active-insides">
   <div class="inside">
     <div class="inside-title">
@@ -103,6 +108,15 @@
 </section>
 
 <section class="action-section">
+  <div class="add-active-title">
+    <div class="image">
+      <img src="/assets/actives-actions.png">
+    </div>
+    <div class="title">
+      <p>ADICIONAR ATIVO A CARTEIRA</p>
+    </div>
+  </div>
+
   <div class="DY">
     <label>Informe o DY (Dividend Yield) desejado:</label>
     <input type="text" placeholder="Ex: 5%" (input)="onInputChange($event)" [value]="dYDisplayValue">
