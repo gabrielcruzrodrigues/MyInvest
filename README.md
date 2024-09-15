@@ -77,6 +77,7 @@ Exemplo de retorno para um ativo:
 ```
 
 ### Tabela Exemplo
+Exemplo de retorno para múltiplos ativos:
 
 | **ID** | **Ativo** | **Empresa**             | **Tipo** | **Dividend Yield (DY)** | **Preço atual** | **P/VP** | **Preço-Teto** | **Indicação** | **P/L** | **ROE** |
 | ------ | --------- | ----------------------- | -------- | ----------------------- | --------------- | -------- | -------------- | ------------- | ------- | ------- |
