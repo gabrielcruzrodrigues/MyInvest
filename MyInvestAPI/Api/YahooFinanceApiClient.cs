@@ -9,15 +9,15 @@ public class YahooFinanceApiClient
     public async static Task<ActiveReturn> GetActive(string active, string dYDesiredPercentage)
     {
         var search = await Yahoo.Symbols(active).Fields(
-            Field.DividendDate, //data
-            Field.Symbol, //ativo
-            Field.LongName, //nome do ativo
-            Field.QuoteType, //tipo do ativo
-            Field.TrailingAnnualDividendYield, //divident yield
-            Field.RegularMarketPrice, //preço atual
-            Field.PriceToBook, // P/VPs
-            Field.TrailingPE  // P/L
-                                // Roe
+            Field.DividendDate,                 // data
+            Field.Symbol,                       // ativo
+            Field.LongName,                     // nome do ativo
+            Field.QuoteType,                    // tipo do ativo
+            Field.TrailingAnnualDividendYield,  // divident yield
+            Field.RegularMarketPrice,           // preço atual
+            Field.PriceToBook,                  // P/VPs
+            Field.TrailingPE                    // P/L
+                                                // Roe
         ).QueryAsync();
 
         if (search is null)
@@ -47,12 +47,12 @@ public class YahooFinanceApiClient
         activeReturn.NomeDoAtivo = result.LongName;
         activeReturn.Tipo = VerifyType(result.QuoteType);
         activeReturn.DividentYield = (dyDesired).ToString() + "%";
-        activeReturn.PrecoAtual = $"R$ {result.RegularMarketPrice.ToString("F2")}";
         activeReturn.P_VP = (result.PriceToBook).ToString("F1");
+        activeReturn.PrecoAtual = $"R$ {result.RegularMarketPrice.ToString("F2")}";
         activeReturn.Preco_Teto = $"R$ {tetoPrice.ToString("F2")}";
         activeReturn.Indicacao = recomendation;
         activeReturn.P_L = (result.TrailingPE).ToString("F1");
-        activeReturn.ROE = "Atualmente indisponível no nosso sistema";
+        activeReturn.ROE = "Indisponível";
         activeReturn.Crecimento_De_Dividendos_5_anos = await CalculateDividendGrowth(result.Symbol);
 
         return activeReturn;
@@ -75,12 +75,12 @@ public class YahooFinanceApiClient
         }
         catch (Exception)
         {
-            return "Serviço indisponível";
+            return "Indisponível";
         }
 
         if (history == null || !history.Any())
         {
-            return "Dados indisponíveis";
+            return "Indisponível";
         }
 
         var dividends = history.Where(x => x.Dividend != null && x.Dividend > 0)
@@ -93,7 +93,7 @@ public class YahooFinanceApiClient
 
         if (dividends.Count == 0)
         {
-            return "Dados indisponíveis";
+            return "Indisponível";
         }
 
         var dividendsPerYear = dividends.GroupBy(d => d.DateTime.Year)

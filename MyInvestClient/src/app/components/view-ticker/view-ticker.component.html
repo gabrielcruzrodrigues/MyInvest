@@ -1,81 +1,152 @@
+<section class="active-title">
+  <h1>{{ active.ativo }}</h1>
+  <p>{{ active.nomeDoAtivo }}</p>
+</section>
 
+<section class="navigate-section">
+  <a class="navigate-a" href="/"><img src="/assets/back.png">Página inicial</a>
+  <a class="navigate-a" href="/search-ticker"><img src="/assets/search.png">Pesquisar ativo</a>
+</section>
 
-<section class="main-section">
-     <h1>Detalhes do ativo</h1>
-     <table>
-       <thead>
-         <tr>
-           <th>Data</th>
-           <td>{{ active.data }}</td>
-         </tr>
-         <tr>
-           <th>Ativo</th>
-           <td>{{ active.ativo }}</td>
-         </tr>
-         <tr>
-           <th>Nome do ativo</th>
-           <td>{{ active.nomeDoAtivo }}</td>
-         </tr>
-         <tr>
-           <th>Dividend Yield</th>
-           <td>{{ active.dividentYield }}</td>
-         </tr>
-         <tr>
-           <th>Preço atual</th>
-           <td>{{ active.precoAtual }}</td>
-         </tr>
-         <tr>
-           <th>P/VP</th>
-           <td>{{ active.p_VP }}</td>
-         </tr>
-         <tr>
-           <th>Preço-Teto</th>
-           <td>{{ active.preco_Teto }}</td>
-         </tr>
-         <tr>
-           <th>Indicação</th>
-           <td>{{ active.indicacao }}</td>
-         </tr>
-         <tr>
-           <th>P/L</th>
-           <td>{{ active.p_L }}</td>
-         </tr>
-         <tr>
-           <th>ROE</th>
-           <td>{{ active.roe }}</td>
-         </tr>
-         <tr>
-           <th>Crescimento de Dividendos (5 anos)</th>
-           <td>{{ active.crecimento_De_Dividendos_5_anos }}</td>
-         </tr>
-       </thead>
-     </table>
-
-  <div class="actions">
-    <div class="DY">
-      <label>Informe o DY (Dividend Yield) desejado:</label>
-      <input type="text" placeholder="Ex: 5%" (input)="onInputChange($event)" [value]="dYDisplayValue">
+<section class="principal-active-insides">
+  
+  <div class="inside">
+    <div class="inside-title">
+      <p>PREÇO TETO</p>
     </div>
-
-    <div class="purses">
-      <label for="purseSelect">Selecione uma carteira:</label>
-      <select id="purseSelect" [(ngModel)]="selectedPurseId">
-        <option value="" disabled selected>Clique para selecionar</option>
-        <option *ngFor="let purse of purses" [value]="purse.id">
-          {{ purse.name }}
-        </option>
-      </select>
+    <div class="inside-value">
+      {{ active.preco_Teto }}
     </div>
   </div>
-    
-    <div class="error-container" #containerError>
-     <p class="error-message" >
-       Selecione uma carteira para continuar!
-     </p>
-    </div>
 
-     <button (click)="addActive()">Adicionar ativo</button>
+  <div class="inside">
+    <div class="inside-title">
+      <p>DY</p>
+    </div>
+    <div class="inside-value">
+      {{ active.dividentYield }}
+    </div>
+  </div>
+
+  <div class="inside">
+    <div class="inside-title">
+      <p>P/L</p>
+    </div>
+    <div class="inside-value">
+      {{ active.p_L }}
+    </div>
+  </div>
+
+  <div class="inside">
+    <div class="inside-title">
+      <p>P/VP</p>
+    </div>
+    <div class="inside-value">
+      {{ active.p_VP }}
+    </div>
+  </div>
 </section>
+
+<section class="active-indicators">
+  <div class="active-indicators-title">
+    <div class="image">
+      <img src="/assets/actives-actions.png">
+    </div>
+    <div class="title">
+      <p>PRINCIPAIS INDICADORES {{ active.ativo }}</p>
+    </div>
+  </div>
+  
+  <div class="active-indicators-body">
+    <div class="box-indicators">
+      <div class="box-indicator">
+        <p class="box-title">DATA DA CONSULTA</p>
+        <P class="box-value">{{ active.data }}</P>
+      </div>
+      
+      <div class="box-indicator">
+        <p class="box-title">DIVIDEND YIELD</p>
+        <P class="box-value">{{ active.dividentYield }}</P>
+      </div>
+
+      <div class="box-indicator">
+        <p class="box-title">P/VP</p>
+        <P class="box-value">{{ active.p_VP }}</P>
+      </div>
+
+      <div class="box-indicator">
+        <p class="box-title">P/L</p>
+        <P class="box-value">{{ active.p_L }}</P>
+      </div>
+
+      <div class="box-indicator">
+        <p class="box-title">ROE</p>
+        <P class="box-value">{{ active.roe }}</P>
+      </div>
+
+      <div class="box-indicator">
+        <p class="box-title">CRESC. DIVID. 5 ANOS</p>
+        <P class="box-value">{{ active.crecimento_De_Dividendos_5_anos }}</P>
+      </div>
+
+      <div class="box-indicator">
+        <p class="box-title">PREÇO ATUAL</p>
+        <P class="box-value">{{ active.precoAtual }}</P>
+      </div>
+      
+      <div class="box-indicator">
+        <p class="box-title">PREÇO TETO</p>
+        <P class="box-value">{{ active.preco_Teto }}</P>
+      </div>
+
+      <div class="box-indicator">
+        <p class="box-title">PROVENTOS PAGOS</p>
+        <P class="box-value"> ??? </P>
+      </div>
+
+      <div class="box-indicator">
+        <p class="box-title">INDICAÇÃO</p>
+        <P class="box-value">{{ active.indicacao }}</P>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="action-section">
+  <div class="add-active-title">
+    <div class="image">
+      <img src="/assets/actives-actions.png">
+    </div>
+    <div class="title">
+      <p>ADICIONAR ATIVO A CARTEIRA</p>
+    </div>
+  </div>
+
+  <div class="DY">
+    <label>Informe o DY (Dividend Yield) desejado:</label>
+    <input type="text" placeholder="Ex: 5%" (input)="onInputChange($event)" [value]="dYDisplayValue">
+  </div>
+
+  <div class="purses">
+    <label for="purseSelect">Selecione uma carteira:</label>
+    <select id="purseSelect" [(ngModel)]="selectedPurseId">
+      <option value="" disabled selected>Clique para selecionar</option>
+      <option *ngFor="let purse of purses" [value]="purse.id">
+        {{ purse.name }}
+      </option>
+    </select>
+  </div>
+
+  <div class="error-container" #containerError>
+    <p class="error-message" >
+      Selecione uma carteira para continuar!
+    </p>
+  </div>
+  
+  <button (click)="addActive()">Adicionar ativo</button>
+</section>
+
 <app-loading [isLoading]="isLoading"></app-loading>
 
    
