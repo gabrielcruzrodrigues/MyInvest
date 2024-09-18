@@ -40,7 +40,7 @@ O **MyInvest** inclui uma série de funcionalidades voltadas à gestão de ativo
 
 - Campo de busca para que o usuário consulte ativos (ações e FIIs).
 - Botões:
-  - `<BUSCAR OUTRO ATIVO>`: Inicia uma nova busca.
+  - `<BUSCAR ATIVO>`: Inicia uma nova busca.
   - `<VOLTAR>`: Retorna para a tela inicial, sem exigir login ou carteira.
 
 #### Consulta de Ativo:
