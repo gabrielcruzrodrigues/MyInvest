@@ -9,6 +9,7 @@
 </section>
 
 <section class="principal-active-insides">
+  
   <div class="inside">
     <div class="inside-title">
       <p>PREÇO TETO</p>
@@ -64,20 +65,10 @@
       </div>
       
       <div class="box-indicator">
-        <p class="box-title">INDICAÇÃO</p>
-        <P class="box-value">{{ active.indicacao }}</P>
-      </div>
-
-      <div class="box-indicator">
         <p class="box-title">DIVIDEND YIELD</p>
         <P class="box-value">{{ active.dividentYield }}</P>
       </div>
 
-      <div class="box-indicator">
-        <p class="box-title">PREÇO ATUAL</p>
-        <P class="box-value">{{ active.precoAtual }}</P>
-      </div>
-      
       <div class="box-indicator">
         <p class="box-title">P/VP</p>
         <P class="box-value">{{ active.p_VP }}</P>
@@ -89,11 +80,6 @@
       </div>
 
       <div class="box-indicator">
-        <p class="box-title">PREÇO TETO</p>
-        <P class="box-value">{{ active.preco_Teto }}</P>
-      </div>
-
-      <div class="box-indicator">
         <p class="box-title">ROE</p>
         <P class="box-value">{{ active.roe }}</P>
       </div>
@@ -101,6 +87,26 @@
       <div class="box-indicator">
         <p class="box-title">CRESC. DIVID. 5 ANOS</p>
         <P class="box-value">{{ active.crecimento_De_Dividendos_5_anos }}</P>
+      </div>
+
+      <div class="box-indicator">
+        <p class="box-title">PREÇO ATUAL</p>
+        <P class="box-value">{{ active.precoAtual }}</P>
+      </div>
+      
+      <div class="box-indicator">
+        <p class="box-title">PREÇO TETO</p>
+        <P class="box-value">{{ active.preco_Teto }}</P>
+      </div>
+
+      <div class="box-indicator">
+        <p class="box-title">PROVENTOS PAGOS</p>
+        <P class="box-value"> ??? </P>
+      </div>
+
+      <div class="box-indicator">
+        <p class="box-title">INDICAÇÃO</p>
+        <P class="box-value">{{ active.indicacao }}</P>
       </div>
 
     </div>

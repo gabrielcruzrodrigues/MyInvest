@@ -9,15 +9,15 @@ public class YahooFinanceApiClient
     public async static Task<ActiveReturn> GetActive(string active, string dYDesiredPercentage)
     {
         var search = await Yahoo.Symbols(active).Fields(
-            Field.DividendDate, //data
-            Field.Symbol, //ativo
-            Field.LongName, //nome do ativo
-            Field.QuoteType, //tipo do ativo
-            Field.TrailingAnnualDividendYield, //divident yield
-            Field.RegularMarketPrice, //preço atual
-            Field.PriceToBook, // P/VPs
-            Field.TrailingPE  // P/L
-                                // Roe
+            Field.DividendDate,                 // data
+            Field.Symbol,                       // ativo
+            Field.LongName,                     // nome do ativo
+            Field.QuoteType,                    // tipo do ativo
+            Field.TrailingAnnualDividendYield,  // divident yield
+            Field.RegularMarketPrice,           // preço atual
+            Field.PriceToBook,                  // P/VPs
+            Field.TrailingPE                    // P/L
+                                                // Roe
         ).QueryAsync();
 
         if (search is null)
@@ -47,8 +47,8 @@ public class YahooFinanceApiClient
         activeReturn.NomeDoAtivo = result.LongName;
         activeReturn.Tipo = VerifyType(result.QuoteType);
         activeReturn.DividentYield = (dyDesired).ToString() + "%";
-        activeReturn.PrecoAtual = $"R$ {result.RegularMarketPrice.ToString("F2")}";
         activeReturn.P_VP = (result.PriceToBook).ToString("F1");
+        activeReturn.PrecoAtual = $"R$ {result.RegularMarketPrice.ToString("F2")}";
         activeReturn.Preco_Teto = $"R$ {tetoPrice.ToString("F2")}";
         activeReturn.Indicacao = recomendation;
         activeReturn.P_L = (result.TrailingPE).ToString("F1");

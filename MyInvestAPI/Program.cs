@@ -8,10 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(options => 
+builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
-//cors
+// cors
 var OriginsWithAllowedAccess = "OriginsWithAllowedAccess";
 
 builder.Services.AddCors(options =>
@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
     })
 );
 
-//Disable the automatic redirect to Https
+// Disable the automatic redirect to Https
 builder.Services.AddHttpsRedirection(options => options.HttpsPort = null);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -35,7 +35,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPurseRepository, PurseRepository>();
 builder.Services.AddScoped<IActiveRepository, ActiveRepository>();
 
-//database
+// database
 string postgreSqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<MyInvestContext>(options =>
@@ -44,7 +44,6 @@ builder.Services.AddDbContext<MyInvestContext>(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-
 if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();

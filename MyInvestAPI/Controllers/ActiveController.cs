@@ -23,7 +23,7 @@ namespace MyInvestAPI.Controllers
         public async Task<ActionResult<Active>> Create(CreateActiveViewModel activeViewModel)
         {
             if (activeViewModel is null)
-                return BadRequest("The body for create a new active must not be null.");
+                return BadRequest("O body para criar um novo ativo não deve ser nulo.");
 
             Active activeCreated = await _repository.CreateAsync(activeViewModel);
 
@@ -42,7 +42,7 @@ namespace MyInvestAPI.Controllers
             return Ok(await _repository.GetAllWithPursesAsync());
         }
 
-        [HttpGet("{id}", Name ="SearchActive")]
+        [HttpGet("{id}", Name = "SearchActive")]
         public async Task<ActionResult<Active>> GetById(int id)
         {
             return Ok(await _repository.GetByIdAsync(id));

@@ -16,6 +16,8 @@ services:
       dockerfile: Dockerfile
     ports:
      - "9090:9090"
+    volumes:
+      - ./MyInvestClient/src/app:/app/src/app
     depends_on:
       - postgres-db
     networks:
