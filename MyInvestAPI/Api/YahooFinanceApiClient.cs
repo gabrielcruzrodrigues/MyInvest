@@ -37,7 +37,7 @@ public class YahooFinanceApiClient
         decimal currentPrice = result[Field.RegularMarketPrice] != null ? Convert.ToDecimal(result[Field.RegularMarketPrice]) : 0;
 
         decimal tetoPrice = CalculatePriceTeto(dYCurrent, currentPrice, dyDesired);
-        string recomendation = Recomendation((decimal)result.RegularMarketPrice, tetoPrice);
+        string recomendation = Recomendation(currentPrice, tetoPrice);
 
         DateTime currentDate = DateTime.Now;
 
@@ -123,9 +123,9 @@ public class YahooFinanceApiClient
         return priceTeto;
     }
 
-    static string Recomendation(decimal regularMarketPrice, decimal tetoPrice)
+    static string Recomendation(decimal currentPrice, decimal tetoPrice)
     {
-        return regularMarketPrice <= tetoPrice ? "🟢 Comprar" : "🔴 Não-comprar";
+        return tetoPrice < currentPrice ? "🟢 Comprar" : "🔴 Não-comprar";
     }
 
     static string VerifyType(string type)
