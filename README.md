@@ -22,9 +22,12 @@ O sistema é composto por dois principais componentes:
 
 ## 📊 Diagrama do Sistema
 
-Abaixo está o diagrama do sistema **MyInvest**, que ilustra a arquitetura e os principais componentes da aplicação:
-
+Abaixo está o diagrama do sistema **MyInvest**, que ilustra a arquitetura e os principais componentes da aplicação e o diagrama de entidade e relacionamento. Este diagrama mostra a estrutura lógica de um banco de dados, incluindo as entidades (tabelas), os atributos (colunas) e os relacionamentos entre essas entidades.
 ![Diagrama do Sistema](imagens/diagrama.png)
+<small>Imagem: Diagrama do Sistema</small>
+
+![Diagrama ER](imagens/der.png)
+<small>Imagem: Diagrama ER</small>
 
 Este diagrama descreve a interação entre os módulos **MyInvestAPI** e **MyInvestClient**, destacando como os dados de ativos são processados e apresentados ao usuário final. A API calcula o preço-teto (segundo o modelo Bazin) e, com base nesse cálculo, o cliente web sugere se o usuário deve ou não comprar o ativo.
 
