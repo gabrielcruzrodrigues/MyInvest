@@ -14,5 +14,6 @@
         public string? P_L { get; set; }
         public string? ROE { get; set; }
         public string? Crecimento_De_Dividendos_5_anos { get; set; }
+        public string? Proventos_pagos { get; set; }
     }
 }

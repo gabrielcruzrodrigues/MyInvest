@@ -142,7 +142,7 @@ namespace MyInvestAPI.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"Un error occured when tryning search actives! err: {ex.Message}");
-                throw new HttpResponseException(500, "Un error occured when tryning search actives");
+                throw new HttpResponseException(500, ex.Message);
             }
         }
 

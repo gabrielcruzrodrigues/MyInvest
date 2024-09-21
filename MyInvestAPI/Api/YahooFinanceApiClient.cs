@@ -54,6 +54,7 @@ public class YahooFinanceApiClient
         activeReturn.P_L = (result.TrailingPE).ToString("F1");
         activeReturn.ROE = "Indisponível";
         activeReturn.Crecimento_De_Dividendos_5_anos = await CalculateDividendGrowth(result.Symbol);
+        activeReturn.Proventos_pagos = $"{await CalculateProventosPagos(result.Symbol)}";
 
         return activeReturn;
     }
@@ -107,6 +108,57 @@ public class YahooFinanceApiClient
         double averageDividends = (double)dividendsPerYear.Average(d => d.DividendsTotal);
 
         return $"{(averageDividends * 100).ToString("0.##") + "%"} por ano.";
+    }
+
+    static async Task<string> CalculateProventosPagos(string ticker)
+    {
+        if (ticker is null)
+        {
+            throw new HttpResponseException(400, "O ticker não pode ser nulo!");
+        }
+
+        //Pega o último dia do ano passado, e a data de 5 anos atras referente a essa data, ignorando o ano atual
+        DateTime lastDateLastYear = new DateTime(DateTime.Now.Year - 1, 12, 31);
+        DateTime fiveYearsAgoDate = lastDateLastYear.AddDays(-5);
+
+        try
+        {
+            var history = await Yahoo.GetDividendsAsync(ticker, new DateTime(lastDateLastYear.Year, lastDateLastYear.Month, lastDateLastYear.Day),
+                                                                new DateTime(fiveYearsAgoDate.Year, fiveYearsAgoDate.Month, fiveYearsAgoDate.Day));
+
+            if (history is null || history.Count() <= 0)
+            {
+                return "Dados indisponíveis";
+            }
+
+            decimal percentageForCalculate = 5 / 100;
+
+            if (history.Count() < 5 && history.Count() >= 3)
+            {
+                percentageForCalculate = 3 / 100;
+            }
+            else
+            {
+                //Levando em consideração apenas dados maiores que 3 anos, se forem menos que 5, calculamos com base em 3 anos
+                return "Dados indisponíveis";
+            }
+
+            decimal dividendAverage = 0;
+
+            foreach (var candle in history)
+            {
+                dividendAverage += candle.Dividend;
+            }
+
+            dividendAverage /= percentageForCalculate;
+
+            return $"{dividendAverage}";
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Houve um erro ao tentar buscar o historico de um dividendo. - ex: {ex.Message}");
+            return "Dados indisponíveis";
+        }
     }
 
     static decimal CalculatePriceTeto(decimal dYCurrent, decimal currentPrice, decimal dYDesiredPercentage)

@@ -20,7 +20,8 @@ interface Active {
   indicacao: string,
   p_L: string,
   roe: string,
-  crecimento_De_Dividendos_5_anos: string
+  crecimento_De_Dividendos_5_anos: string,
+  proventos_pagos: string
 }
 
 interface Purse {
@@ -60,7 +61,8 @@ export class ViewTickerComponent implements OnInit{
     indicacao: '',
     p_L: '',
     roe: '',
-    crecimento_De_Dividendos_5_anos: ''
+    crecimento_De_Dividendos_5_anos: '',
+    proventos_pagos: ''
   }
 
   constructor(
@@ -144,7 +146,8 @@ export class ViewTickerComponent implements OnInit{
       indicacao: body.indicacao || '',
       p_L: body.p_L || '',
       roe: body.roe || body.roe,
-      crecimento_De_Dividendos_5_anos: body.crecimento_De_Dividendos_5_anos || ''
+      crecimento_De_Dividendos_5_anos: body.crecimento_De_Dividendos_5_anos || '',
+      proventos_pagos: body.proventos_pagos || ''
     } 
     if (!this.hasUpdatedInputAutomatically){
       this.dYDisplayValue = body.dividentYield;
