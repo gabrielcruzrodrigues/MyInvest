@@ -37,7 +37,11 @@ public class YahooFinanceApiClient
         decimal dYCurrent = result[Field.TrailingAnnualDividendYield] != null ? Convert.ToDecimal(result[Field.TrailingAnnualDividendYield]) : 0;
         decimal currentPrice = result[Field.RegularMarketPrice] != null ? Convert.ToDecimal(result[Field.RegularMarketPrice]) : 0;
 
-        string mediaDosProventosPagos = await YahooDividendsPeriodo(result.Symbol);
+        //obtendo os dividendos e calculando o total e a media dos proventos pagos
+        JToken dividendosDaAcao = await ObterDividendosAte5Anos(result.Symbol);
+        string mediaDosProventosPagos = CalculateMediaDosProventosPagos(dividendosDaAcao);
+        string totalDosProventosPagos = CalculateTotalDosDividendosPagos(dividendosDaAcao);
+
         decimal tetoPrice = CalculatePriceTeto(mediaDosProventosPagos, currentPrice, dyDesired);
         string recomendation = Recomendation(currentPrice, tetoPrice);
 
@@ -56,14 +60,11 @@ public class YahooFinanceApiClient
         activeReturn.P_L = (result.TrailingPE).ToString("F1");
         activeReturn.ROE = "Indisponível";
         activeReturn.Crecimento_De_Dividendos_5_anos = await CalculateDividendGrowth(result.Symbol);
-        
+
+        activeReturn.Proventos_pagos = "Dados indisponíveis";
         if (mediaDosProventosPagos != "Dados indisponíveis")
         {
-            activeReturn.Proventos_pagos = $"R$ {mediaDosProventosPagos}";
-        }
-        else
-        {
-            activeReturn.Proventos_pagos = $"{mediaDosProventosPagos}";
+            activeReturn.Proventos_pagos = $"Total: R$ {totalDosProventosPagos} | Média: R$ {mediaDosProventosPagos}";
         }
 
         return activeReturn;
@@ -120,7 +121,7 @@ public class YahooFinanceApiClient
         return $"{(averageDividends * 100).ToString("0.##") + "%"} por ano.";
     }
 
-    static async Task<string> YahooDividendsPeriodo(string ticker)
+    static async Task<JToken> ObterDividendosAte5Anos(string ticker)
     {
         if (ticker is null)
         {
@@ -131,8 +132,6 @@ public class YahooFinanceApiClient
         DateOnly endDate = new DateOnly(DateTime.Now.Year - 1, 12, 31);
         DateTime startFullDate = new DateTime(endDate.Year, 1, 1).AddYears(-4);
         DateOnly startDate = new DateOnly(startFullDate.Year, startFullDate.Month, startFullDate.Day);
-
-        Console.WriteLine(endDate + " + " + startDate);
 
         long startTimestamp = new DateTimeOffset(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0, TimeSpan.Zero).ToUnixTimeSeconds();
         long endTimestamp = new DateTimeOffset(endDate.Year, endDate.Month, endDate.Day, 0, 0, 0, TimeSpan.Zero).ToUnixTimeSeconds();
@@ -162,57 +161,72 @@ public class YahooFinanceApiClient
                     return "Dados indisponíveis";
                 }
 
-                //codigo para retornar o total dos dividendos pagos
+                return events;
+            }
+        }
+        catch(Exception ex)
+        {
+            throw new Exception($"Houve um problema ao tentar buscar os dividendos por ticker. - ex: {ex.Message}");
+        }
+    }
 
-                //decimal totalDividends = 0;
-                //foreach (var dividend in events["dividends"])
-                //{
-                //    totalDividends += (decimal)dividend.First["amount"];
-                //}
-
-                ////return totalDividends.ToString("F2");
-
-                //return $"{totalDividends.ToString("F2")}";
-
-
-                //Dicionário para armazenar os dividendos por ano
-                Dictionary<int, List<decimal>> dividendsByYear = new Dictionary<int, List<decimal>>();
-
-                foreach (var dividend in events["dividends"])
+    static string CalculateTotalDosDividendosPagos(JToken dividends)
+    {
+        try
+        {
+                decimal totalDividends = 0;
+                foreach (var dividend in dividends["dividends"])
                 {
-                    var amount = (decimal)dividend.First["amount"];
-                    var date = (long)dividend.First["date"];
-                    var dividendDate = DateTimeOffset.FromUnixTimeSeconds(date).DateTime;
-
-                    int year = dividendDate.Year;
-
-                    // Adiciona o dividendo na lista correspondente ao ano
-                    if (!dividendsByYear.ContainsKey(year))
-                    {
-                        dividendsByYear[year] = new List<decimal>();
-                    }
-
-                    dividendsByYear[year].Add(amount);
+                    totalDividends += (decimal)dividend.First["amount"];
                 }
 
-                int quantityDividendHistoryYears = dividendsByYear.Keys.Count();
-                decimal total = 0;
-
-                //soma todos os valores dentro de cada ano
-                foreach (var year in dividendsByYear.Keys)
-                {
-                    total += dividendsByYear[year].Sum();
-                    Console.WriteLine($"Ano: {year} - valor total: {total}");
-                }
-
-                return $"{(total / quantityDividendHistoryYears).ToString("F2")}";
-            }  
+                return $"{totalDividends.ToString("F2")}";
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Houve um erro ao tentar buscar o historico de um dividendo. - ex: {ex.Message}");
+            Console.WriteLine($"Houve um erro ao tentar calcular o total dos dividendos pagos de uma ação. - ex: {ex.Message}");
             return "Dados indisponíveis";
         }
+    }
+
+    static string CalculateMediaDosProventosPagos(JToken dividends)
+    {
+        if (dividends is null || dividends.Count() <= 0)
+        {
+            return "Dados indisponíveis";
+        }
+
+        //Dicionário para armazenar os dividendos por ano, separando os vários dividendos retornados pelo ano
+        Dictionary<int, List<decimal>> dividendsByYear = new Dictionary<int, List<decimal>>();
+
+        foreach (var dividend in dividends["dividends"])
+        {
+            var amount = (decimal)dividend.First["amount"];
+            var date = (long)dividend.First["date"];
+            var dividendDate = DateTimeOffset.FromUnixTimeSeconds(date).DateTime;
+
+            int year = dividendDate.Year;
+
+            // Adiciona o dividendo na lista correspondente ao ano
+            if (!dividendsByYear.ContainsKey(year))
+            {
+                dividendsByYear[year] = new List<decimal>();
+            }
+
+            dividendsByYear[year].Add(amount);
+        }
+
+        int quantityDividendHistoryYears = dividendsByYear.Keys.Count();
+        decimal total = 0;
+
+        //soma todos os valores dentro de cada ano
+        foreach (var year in dividendsByYear.Keys)
+        {
+            total += dividendsByYear[year].Sum();
+            Console.WriteLine($"Ano: {year} - valor total: {total}");
+        }
+
+        return $"{(total / quantityDividendHistoryYears).ToString("F2")}";
     }
 
     static decimal CalculatePriceTeto(string mediaProventosPagos, decimal currentPrice, decimal dYDesiredPercentage)
