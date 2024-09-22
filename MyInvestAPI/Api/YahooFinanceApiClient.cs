@@ -1,6 +1,7 @@
 ﻿using MyInvestAPI.Domain;
 using YahooFinanceApi;
 using MyInvestAPI.Extensions;
+using Newtonsoft.Json.Linq;
 
 namespace MyInvestAPI.Api;
 
@@ -36,7 +37,8 @@ public class YahooFinanceApiClient
         decimal dYCurrent = result[Field.TrailingAnnualDividendYield] != null ? Convert.ToDecimal(result[Field.TrailingAnnualDividendYield]) : 0;
         decimal currentPrice = result[Field.RegularMarketPrice] != null ? Convert.ToDecimal(result[Field.RegularMarketPrice]) : 0;
 
-        decimal tetoPrice = CalculatePriceTeto(dYCurrent, currentPrice, dyDesired);
+        string mediaDosProventosPagos = await YahooDividendsPeriodo(result.Symbol);
+        decimal tetoPrice = CalculatePriceTeto(mediaDosProventosPagos, currentPrice, dyDesired);
         string recomendation = Recomendation(currentPrice, tetoPrice);
 
         DateTime currentDate = DateTime.Now;
@@ -54,7 +56,15 @@ public class YahooFinanceApiClient
         activeReturn.P_L = (result.TrailingPE).ToString("F1");
         activeReturn.ROE = "Indisponível";
         activeReturn.Crecimento_De_Dividendos_5_anos = await CalculateDividendGrowth(result.Symbol);
-        activeReturn.Proventos_pagos = $"{await CalculateProventosPagos(result.Symbol)}";
+        
+        if (mediaDosProventosPagos != "Dados indisponíveis")
+        {
+            activeReturn.Proventos_pagos = $"R$ {mediaDosProventosPagos}";
+        }
+        else
+        {
+            activeReturn.Proventos_pagos = $"{mediaDosProventosPagos}";
+        }
 
         return activeReturn;
     }
@@ -110,49 +120,93 @@ public class YahooFinanceApiClient
         return $"{(averageDividends * 100).ToString("0.##") + "%"} por ano.";
     }
 
-    static async Task<string> CalculateProventosPagos(string ticker)
+    static async Task<string> YahooDividendsPeriodo(string ticker)
     {
         if (ticker is null)
         {
             throw new HttpResponseException(400, "O ticker não pode ser nulo!");
         }
 
-        //Pega o último dia do ano passado, e a data de 5 anos atras referente a essa data, ignorando o ano atual
-        DateTime lastDateLastYear = new DateTime(DateTime.Now.Year - 1, 12, 31);
-        DateTime fiveYearsAgoDate = lastDateLastYear.AddDays(-5);
+        //Pega o último dia do ano passado, e o primeiro dia da data de 5 anos atras referente a essa data, ignorando o ano atual
+        DateOnly endDate = new DateOnly(DateTime.Now.Year - 1, 12, 31);
+        DateTime startFullDate = new DateTime(endDate.Year, 1, 1).AddYears(-4);
+        DateOnly startDate = new DateOnly(startFullDate.Year, startFullDate.Month, startFullDate.Day);
+
+        Console.WriteLine(endDate + " + " + startDate);
+
+        long startTimestamp = new DateTimeOffset(startDate.Year, startDate.Month, startDate.Day, 0, 0, 0, TimeSpan.Zero).ToUnixTimeSeconds();
+        long endTimestamp = new DateTimeOffset(endDate.Year, endDate.Month, endDate.Day, 0, 0, 0, TimeSpan.Zero).ToUnixTimeSeconds();
+
+        var url = $"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?interval=1d&period1={startTimestamp}&period2={endTimestamp}&events=div";
 
         try
         {
-            var history = await Yahoo.GetDividendsAsync(ticker, new DateTime(lastDateLastYear.Year, lastDateLastYear.Month, lastDateLastYear.Day),
-                                                                new DateTime(fiveYearsAgoDate.Year, fiveYearsAgoDate.Month, fiveYearsAgoDate.Day));
-
-            if (history is null || history.Count() <= 0)
+            using (var client = new HttpClient())
             {
-                return "Dados indisponíveis";
-            }
+                client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0");
+                var response = await client.GetStringAsync(url);
 
-            decimal percentageForCalculate = 5 / 100;
+                var data = JObject.Parse(response);
 
-            if (history.Count() < 5 && history.Count() >= 3)
-            {
-                percentageForCalculate = 3 / 100;
-            }
-            else
-            {
-                //Levando em consideração apenas dados maiores que 3 anos, se forem menos que 5, calculamos com base em 3 anos
-                return "Dados indisponíveis";
-            }
+                if (data["chart"]?["result"] == null || !data["chart"]["result"].HasValues)
+                {
+                    Console.WriteLine("Erro: Não foi possível recuperar os dados.");
+                    return "Dados indisponíveis";
+                }
 
-            decimal dividendAverage = 0;
+                var events = data["chart"]["result"][0]["events"];
 
-            foreach (var candle in history)
-            {
-                dividendAverage += candle.Dividend;
-            }
+                if (events is null || events["dividends"] is null)
+                {
+                    Console.WriteLine("Nenhum dividendo encontrado no período especificado.");
+                    return "Dados indisponíveis";
+                }
 
-            dividendAverage /= percentageForCalculate;
+                //codigo para retornar o total dos dividendos pagos
 
-            return $"{dividendAverage}";
+                //decimal totalDividends = 0;
+                //foreach (var dividend in events["dividends"])
+                //{
+                //    totalDividends += (decimal)dividend.First["amount"];
+                //}
+
+                ////return totalDividends.ToString("F2");
+
+                //return $"{totalDividends.ToString("F2")}";
+
+
+                //Dicionário para armazenar os dividendos por ano
+                Dictionary<int, List<decimal>> dividendsByYear = new Dictionary<int, List<decimal>>();
+
+                foreach (var dividend in events["dividends"])
+                {
+                    var amount = (decimal)dividend.First["amount"];
+                    var date = (long)dividend.First["date"];
+                    var dividendDate = DateTimeOffset.FromUnixTimeSeconds(date).DateTime;
+
+                    int year = dividendDate.Year;
+
+                    // Adiciona o dividendo na lista correspondente ao ano
+                    if (!dividendsByYear.ContainsKey(year))
+                    {
+                        dividendsByYear[year] = new List<decimal>();
+                    }
+
+                    dividendsByYear[year].Add(amount);
+                }
+
+                int quantityDividendHistoryYears = dividendsByYear.Keys.Count();
+                decimal total = 0;
+
+                //soma todos os valores dentro de cada ano
+                foreach (var year in dividendsByYear.Keys)
+                {
+                    total += dividendsByYear[year].Sum();
+                    Console.WriteLine($"Ano: {year} - valor total: {total}");
+                }
+
+                return $"{(total / quantityDividendHistoryYears).ToString("F2")}";
+            }  
         }
         catch (Exception ex)
         {
@@ -161,23 +215,26 @@ public class YahooFinanceApiClient
         }
     }
 
-    static decimal CalculatePriceTeto(decimal dYCurrent, decimal currentPrice, decimal dYDesiredPercentage)
+    static decimal CalculatePriceTeto(string mediaProventosPagos, decimal currentPrice, decimal dYDesiredPercentage)
     {
+        if (!decimal.TryParse(mediaProventosPagos, out decimal mediaProventosPagosDecimal))
+        {
+            throw new Exception("Valor do total dos proventos pagos é inválido!");
+        }
+
         dYDesiredPercentage /= 100;
 
-        if (dYCurrent <= 0 || currentPrice <= 0)
+        if (mediaProventosPagosDecimal <= 0 || currentPrice <= 0)
             throw new InvalidOperationException("Data of Dividend Yield or Active price are invalid!");
 
-        decimal AnnualDividends = dYCurrent * currentPrice;
-
-        decimal priceTeto = AnnualDividends / dYDesiredPercentage;
+        decimal priceTeto = mediaProventosPagosDecimal / dYDesiredPercentage;
 
         return priceTeto;
     }
 
     static string Recomendation(decimal currentPrice, decimal tetoPrice)
     {
-        return tetoPrice < currentPrice ? "🟢 Comprar" : "🔴 Não-comprar";
+        return currentPrice < tetoPrice ? "🟢 Comprar" : "🔴 Não-comprar";
     }
 
     static string VerifyType(string type)
