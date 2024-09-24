@@ -17,7 +17,7 @@ export class SearchTickerComponent {
   form: FormGroup;
   isLoading: boolean = false;
 
-  percentValue: number | null = null;
+  percentValue: number | null = 6;  
   dYDisplayValue: string = '';
 
   constructor(
@@ -62,12 +62,16 @@ export class SearchTickerComponent {
           {
             alert("Não foi encontrado nenhum ativo com o ticker informado.");
             return;
-          }
-          if (err.status === 500)
+
+          } 
+          else if (err.status === 500)
           {
             alert("Houve um erro ao tentar buscar esse ativo!");
+          } 
+          else 
+          {
+            alert("Houve um erro ao tentar buscar o ativo, tente novamente mais tarde!")
           }
-          console.log(err);
         }
       })
     }
@@ -92,5 +96,15 @@ export class SearchTickerComponent {
       this.percentValue = null;
       this.dYDisplayValue = '';
     }
+  }
+
+  searchFixedActions(action: string) : void
+  {
+    this.form.patchValue({
+      name: action,
+      dy: 6
+    });
+    this.dYDisplayValue = '6%';
+    this.onSubmit()
   }
 }

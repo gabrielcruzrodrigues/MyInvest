@@ -37,12 +37,12 @@ interface Purse {
   styleUrl: './view-ticker.component.scss'
 })
 export class ViewTickerComponent implements OnInit{
+  isLoading: boolean = true;
   userId: string = '';
   activeName: string = '';
   purses: Purse[] = [];
   selectedPurseId: string = '';
   @ViewChild('containerError', { static : false }) containerError!: ElementRef;
-  isLoading: boolean = true;
 
   percentValue: number | null = null;
   dYDisplayValue: string = '';
@@ -86,17 +86,18 @@ export class ViewTickerComponent implements OnInit{
     this.userService.getPurses(this.userId).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.status === 200)
-        {
-          response.body.purses.forEach((purse: any) => {
-            const newPurse: Purse = {
-              id: purse.purse_Id,
-              name: purse.name
-            };
-            this.purses.push(newPurse);
-          });
-        }
-      },
-      error: (err) => {
+          {
+            response.body.purses.forEach((purse: any) => {
+              const newPurse: Purse = {
+                id: purse.purse_Id,
+                name: purse.name
+              };
+              this.purses.push(newPurse);
+              this.isLoading = false;
+            });
+          }
+        },
+        error: (err) => {
         this.isLoading = false;
         console.log(err);
       }
@@ -107,7 +108,8 @@ export class ViewTickerComponent implements OnInit{
   {
     if (this.percentValue === null)
     {
-      alert("O DY (Dividend Yield) não pode ser nulo111!");
+      alert("O DY (Dividend Yield) não pode ser nulo!");
+      this.isLoading = false;
       return;
     }
 
@@ -134,6 +136,7 @@ export class ViewTickerComponent implements OnInit{
 
   populateActiveFields(body: any): void
   {
+    
     this.active = {
       data: body.data || '',
       ativo: body.ativo || '',
@@ -149,12 +152,11 @@ export class ViewTickerComponent implements OnInit{
       crecimento_De_Dividendos_5_anos: body.crecimento_De_Dividendos_5_anos || '',
       proventos_pagos: body.proventos_pagos || ''
     } 
+
     if (!this.hasUpdatedInputAutomatically){
       this.dYDisplayValue = body.dividentYield;
       this.hasUpdatedInputAutomatically = false;
     }
-
-    this.isLoading = false;
   }
 
   addActive(): void 
