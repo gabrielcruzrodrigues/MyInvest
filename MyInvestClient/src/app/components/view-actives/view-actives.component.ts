@@ -6,11 +6,27 @@ import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../layout/loading/loading.component';
 import { AuthService } from '../../services/auth.service';
 
-interface Active {
+interface ActiveDomain {
   id: string,
   code: string,
   type: string,
   dyDesiredPercentage: string
+}
+
+interface Active {
+  data: string,
+  ativo: string,
+  nomeDoAtivo: string,
+  tipo: string,
+  dividentYield: string,
+  precoAtual: string,
+  p_VP: string,
+  preco_Teto: string,
+  indicacao: string,
+  p_L: string,
+  roe: string,
+  crecimento_De_Dividendos_5_anos: string,
+  proventos_pagos: string
 }
 
 @Component({
@@ -23,9 +39,11 @@ interface Active {
 export class ViewActivesComponent implements OnInit{
   purseId: string = '';
   userId: string = '';
-  actives: Active[] = [];
-  @ViewChild('message', { static: false }) message!: ElementRef;
-  @ViewChild('titles', { static: false }) titles!: ElementRef;
+  actives: ActiveDomain[] = [];
+
+  @ViewChild('actions_menu', { static: false }) actions_menu!: ElementRef;
+  @ViewChild('actions', { static: false }) actions!: ElementRef;
+
   isLoading: boolean = true;
 
   constructor(
@@ -61,7 +79,6 @@ export class ViewActivesComponent implements OnInit{
         this.isLoading = false;
         if (err.status === 404)
         {
-          this.message.nativeElement.classList.add('active');
           return;
         }
         if (err.status === 500)
@@ -73,6 +90,12 @@ export class ViewActivesComponent implements OnInit{
         }
         console.log(err);
       }
+    })
+  }
+
+  ngAfterViewInit(): void {
+    this.actions_menu.nativeElement.addEventListener('click', () => {
+      this.actions.nativeElement.classList.add('active');
     })
   }
 
@@ -88,12 +111,10 @@ export class ViewActivesComponent implements OnInit{
           dyDesiredPercentage: active.dyDesiredPercentage
         }
       });
-      this.titles.nativeElement.classList.add('active');
       this.isLoading = false;
     }
     else
     {
-      this.message.nativeElement.classList.add('active');
       this.isLoading = false;
     }
   }
@@ -118,8 +139,7 @@ export class ViewActivesComponent implements OnInit{
         }
 
         if (this.actives.length == 0) {
-          this.titles.nativeElement.classList.remove('active');
-          this.message.nativeElement.classList.add('active');
+
         }
       },
       error: (err) => {
@@ -136,5 +156,12 @@ export class ViewActivesComponent implements OnInit{
   updateActive(activeId: string, activeCode: string, percentValue: string)
   {
     this.router.navigate(["/edit-ticker/" + activeId + "/" +  activeCode + "/" + percentValue])
+  }
+
+  // new project
+
+
+  backToPurses(): void {
+    this.router.navigate(["/purses"])
   }
 }
