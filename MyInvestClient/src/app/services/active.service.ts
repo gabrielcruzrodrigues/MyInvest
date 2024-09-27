@@ -39,6 +39,12 @@ export class ActiveService {
     return this.http.get(urlForRequest, { observe: 'response' });
   }
 
+  searchActivesForShowPurseDetails(purseId: string): Observable<any>
+  {
+    const urlForRequest = this.url + "/search-active-purse-details/" + purseId;
+    return this.http.get(urlForRequest, { observe: 'response' });
+  }
+
   delete(purseId: string): Observable<any>
   {
     const urlForRequest = this.url + "/active/" + purseId;

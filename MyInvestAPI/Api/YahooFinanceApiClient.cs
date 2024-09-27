@@ -9,6 +9,11 @@ public class YahooFinanceApiClient
 {
     public async static Task<Security> GetActive(string active, string dYDesiredPercentage)
     {
+        if (string.IsNullOrEmpty(active))
+        {
+            throw new HttpResponseException(500, "O ativo para a pesquisa não pode ser nulo ou vazio");
+        }
+
         var search = await Yahoo.Symbols(active).Fields(
             Field.DividendDate,                 // data
             Field.Symbol,                       // ativo
@@ -27,7 +32,7 @@ public class YahooFinanceApiClient
         return search[$"{active}"];
     }
 
-    public static async Task<ActiveReturnForPurseDetails> CreateActiveReturnForPurseDetails(string ticker, string dYDesiredPercentage)
+    public static async Task<ActiveReturnForPurseDetails> CreateActiveReturnForPurseDetails(string ticker, string dYDesiredPercentage, int activeId)
     {
         Security result = await GetActive(ticker, dYDesiredPercentage);
 
@@ -48,6 +53,7 @@ public class YahooFinanceApiClient
         DateTime currentDate = DateTime.Now;
 
         ActiveReturnForPurseDetails activeReturnForPurseDetails = new ();
+        activeReturnForPurseDetails.Id = activeId;
         activeReturnForPurseDetails.Ativo = result.Symbol;
         activeReturnForPurseDetails.Tipo = VerifyType(result.QuoteType);
         activeReturnForPurseDetails.DividentYield = (dyDesired).ToString() + "%";

@@ -6,26 +6,14 @@ import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../layout/loading/loading.component';
 import { AuthService } from '../../services/auth.service';
 
-interface ActiveDomain {
-  id: string,
-  code: string,
-  type: string,
-  dyDesiredPercentage: string
-}
-
 interface Active {
-  data: string,
+  id: string
   ativo: string,
-  nomeDoAtivo: string,
   tipo: string,
   dividentYield: string,
   precoAtual: string,
-  p_VP: string,
   preco_Teto: string,
   indicacao: string,
-  p_L: string,
-  roe: string,
-  crecimento_De_Dividendos_5_anos: string,
   proventos_pagos: string
 }
 
@@ -39,7 +27,9 @@ interface Active {
 export class ViewActivesComponent implements OnInit{
   purseId: string = '';
   userId: string = '';
-  actives: ActiveDomain[] = [];
+  actives: Active[] = [];
+  activesQty: number = 0;
+  selectedMenu: string = 'RESUMO';
 
   @ViewChild('actions_menu', { static: false }) actions_menu!: ElementRef;
   @ViewChild('actions', { static: false }) actions!: ElementRef;
@@ -67,9 +57,8 @@ export class ViewActivesComponent implements OnInit{
       return;
     }
 
-    this.activeService.searchActivesByPurseId(param).subscribe({
+    this.activeService.searchActivesForShowPurseDetails(param).subscribe({
       next: (response: HttpResponse<any>) => {
-        this.isLoading = false;
         if (response.status === 200)
         {
           this.populateTheArrayOfActives(response.body);
@@ -93,6 +82,11 @@ export class ViewActivesComponent implements OnInit{
     })
   }
 
+  selectOptionMenu(optionMenu: string): void
+  {
+    this.selectedMenu = optionMenu;
+  }
+
   ngAfterViewInit(): void {
     this.actions_menu.nativeElement.addEventListener('click', () => {
       this.actions.nativeElement.classList.add('active');
@@ -101,16 +95,21 @@ export class ViewActivesComponent implements OnInit{
 
   populateTheArrayOfActives(body: any): void
   {
-    if (body.actives.length > 0)
+    if (body.length > 0)
     {
-      this.actives = body.actives.map((active: any) => {
+      this.actives = body.map((active: any) => {
         return {
-          id: active.active_Id,
-          code: active.code,
-          type: active.type,
-          dyDesiredPercentage: active.dyDesiredPercentage
+          id: active.id,
+          ativo: active.ativo,
+          tipo: active.tipo,
+          dividentYield: active.dividentYield,
+          precoAtual: active.precoAtual,
+          preco_Teto: active.preco_Teto,
+          indicacao: active.indicacao,
+          proventos_pagos: active.proventos_pagos
         }
       });
+      this.activesQty = body.length;
       this.isLoading = false;
     }
     else
@@ -121,7 +120,7 @@ export class ViewActivesComponent implements OnInit{
 
   redirectToActive(code: string, dyDesiredPercentage: string): void
   {
-    this.router.navigate([`/view-active-info/${code}/${dyDesiredPercentage}`]);
+    this.router.navigate([`/view-ticker/${code}/${dyDesiredPercentage}`]);
   }
 
   createActive(): void 
@@ -131,11 +130,13 @@ export class ViewActivesComponent implements OnInit{
 
   deleteActive(purseId: any): void 
   {
+    this.isLoading = true;
     this.activeService.delete(purseId).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.status === 204)
         {
-          this.actives.filter(active => active.id !== purseId);
+          this.actives = this.actives.filter(active => active.id !== purseId);
+          this.isLoading = false;
         }
 
         if (this.actives.length == 0) {
@@ -146,6 +147,7 @@ export class ViewActivesComponent implements OnInit{
         if (typeof window !== 'undefined')
         {
           alert("Ocorreu um erro ao tentar deletar o ativo!");
+          this.isLoading = false;
           console.log(`Ocorreu um erro ao tentar deletar o ativo! err: ${err.message}`);
           return;
         }
@@ -157,9 +159,6 @@ export class ViewActivesComponent implements OnInit{
   {
     this.router.navigate(["/edit-ticker/" + activeId + "/" +  activeCode + "/" + percentValue])
   }
-
-  // new project
-
 
   backToPurses(): void {
     this.router.navigate(["/purses"])

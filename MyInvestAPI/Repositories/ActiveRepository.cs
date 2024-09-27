@@ -173,7 +173,7 @@ namespace MyInvestAPI.Repositories
                 List<ActiveReturnForPurseDetails> actives = new();
                 foreach (var active in purse.Actives)
                 {
-                    actives.Add(await YahooFinanceApiClient.CreateActiveReturnForPurseDetails(active.Code, active.DYDesiredPercentage.ToString()));
+                    actives.Add(await YahooFinanceApiClient.CreateActiveReturnForPurseDetails(active.Code, active.DYDesiredPercentage.ToString(), active.Active_Id));
                 }
 
                 return actives;

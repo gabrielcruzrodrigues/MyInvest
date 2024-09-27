@@ -10,16 +10,15 @@
 <section class="main-section">
      <div class="menu">
           <ul>
-               <li #resume>RESUMO</li>
-               <li #actions_menu>AÇÕES</li>
-               <li #fiis>FIIS</li>
+               <li #resume (click)="selectOptionMenu('RESUMO')" [ngClass]="{'selected': selectedMenu === 'RESUMO'}">RESUMO</li>
+               <li #actions_menu (click)="selectOptionMenu('ACOES')" [ngClass]="{'selected': selectedMenu === 'ACOES'}">AÇÕES</li>
+               <li #fiis (click)="selectOptionMenu('FIIS')" [ngClass]="{'selected': selectedMenu === 'FIIS'}">FIIS</li>
           </ul>
      </div>
      
      <div class="actions" #actions>
           <div class="first-infos">
-               <p>AÇÕES: 5</p>
-               <P>VALOR TOTAL: R$ 900,00</P>
+               <p>AÇÕES: {{ activesQty }}</p>
           </div>
           <table class="actions-infos">
                <thead>
@@ -27,37 +26,41 @@
                        <th>Ativo</th>
                        <th>Quantidade</th>
                        <th>Tipo</th>
-                       <th>DY Desejado</th>
+                       <th>DY</th>
                        <th>Preço atual</th>
                        <th>Dividendos pagos</th>
                        <th>Preço teto</th>
                        <th>Indicação</th>
+                       <th>ações</th>
                    </tr>
                </thead>
                <tbody>
-                   <tr>
-                       <td>Ativo 1</td>
-                       <td>100</td>
-                       <td>Tipo A</td>
-                       <td>6%</td>
-                       <td>R$ 10,00</td>
-                       <td>R$ 1,00</td>
-                       <td>R$ 12,00</td>
-                       <td>Comprar</td>
+                   <tr *ngFor="let active of actives" (click)="redirectToActive(active.ativo, active.dividentYield)">
+                       <td>{{ active.ativo }}</td>
+                       <td>-</td>
+                       <td>{{ active.tipo }}</td>
+                       <td>{{ active.dividentYield }}</td>
+                       <td>{{ active.precoAtual }}</td>
+                       <td>{{ active.dividentYield }}</td>
+                       <td>{{ active.preco_Teto }}</td>
+                       <td>{{ active.indicacao }}</td>
+                       <td class="actions-button-container">
+                              <button class="actions-button edit" (click)="updateActive(active.id, active.ativo, active.dividentYield)">
+                                   <img src="assets/edit.png">
+                              </button>
+                              <button class="actions-button delete" (click)="deleteActive(active.id)">
+                                   <img src="assets/delete.png">
+                              </button>
+                       </td>
                    </tr>
-                   <tr>
-                         <td>Ativo 1</td>
-                         <td>100</td>
-                         <td>Tipo A</td>
-                         <td>6%</td>
-                         <td>R$ 10,00</td>
-                         <td>R$ 1,00</td>
-                         <td>R$ 12,00</td>
-                         <td>Comprar</td>
-                    </tr>
                </tbody>
            </table>
      </div>
+     <div class="add" (click)="createActive()">
+          <img src="/assets/add.png" class="add-icon">
+     </div>
 </section>
+
+
 
 <app-loading [isLoading]="isLoading"></app-loading>

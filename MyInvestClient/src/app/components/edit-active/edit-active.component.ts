@@ -172,11 +172,11 @@ export class EditActiveComponent {
 
     if (this.percentValue === null)
       {
-        alert("O DY (Dividend Yield) não pode ser nulo111!");
+        alert("O DY (Dividend Yield) não pode ser nulo!");
         this.isLoading = false;
         return;
       }
-
+      
     this.activeService.update(this.activeId, this.percentValue).subscribe({
       next: (response: HttpResponse<any>) => {
         this.isLoading = false;

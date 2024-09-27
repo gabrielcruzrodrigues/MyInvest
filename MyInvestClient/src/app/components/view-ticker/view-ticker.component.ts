@@ -93,7 +93,6 @@ export class ViewTickerComponent implements OnInit{
                 name: purse.name
               };
               this.purses.push(newPurse);
-              this.isLoading = false;
             });
           }
         },
@@ -118,6 +117,7 @@ export class ViewTickerComponent implements OnInit{
         if (response.status === 200)
         {
           this.populateActiveFields(response.body);
+          this.isLoading = false;
         }
         else 
         {
@@ -182,9 +182,9 @@ export class ViewTickerComponent implements OnInit{
 
       this.activeService.create(this.selectedPurseId, this.active.tipo, this.active.ativo, this.percentValue?.toString()).subscribe({
         next: (response: HttpResponse<any>) => {
-          this.isLoading = false;
           if (response.status === 201)
           {
+            this.isLoading = false;
             this.router.navigate(["/purses"]);
           }
         },

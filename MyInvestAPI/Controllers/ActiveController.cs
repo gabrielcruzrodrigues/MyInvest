@@ -59,7 +59,7 @@ namespace MyInvestAPI.Controllers
             return Ok(ActiveVerify);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{activeId}")]
         public async Task<IActionResult> Update(int activeId, UpdateActiveViewModel activeViewModel)
         {
             _repository.Update(activeId, activeViewModel);
