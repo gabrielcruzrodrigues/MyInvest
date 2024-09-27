@@ -7,7 +7,7 @@ namespace MyInvestAPI.Api;
 
 public class YahooFinanceApiClient
 {
-    public async static Task<ActiveReturn> GetActive(string active, string dYDesiredPercentage)
+    public async static Task<Security> GetActive(string active, string dYDesiredPercentage)
     {
         var search = await Yahoo.Symbols(active).Fields(
             Field.DividendDate,                 // data
@@ -24,13 +24,50 @@ public class YahooFinanceApiClient
         if (search is null)
             throw new KeyNotFoundException();
 
-        var result = search[$"{active}"];
-
-        return await CreateActiveReturn(result, dYDesiredPercentage);
+        return search[$"{active}"];
     }
 
-    static async Task<ActiveReturn> CreateActiveReturn(Security result, string dYDesiredPercentage)
+    public static async Task<ActiveReturnForPurseDetails> CreateActiveReturnForPurseDetails(string ticker, string dYDesiredPercentage)
     {
+        Security result = await GetActive(ticker, dYDesiredPercentage);
+
+        if (!decimal.TryParse(dYDesiredPercentage, out decimal dyDesired))
+            throw new ArgumentException("Porcentagem inválida.");
+
+        decimal dYCurrent = result[Field.TrailingAnnualDividendYield] != null ? Convert.ToDecimal(result[Field.TrailingAnnualDividendYield]) : 0;
+        decimal currentPrice = result[Field.RegularMarketPrice] != null ? Convert.ToDecimal(result[Field.RegularMarketPrice]) : 0;
+
+        //obtendo os dividendos e calculando o total e a media dos proventos pagos
+        JToken dividendosDaAcao = await ObterDividendosAte5Anos(result.Symbol);
+        string mediaDosProventosPagos = CalculateMediaDosProventosPagos(dividendosDaAcao);
+        string totalDosProventosPagos = CalculateTotalDosDividendosPagos(dividendosDaAcao);
+
+        decimal tetoPrice = CalculatePriceTeto(mediaDosProventosPagos, currentPrice, dyDesired);
+        string recomendation = Recomendation(currentPrice, tetoPrice);
+
+        DateTime currentDate = DateTime.Now;
+
+        ActiveReturnForPurseDetails activeReturnForPurseDetails = new ();
+        activeReturnForPurseDetails.Ativo = result.Symbol;
+        activeReturnForPurseDetails.Tipo = VerifyType(result.QuoteType);
+        activeReturnForPurseDetails.DividentYield = (dyDesired).ToString() + "%";
+        activeReturnForPurseDetails.PrecoAtual = $"R$ {result.RegularMarketPrice.ToString("F2")}";
+        activeReturnForPurseDetails.Preco_Teto = $"R$ {tetoPrice.ToString("F2")}";
+        activeReturnForPurseDetails.Indicacao = recomendation;
+
+        activeReturnForPurseDetails.Proventos_pagos = "Dados indisponíveis";
+        if (mediaDosProventosPagos != "Dados indisponíveis")
+        {
+            activeReturnForPurseDetails.Proventos_pagos = $"Total: R$ {totalDosProventosPagos} | Média: R$ {mediaDosProventosPagos}";
+        }
+
+        return activeReturnForPurseDetails;
+    }
+
+    public static async Task<ActiveReturn> CreateActiveReturn(string ticker, string dYDesiredPercentage)
+    {
+        Security result = await GetActive(ticker, dYDesiredPercentage);
+
         if (!decimal.TryParse(dYDesiredPercentage, out decimal dyDesired))
             throw new ArgumentException("Porcentagem inválida.");
 

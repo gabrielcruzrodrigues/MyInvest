@@ -79,6 +79,12 @@ namespace MyInvestAPI.Controllers
             return Ok(await _repository.SearchActiveAsync(active, dYDesiredPercentage));
         }
 
+        [HttpGet("/search-active-purse-details/{purseId}")]
+        public async Task<ActionResult<IEnumerable<ActiveReturnForPurseDetails>>> searchActivesForPurseDetails(int purseId)
+        {
+            return Ok(await _repository.GetActivesForShowInPurseDetails(purseId));
+        }
+
         [HttpGet("/get-actives/{purseId}")]
         public async Task<ActionResult> GetActivesByPurseId(int purseId)
         {
