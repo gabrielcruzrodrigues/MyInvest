@@ -6,11 +6,12 @@ import { PurseService } from '../../services/purse.service';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LoadingComponent } from '../layout/loading/loading.component';
+import { BackComponent } from '../layout/back/back.component';
 
 @Component({
   selector: 'app-create-purse',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, LoadingComponent],
+  imports: [ReactiveFormsModule, CommonModule, LoadingComponent, BackComponent],
   templateUrl: './create-purse.component.html',
   styleUrl: './create-purse.component.scss'
 })
@@ -18,6 +19,7 @@ export class CreatePurseComponent implements OnInit{
   form: FormGroup;
   userId: string = '';
   isLoading: boolean = false;
+  redirectBackLink: string = '/purses';
 
   constructor(
     private fb: FormBuilder,
