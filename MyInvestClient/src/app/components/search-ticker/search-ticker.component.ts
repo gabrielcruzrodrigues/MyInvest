@@ -5,17 +5,19 @@ import { ActiveService } from '../../services/active.service';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LoadingComponent } from '../layout/loading/loading.component';
+import { BackComponent } from '../layout/back/back.component';
 
 @Component({
   selector: 'app-search-ticker',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, LoadingComponent],
+  imports: [ReactiveFormsModule, CommonModule, LoadingComponent, BackComponent],
   templateUrl: './search-ticker.component.html',
   styleUrl: './search-ticker.component.scss'
 })
 export class SearchTickerComponent {
   form: FormGroup;
   isLoading: boolean = false;
+  redirectBackLink: string = '/purses';
 
   percentValue: number | null = 6;  
   dYDisplayValue: string = '';
