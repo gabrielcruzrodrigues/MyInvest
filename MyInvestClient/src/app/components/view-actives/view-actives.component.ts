@@ -5,6 +5,7 @@ import { HttpResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../layout/loading/loading.component';
 import { AuthService } from '../../services/auth.service';
+import { BackComponent } from '../layout/back/back.component';
 
 interface Active {
   id: string
@@ -20,7 +21,7 @@ interface Active {
 @Component({
   selector: 'app-view-actives',
   standalone: true,
-  imports: [CommonModule, LoadingComponent],
+  imports: [CommonModule, LoadingComponent, BackComponent],
   templateUrl: './view-actives.component.html',
   styleUrl: './view-actives.component.scss'
 })
@@ -30,6 +31,7 @@ export class ViewActivesComponent implements OnInit{
   actives: Active[] = [];
   activesQty: number = 0;
   selectedMenu: string = 'RESUMO';
+  redirectBackLink: string = '/purses';
 
   @ViewChild('actions_menu', { static: false }) actions_menu!: ElementRef;
   @ViewChild('actions', { static: false }) actions!: ElementRef;
@@ -74,7 +76,7 @@ export class ViewActivesComponent implements OnInit{
         {
           if (typeof window !== 'undefined')
           {
-            alert("Carteira criada com sucesso!");
+            alert("Houve um erro ao tentar buscar os ativos!");
           }
         }
         console.log(err);
@@ -158,9 +160,5 @@ export class ViewActivesComponent implements OnInit{
   updateActive(activeId: string, activeCode: string, percentValue: string)
   {
     this.router.navigate(["/edit-ticker/" + activeId + "/" +  activeCode + "/" + percentValue])
-  }
-
-  backToPurses(): void {
-    this.router.navigate(["/purses"])
   }
 }

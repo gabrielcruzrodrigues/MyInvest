@@ -1,11 +1,6 @@
-<section class="navegation" (click)="backToPurses()">
-     <div class="back">
-          <img src="/assets/back-icon.png">
-     </div>
-     <p>voltar</p>
-</section>
+<app-back [link]="redirectBackLink"></app-back>
 
-<h1> Carteira teste </h1>
+<h1>Meus ativos</h1>
 
 <section class="main-section">
      <div class="menu">
@@ -18,7 +13,7 @@
      
      <div class="actions" #actions>
           <div class="first-infos">
-               <p>AÇÕES: {{ activesQty }}</p>
+               <p>INVESTIMENTOS: {{ activesQty }}</p>
           </div>
           <table class="actions-infos">
                <thead>
@@ -44,7 +39,7 @@
                        <td>{{ active.dividentYield }}</td>
                        <td>{{ active.preco_Teto }}</td>
                        <td>{{ active.indicacao }}</td>
-                       <td class="actions-button-container">
+                       <td class="actions-button-container" (click)="$event.stopPropagation()">
                               <button class="actions-button edit" (click)="updateActive(active.id, active.ativo, active.dividentYield)">
                                    <img src="assets/edit.png">
                               </button>

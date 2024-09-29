@@ -1,5 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NavbarComponent } from '../layout/navbar/navbar.component';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
@@ -7,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
 import { LoadingComponent } from '../layout/loading/loading.component';
 import { PurseService } from '../../services/purse.service';
+import { BackComponent } from '../layout/back/back.component';
 
 interface Purse {
   purse_Id: number;
@@ -19,7 +19,7 @@ interface Purse {
   selector: 'app-view-purses',
   standalone: true,
   imports: [
-    CommonModule, LoadingComponent
+    CommonModule, LoadingComponent, BackComponent
   ],
   templateUrl: './view-purses.component.html',
   styleUrl: './view-purses.component.scss'
@@ -27,9 +27,9 @@ interface Purse {
 export class ViewPursesComponent implements OnInit{
   userId: string = '';
   purses: Purse[] = [];
-  @ViewChild('message', { static: false }) message!: ElementRef;
-  @ViewChild('titles', { static: false }) titles!: ElementRef;
   isLoading: boolean = true;
+  pursesQty: number = 0;
+  redirectBackLink: string = '/';
 
   constructor(
     private authService: AuthService,
@@ -71,12 +71,11 @@ export class ViewPursesComponent implements OnInit{
         const date = new Date(purse.createdAt);
         purse.createdAt = date.toLocaleDateString('pt-BR');
         this.purses.push(purse);
-        this.titles.nativeElement.classList.add('active');
+        this.pursesQty++;
       });
       this.isLoading = false;
     }
     else {
-      this.message.nativeElement.classList.add('active');
       this.isLoading = false;
     }
   }
@@ -103,11 +102,6 @@ export class ViewPursesComponent implements OnInit{
         if (response.status === 204)
         {
           this.purses = this.purses.filter(purse => purse.purse_Id !== id);
-          
-          if (this.purses.length == 0) {
-            this.titles.nativeElement.classList.remove('active');
-            this.message.nativeElement.classList.add('active');
-          }
         }
         else 
         {

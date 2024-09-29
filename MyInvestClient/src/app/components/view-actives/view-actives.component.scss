@@ -8,32 +8,6 @@
      }
 }
 
-// navegação
-.navegation {
-     display: flex;
-     align-items: center;
-     padding: 10px 5%;
-}
-
-.navegation p {
-     font-size: 18px;
-     cursor: pointer;
-}
-
-.back {
-     display: flex;
-     align-items: center;
-     border: 1px solid #ccc;
-     border-radius: 15px;
-     background-color: $primary-color;
-     cursor: pointer;
-     margin-right: 10px;
-} 
-
-.back img {
-     width: 40px;
-}
-
 h1 {
      text-align: center;
      color: $primary-color;
@@ -99,6 +73,7 @@ h1 {
 // actions
 .actions {
      display: block;
+     margin-bottom: 10%;
 }
 
 .actions.active {
@@ -190,6 +165,8 @@ h1 {
 
 .add-icon {
      width: 80px;
+     background-color: $primary-color;
+     border-radius: 50%;
 }
 
 
