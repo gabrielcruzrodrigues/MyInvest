@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Domain;
 using MyInvestAPI.Repositories;
@@ -28,42 +29,48 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<User>> GetAllUsers()
         {
             return await _repository.GetAllUsersAsync();
         }
 
+        [Authorize]
         [HttpGet("purses")]
         public async Task<IEnumerable<User>> GetAllUsersWithPurses()
         {
             return await _repository.GetAllUsersWithPursesAsync();
         }
 
+        [Authorize]
         [HttpGet("purses/actives")]
         public async Task<IEnumerable<User>> GetAllUsersWithPursesAndActives()
         {
             return await _repository.GetAllUsersWithPursesAndActivesAsync();
         }
 
+        [Authorize]
         [HttpGet("{id:int}", Name ="GetUser")]
         public async Task<ActionResult<User>> GetById(int id)
         {
             return Ok(await _repository.GetByIdAsync(id));
         }
 
+        [Authorize]
         [HttpGet("{id:int}/purses")]
         public async Task<ActionResult<User>> GetUserWithAllPursesById(int id)
         {
             return Ok(await _repository.GetUserWithAllPursesByIdAsync(id));
         }
 
+        [Authorize]
         [HttpGet("{id:int}/purses/actives")]
         public async Task<ActionResult<User>> GetUserWithAllPursesAndActivesById(int id)
         {
             return Ok(await _repository.GetUserWithAllPursesAndActivesByIdAsync(id));
         }
 
-
+        [Authorize]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, CreateUserViewModel userViewModel)
         {
@@ -75,6 +82,7 @@ namespace MyInvestAPI.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
