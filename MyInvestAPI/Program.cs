@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MyInvestAPI.Data;
+using MyInvestAPI.Domain;
 using MyInvestAPI.Extensions;
 using MyInvestAPI.Repositories;
 using System.Text;
@@ -36,7 +37,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // -------------------- Autenticação e autorização ---------------------
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<MyInvestContext>()
     .AddDefaultTokenProviders();
 
@@ -60,11 +61,11 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero,
         ValidAudience = builder.Configuration["JWT:ValidAudience"],
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey);
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
     };
 });
 
-//----------------- Configuração Da DI no container -----------------
+//----------------- Configuração da DI no container -----------------
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPurseRepository, PurseRepository>();
 builder.Services.AddScoped<IActiveRepository, ActiveRepository>();

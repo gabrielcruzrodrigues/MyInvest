@@ -25,7 +25,7 @@ namespace MyInvestAPI.Controllers
                 return BadRequest("The User body must not be null.");
 
             var userCreated = await _repository.CreateAsync(userViewModel);
-            return new CreatedAtRouteResult("GetUser", new { id = userCreated.User_Id }, userCreated);
+            return new CreatedAtRouteResult("GetUser", new { id = userCreated.Id }, userCreated);
         }
 
         [HttpGet]

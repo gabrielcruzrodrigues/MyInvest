@@ -64,7 +64,7 @@ namespace MyInvestAPI.Repositories
 
             var user = await _context.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(user => user.User_Id == id);
+                .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)
                 throw new HttpResponseException(404, $"The user with id {id} not found!");
@@ -80,7 +80,7 @@ namespace MyInvestAPI.Repositories
             var user = await _context.Users
                 .AsNoTracking()
                 .Include(user => user.Purses)
-                .FirstOrDefaultAsync(user => user.User_Id == id);
+                .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)
                 throw new HttpResponseException(404, $"The user with id {id} not found!");
@@ -97,7 +97,7 @@ namespace MyInvestAPI.Repositories
                 .Include(user => user.Purses)
                 .ThenInclude(purse => purse.Actives)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(user => user.User_Id == id);
+                .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)
                 throw new HttpResponseException(404, $"The user with id {id} not found!");
@@ -107,7 +107,7 @@ namespace MyInvestAPI.Repositories
 
         public void Update(int id, CreateUserViewModel userViewModel)
         {
-            User userVerify = _context.Users.FirstOrDefault(user => user.User_Id == id);
+            User userVerify = _context.Users.FirstOrDefault(user => user.Id == id.ToString());
 
             if (userVerify == null)
                 throw new HttpResponseException(404, $"The user with ID {id} not found!");
@@ -128,7 +128,7 @@ namespace MyInvestAPI.Repositories
 
         public void Delete(int id)
         {
-            User user = _context.Users.FirstOrDefault(user => user.User_Id == id);
+            User user = _context.Users.FirstOrDefault(user => user.Id == id.ToString());
 
             if (user == null)
                 throw new HttpResponseException(404, $"The user with ID {id} not found!");
