@@ -13,8 +13,5 @@ namespace MyInvestAPI.ViewModels.Auth
 
         [Required(ErrorMessage = "A senha é obrigatória")]
         public string? Password { get; set; }
-
-        [Required(ErrorMessage ="O número do usuário é obrigatório")]
-        public string? PhoneNumber { get; set; }
     }
 }

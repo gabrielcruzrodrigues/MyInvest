@@ -6,6 +6,7 @@ using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
 using MyInvestAPI.Extensions;
 using MyInvestAPI.Repositories;
+using MyInvestAPI.Services;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -69,7 +70,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPurseRepository, PurseRepository>();
 builder.Services.AddScoped<IActiveRepository, ActiveRepository>();
-
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 //----------------------------- Database -----------------------------
 string postgreSqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
