@@ -11,5 +11,10 @@ namespace MyInvestAPI.Data
 
         public DbSet<Purse>? Purses { get; set; }
         public DbSet<Active>? Actives { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+        }
     }
 }

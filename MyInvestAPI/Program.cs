@@ -65,7 +65,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-//----------------- Configuração da DI no container -----------------
+//----------------- Registrando serviços no container DI -----------------
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPurseRepository, PurseRepository>();
 builder.Services.AddScoped<IActiveRepository, ActiveRepository>();
