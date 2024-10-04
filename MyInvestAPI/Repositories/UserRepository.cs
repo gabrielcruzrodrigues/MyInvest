@@ -17,22 +17,6 @@ namespace MyInvestAPI.Repositories
             _logger = logger;
         }
 
-        public async Task<User> CreateAsync(CreateUserViewModel userViewModel)
-        {
-            User user = userViewModel.CreateUser();
-
-            try
-            {
-                await _context.Users.AddAsync(user);
-                await _context.SaveChangesAsync();
-                return user;
-            } 
-            catch(Exception ex)
-            {
-                _logger.LogError($"An error occured when tryning to create the user! err: {ex.Message}");
-                throw new HttpResponseException(500, "An error occured when tryning to create the user");
-            }
-        }
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await _context.Users

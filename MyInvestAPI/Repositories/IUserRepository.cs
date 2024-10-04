@@ -5,7 +5,6 @@ namespace MyInvestAPI.Repositories;
 
 public interface IUserRepository
 {
-    Task<User> CreateAsync(CreateUserViewModel userViewModel);
     Task<IEnumerable<User>> GetAllUsersAsync();
     Task<IEnumerable<User>> GetAllUsersWithPursesAsync();
     Task<IEnumerable<User>> GetAllUsersWithPursesAndActivesAsync();
