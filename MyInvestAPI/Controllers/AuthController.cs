@@ -32,7 +32,7 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult> Login(LoginViewModel request)
     {
-        var user = await _userManager.FindByNameAsync(request.Username!);
+        var user = await _userManager.FindByEmailAsync(request.Email!);
 
         if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password!))
         {
