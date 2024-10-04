@@ -18,16 +18,6 @@ namespace MyInvestAPI.Controllers
             _repository = IUserRepository;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync(CreateUserViewModel userViewModel)
-        {
-            if (userViewModel is null)
-                return BadRequest("The User body must not be null.");
-
-            var userCreated = await _repository.CreateAsync(userViewModel);
-            return new CreatedAtRouteResult("GetUser", new { id = userCreated.Id }, userCreated);
-        }
-
         [HttpGet]
         [Authorize]
         public async Task<IEnumerable<User>> GetAllUsers()

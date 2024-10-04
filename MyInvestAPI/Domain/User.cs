@@ -9,7 +9,7 @@ namespace MyInvestAPI.Domain
     {
         [Required]
         public DateTime CreatedAt { get; set; }
-
+        
         public DateTime LastUpdatedAt { get; set; }
 
         public string? RefreshToken { get; set; }
