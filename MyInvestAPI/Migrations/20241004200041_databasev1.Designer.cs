@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyInvestAPI.Migrations
 {
     [DbContext(typeof(MyInvestContext))]
-    [Migration("20241002233635_ImplementsUserIdentityOnUser")]
-    partial class ImplementsUserIdentityOnUser
+    [Migration("20241004200041_databasev1")]
+    partial class databasev1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -283,6 +283,12 @@ namespace MyInvestAPI.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");

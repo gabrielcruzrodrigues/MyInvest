@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { development_environments } from '../environments/development-environments';
 import { Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,15 +10,17 @@ import { Observable } from 'rxjs';
 export class ActiveService {
 
   url: string = development_environments.url;
+  headers = this.authService.getHeaders();
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient, private authService: AuthService
   ) { }
+
 
   search(active: string, percentage: number): Observable<any>
   {
     const urlForRequest = this.url + `/search-active/${active}/${percentage}`;
-    return this.http.get(urlForRequest, { observe: 'response' });
+    return this.http.get(urlForRequest, {headers: this.headers, observe: 'response' });
   }
 
   create(purseId: string, type: string, code: string, dYDesiredPercentage: string): Observable<any>
@@ -30,26 +33,26 @@ export class ActiveService {
       code: code,
       dyDesiredPercentage: dYDesiredPercentage
     }
-    return this.http.post(urlForRequest, objForRequest, { observe: 'response' });
+    return this.http.post(urlForRequest, objForRequest, {headers: this.headers, observe: 'response' });
   }
 
   searchActivesByPurseId(purseId: string): Observable<any>
   {
     const urlForRequest = this.url + "/get-actives/" + purseId;
-    return this.http.get(urlForRequest, { observe: 'response' });
+    return this.http.get(urlForRequest, {headers: this.headers, observe: 'response' });
   }
 
   searchActivesForShowPurseDetails(purseId: string): Observable<any>
   {
     const urlForRequest = this.url + "/search-active-purse-details/" + purseId;
-    return this.http.get(urlForRequest, { observe: 'response' });
+    return this.http.get(urlForRequest, {headers: this.headers, observe: 'response' });
   }
 
   delete(purseId: string): Observable<any>
   {
     const urlForRequest = this.url + "/active/" + purseId;
     console.log(urlForRequest)
-    return this.http.delete(urlForRequest, { observe: 'response' });
+    return this.http.delete(urlForRequest, {headers: this.headers, observe: 'response' });
   }
 
   update(activeId: string, dYDesiredPercentage: number): Observable<any>
@@ -60,6 +63,6 @@ export class ActiveService {
     const objForRequest = {
       dyDesiredPercentage: dYDesiredPercentage
     }
-    return this.http.put(urlForRequest, objForRequest, { observe: 'response' });
+    return this.http.put(urlForRequest, objForRequest, {headers: this.headers, observe: 'response' });
   }
 }

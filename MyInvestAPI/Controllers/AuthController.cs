@@ -43,6 +43,7 @@ public class AuthController : ControllerBase
 
         var authClaims = new List<Claim>
         {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.UserName!),
             new Claim(ClaimTypes.Email, user.Email!),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
@@ -66,6 +67,7 @@ public class AuthController : ControllerBase
 
         return Ok(new
         {
+            userId = user.Id,
             Token = new JwtSecurityTokenHandler().WriteToken(token),
             RefreshToken = refreshToken,
             Expiration = token.ValidTo
@@ -75,11 +77,11 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult> register(RegisterViewModel request)
     {
-        var userExists = await _userManager.FindByNameAsync(request.Username!);
+        var EmailVerify = await _userManager.FindByEmailAsync(request.Email!);
 
-        if (userExists is not null)
+        if (EmailVerify is not null)
         {
-            return BadRequest("Usuário já cadastrado no banco de dados");
+            return BadRequest(new {message = "Email já cadastrado no banco de dados" });
         }
 
         User user = new()
@@ -97,10 +99,10 @@ public class AuthController : ControllerBase
         if (!result.Succeeded)
         {
             _logger.LogError($"A criação do usuário falhou! - err: {result.Errors}");
-            return BadRequest($"A criação do usuário falhou! - err: {result.Errors.First().Description}");
+            return BadRequest(new { message = result.Errors.First().Description});
         }
 
-        return Ok("Usuário criado com sucesso!");
+        return Created("/users/{userId}", new { message = "Usuário criado com sucesso!" });
     }
 
     [HttpPost("refresh-token")]

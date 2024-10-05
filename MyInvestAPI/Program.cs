@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
     policy =>
     {
         policy.WithOrigins("http://localhost:4200", "http://localhost:9090")
-            .WithHeaders("Content-Type")
+            .AllowAnyHeader()
             .WithMethods("*");
     })
 );
@@ -68,9 +68,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // -------------------- Autenticação e autorização ---------------------
-builder.Services.AddIdentity<User, IdentityRole>()
-    .AddEntityFrameworkStores<MyInvestContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<MyInvestContext>()
+.AddDefaultTokenProviders();
 
 var secretKey = builder.Configuration["JWT:SecretKey"] ?? throw new ArgumentException("Chave secreta inválida");
 

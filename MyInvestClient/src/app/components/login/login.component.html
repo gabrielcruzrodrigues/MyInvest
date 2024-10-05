@@ -1,0 +1,30 @@
+<section class="main-section">
+     <h1>Acessar a conta</h1>
+     <p class="subtitle">Faça login e continue utilizando a plataforma!</p>
+     <form [formGroup]="form" (ngSubmit)="onSubmit()">
+ 
+         <!-- Email -->
+         <div class="error-container">
+             <p class="error-message" *ngIf="form.get('email')?.errors?.['required'] && form.get('email')?.touched">
+                 O campo email é obrigatório!
+             </p>
+             <p class="error-message" *ngIf="form.get('email')?.errors?.['email'] && form.get('email')?.touched">
+                 O email deve ser válido!
+             </p>
+         </div>
+         <input type="email" name="email" placeholder="Email" formControlName="email">
+ 
+         <!-- password -->
+         <div class="error-container">
+             <p class="error-message" *ngIf="form.get('password')?.errors?.['required'] && form.get('password')?.touched">
+                 O campo senha é obrigatório!
+             </p>
+         </div>
+         <input type="password" name="password" placeholder="Digite sua senha" formControlName="password">
+ 
+         <button type="submit">Acessar conta</button>
+         <a href="/register" class="redirectLCreate">Ainda não tem uma conta? Crie uma clicando aqui!</a>
+     </form>
+ </section>
+ <app-loading [isLoading]="isLoading"></app-loading>
+ 

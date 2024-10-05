@@ -34,7 +34,7 @@ a {
 
 .nav-list {
      display: flex;
-     gap: 32px;
+     gap: 30px;
      list-style: none;
 }
 
@@ -61,6 +61,19 @@ a {
      margin-top: 5px;
      position: relative;
      transition: 0.3s;
+}
+
+.authenticated {
+     display: none;
+}
+
+.active {
+     display: block;
+}
+
+.no-active {
+     display: none !important;
+     margin: 0;
 }
 
 @media (max-width: 910px) {
