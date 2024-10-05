@@ -266,7 +266,6 @@ public class YahooFinanceApiClient
         foreach (var year in dividendsByYear.Keys)
         {
             total += dividendsByYear[year].Sum();
-            Console.WriteLine($"Ano: {year} - valor total: {total}");
         }
 
         return $"{(total / quantityDividendHistoryYears).ToString("F2")}";

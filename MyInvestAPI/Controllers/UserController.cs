@@ -40,43 +40,43 @@ namespace MyInvestAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id:int}", Name ="GetUser")]
-        public async Task<ActionResult<User>> GetById(int id)
+        [HttpGet("{userId}", Name ="GetUser")]
+        public async Task<ActionResult<User>> GetById(string userId)
         {
-            return Ok(await _repository.GetByIdAsync(id));
+            return Ok(await _repository.GetByIdAsync(userId));
         }
 
         [Authorize]
-        [HttpGet("{id:int}/purses")]
-        public async Task<ActionResult<User>> GetUserWithAllPursesById(int id)
+        [HttpGet("{userId}/purses")]
+        public async Task<ActionResult<User>> GetUserWithAllPursesById(string userId)
         {
-            return Ok(await _repository.GetUserWithAllPursesByIdAsync(id));
+            return Ok(await _repository.GetUserWithAllPursesByIdAsync(userId));
         }
 
         [Authorize]
-        [HttpGet("{id:int}/purses/actives")]
-        public async Task<ActionResult<User>> GetUserWithAllPursesAndActivesById(int id)
+        [HttpGet("{userId}/purses/actives")]
+        public async Task<ActionResult<User>> GetUserWithAllPursesAndActivesById(string userId)
         {
-            return Ok(await _repository.GetUserWithAllPursesAndActivesByIdAsync(id));
+            return Ok(await _repository.GetUserWithAllPursesAndActivesByIdAsync(userId));
         }
 
         [Authorize]
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, CreateUserViewModel userViewModel)
+        [HttpPut("{userId}")]
+        public IActionResult Update(string userId, CreateUserViewModel userViewModel)
         {
             if (userViewModel is null)
                 return BadRequest("The data for update must not be null.");
 
-            _repository.Update(id, userViewModel);
+            _repository.Update(userId, userViewModel);
 
             return NoContent();
         }
 
         [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{userId}")]
+        public IActionResult Delete(string userId)
         {
-            _repository.Delete(id);
+            _repository.Delete(userId);
             return NoContent();
         }
     }
