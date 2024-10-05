@@ -39,10 +39,11 @@ export class LoginComponent {
     this.isLoading = true;
     this.authService.login(this.form.value).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log(response);
         this.authService.configureLocalStorage(response.body);
         this.isLoading = false;
+        alert("Login efetuado com sucesso!");
         this.route.navigate(["/purses"]);
+        return;
       },
       error: (err) => {
         console.log(err);

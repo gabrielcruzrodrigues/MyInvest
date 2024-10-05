@@ -48,9 +48,10 @@ export class CreateAccountComponent implements OnInit{
         next: (response: HttpResponse<any>) => {
           if (response.status === 201)
           {
+            this.authService.configureLocalStorage(response.body);
             this.isLoading = false;
-            alert("Conta criada com sucesso, faça login para acessar a conta!");
-            this.route.navigate(["/login"]);
+            alert("Sua conta foi criada com sucesso!");
+            this.route.navigate(["/purses"]);
             return;
           }
           alert("Uma resposta inédita foi recebida do servidor!");

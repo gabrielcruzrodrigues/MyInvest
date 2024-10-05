@@ -41,7 +41,7 @@ export class ViewPursesComponent implements OnInit{
   ngOnInit(): void {
     if (!this.authService.verifyIfUserIdLogged())
     {
-      this.route.navigate(["/create-account"])
+      this.route.navigate(["/login"])
       this.isLoading = false;
       return;
     }
