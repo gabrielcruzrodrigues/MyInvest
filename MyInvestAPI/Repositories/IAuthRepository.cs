@@ -6,5 +6,6 @@ namespace MyInvestAPI.Repositories;
 public interface IAuthRepository
 {
     Task<ResponseLoginViewModel> Login(LoginRequestViewModel request);
-    Task<ResponseLoginViewModel> register(RegisterViewModel request);
+    Task<ResponseLoginViewModel> Register(RegisterViewModel request);
+    Task<object> GetNewTokenUsingRefreshToken(TokenViewModel tokenViewModel);
 }

@@ -40,6 +40,34 @@ export class AuthService {
     return ''; 
   }
 
+  getExpirationTokenDate() {
+    if (!this.verifyIfUserIdLogged())
+    {
+      return null;
+    }
+
+    if (typeof window == 'undefined' || typeof window.localStorage == 'undefined')
+    {
+      return null;
+    } 
+    
+    return localStorage.getItem('Expiration');
+    
+  }
+
+  getNewAccessToken() : void
+  {
+    var expiredAccessToken = localStorage.getItem('Token');
+    var refreshToken = localStorage.getItem('RefreshToken');
+
+    var urlForRequest = this.url + "new-access-token";
+    var objectForRequest = {
+      accessToken : expiredAccessToken,
+      refreshToken : refreshToken
+    }
+    var response = this.http.post(urlForRequest, objectForRequest, {observe: 'response'});
+  }
+
   createAccount(data: any) : Observable<any>
   {
     const urlForRequest = this.url + "register";

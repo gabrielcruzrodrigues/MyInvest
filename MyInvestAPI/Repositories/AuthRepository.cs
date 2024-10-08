@@ -78,7 +78,7 @@ namespace MyInvestAPI.Repositories
             );
         }
 
-        public async Task<ResponseLoginViewModel> register(RegisterViewModel request)
+        public async Task<ResponseLoginViewModel> Register(RegisterViewModel request)
         {
             var EmailVerify = await _userManager.FindByEmailAsync(request.Email!);
 
@@ -107,6 +107,37 @@ namespace MyInvestAPI.Repositories
 
             var credentials = new LoginRequestViewModel(request.Email!, request.Password!);
             return await Login(credentials);
+        }
+
+        public async Task<object> GetNewTokenUsingRefreshToken(TokenViewModel tokenViewModel)
+        {
+            string? accessToken = tokenViewModel.AccessToken ?? throw new ArgumentNullException(nameof(tokenViewModel));
+
+            string? refreshToken = tokenViewModel.RefreshToken ?? throw new ArgumentNullException(nameof(tokenViewModel));
+
+            var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken!, _configuration);
+
+            if (principal is null)
+            {
+                throw new HttpResponseException(400, "Access/Refresh token inválido");
+            }
+
+            var user = await _userManager.FindByNameAsync(principal.Identity.Name);
+
+            if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+            {
+                throw new HttpResponseException(400, "Access/Refresh token inválido");
+            }
+
+            var newAccessToken = _tokenService.GenerateAccessToken(principal.Claims.ToList(), _configuration);
+
+            user.RefreshToken = null;
+            await _userManager.UpdateAsync(user);
+
+            return new
+            {
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken)
+            };
         }
     }
 }
