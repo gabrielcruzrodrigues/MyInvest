@@ -1,5 +1,7 @@
 # 💰 MyInvest
 
+<h1 style="background-color:green;">PROJETO EM DESENVOLVIMENTO...</h1>
+
 **MyInvest** é uma aplicação web composta por uma API desenvolvida em **C# | ASP.NET** e um cliente web em **Angular**. O objetivo do sistema é fornecer informações detalhadas sobre a carteira de ativos dos usuários, calculando o preço-teto (modelo de Bazin) para ações e FIIs e sugerindo a compra ou não do ativo com base no preço atual < preço-teto.
 
 ## 🎯 Objetivo
