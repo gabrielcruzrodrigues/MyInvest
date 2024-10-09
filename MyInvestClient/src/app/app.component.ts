@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './components/layout/navbar/navbar.component';
 import { AuthService } from './services/auth.service';
 
@@ -13,19 +13,22 @@ import { AuthService } from './services/auth.service';
 export class AppComponent implements OnInit{
   title = 'MyInvestClient';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     var expirationTokenDate = this.authService.getExpirationTokenDate();
-    if (expirationTokenDate)
+    
+    if (!expirationTokenDate)
     {
-      const expirationDate = new Date(expirationTokenDate);
-      const currentDate = new Date();
+      return;
+    }
 
-      if (currentDate >= expirationDate)
-      {
-        this.authService.getNewAccessToken();
-      }
+    const expirationDate = new Date(expirationTokenDate);
+    const currentDate = new Date();
+
+    if (currentDate >= expirationDate)
+    {
+      this.authService.NewAccessToken();
     }
   }
 }

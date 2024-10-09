@@ -66,11 +66,16 @@ export class CreatePurseComponent implements OnInit{
               {
                 alert("Houve um problema ao criar a carteira!");
               }
-            }
-          },
-          error: (err) => {
+          }
+        },
+        error: (err) => {
+          if (err.status === 401)
+          {
+            this.authService.redirectAfterExpiredAccessToken();
+            return;
+          }
+          
           this.isLoading = false;
-          console.log(err);
           if (typeof window !== 'undefined')
           {
             alert("Houve um erro ao tentar criar uma carteira!");
