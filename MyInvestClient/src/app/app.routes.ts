@@ -9,6 +9,7 @@ import { ViewTickerFinalComponent } from './components/view-ticker-final/view-ti
 import { EditPurseComponent } from './components/edit-purse/edit-purse.component';
 import { EditActiveComponent } from './components/edit-active/edit-active.component';
 import { LoginComponent } from './components/login/login.component';
+import { LogoutComponent } from './components/logout/logout.component';
 
 export const routes: Routes = [
      {
@@ -43,5 +44,8 @@ export const routes: Routes = [
      },
      {
           path: 'login', component: LoginComponent
+     },
+     {
+          path: 'logout', component: LogoutComponent
      }
 ];

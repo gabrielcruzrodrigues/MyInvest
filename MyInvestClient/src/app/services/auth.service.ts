@@ -109,6 +109,15 @@ export class AuthService {
     return this.http.post(urlForRequest, data, {observe: 'response'});
   }
 
+  logout() : void
+  {
+    if (typeof window == 'undefined' || typeof window.localStorage == 'undefined') {
+      return;
+    } 
+
+    localStorage.clear();
+  }
+
   getHeaders() {
     if (typeof window == 'undefined' || typeof window.localStorage == 'undefined') {
       return;
