@@ -134,7 +134,24 @@ A documentação completa da API, incluindo todos os endpoints e detalhes, está
 ```
 http://localhost:8080/swagger/index.html
 ```
+  
+
+## 🏆 Equipe de Desenvolvimento:
+  
+  * Marcos Morais (Autor) <br />
+    <mmstec@gmail.com>
+  * Gabriel Rodriguez <br />
+    <contatogabrielcruzrodrigues@gmail.com>
 
 ## 📝 Licença
 
-Este projeto é licenciado sob a [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). Você pode usar, modificar e distribuir este software, desde que cumpra os termos da licença.
+Este projeto é licenciado sob a [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0), com as seguintes condições adicionais:
+
+  ### Licença de Uso Restrito:
+
+  Este software é licenciado sob os seguintes termos:
+
+  1. **Uso Restrito**: Este software não pode ser usado, modificado ou distribuído sem a permissão explícita do autor.
+  2. **Atribuição de Autoria**: Qualquer uso autorizado deste software deve incluir a atribuição clara da autoria ao autor.
+  3. **Proibições**: É estritamente proibido copiar, modificar, distribuir ou vender este software sem a autorização prévia por escrito do autor.
+  4. **Consequências da Violação**: Qualquer violação dos termos acima resultará em medidas legais apropriadas.
