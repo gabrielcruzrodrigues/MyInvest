@@ -68,10 +68,17 @@ export class ViewActivesComponent implements OnInit{
       },
       error: (err) => {
         this.isLoading = false;
+        if (err.status === 401)
+        {
+          this.authService.redirectAfterExpiredAccessToken();
+          return;
+        }
+
         if (err.status === 404)
         {
           return;
         }
+        
         if (err.status === 500)
         {
           if (typeof window !== 'undefined')

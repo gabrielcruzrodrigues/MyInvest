@@ -56,6 +56,13 @@ export class ViewPursesComponent implements OnInit{
         }
       },
       error: (err) => {
+        if (err.status === 401)
+        {
+          this.isLoading = false;
+          this.authService.NewAccessToken();
+          return;
+        }
+
         console.log("Houve um erro ao tentar buscar as carteiras " + err.message);
         this.isLoading = false;
         return;

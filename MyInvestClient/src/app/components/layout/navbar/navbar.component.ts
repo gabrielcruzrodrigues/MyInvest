@@ -1,7 +1,8 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
@@ -14,12 +15,12 @@ export class NavbarComponent {
   @ViewChild('hamburger', { static: false }) hamburger!: ElementRef;
   @ViewChild('nav', { static: false }) nav!: ElementRef;
   @ViewChild('purses') purses!: ElementRef;
-  @ViewChild('myaccount') myaccount!: ElementRef;
+  @ViewChild('logout') logout!: ElementRef;
   @ViewChild('login') login!: ElementRef;
   @ViewChild('createAccount') createAccount!: ElementRef;
 
   constructor(
-    private authService: AuthService, private router: Router
+    private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef
   ) 
   {
     this.router.events
@@ -40,7 +41,7 @@ export class NavbarComponent {
 
     if (this.authService.verifyIfUserIdLogged()) {
       this.purses.nativeElement.classList.add('active');
-      this.myaccount.nativeElement.classList.add('active');
+      this.logout.nativeElement.classList.add('active');
       this.createAccount.nativeElement.classList.add('no-active');
       this.login.nativeElement.classList.add('no-active');
     }

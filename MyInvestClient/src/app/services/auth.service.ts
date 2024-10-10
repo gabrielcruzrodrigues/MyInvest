@@ -1,5 +1,6 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { Observable } from 'rxjs';
 export class AuthService {
   url: string = 'https://localhost:7021/Auth/';
   
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
   
   configureLocalStorage(body: any): void 
   {
@@ -25,7 +26,8 @@ export class AuthService {
   {
     if (typeof window !== 'undefined' && typeof window.localStorage !== 'undefined') {
       var token = localStorage.getItem('Token');
-      if (token != null) {
+      var userId = localStorage.getItem('userId');
+      if (token != null && userId != null ) {
         return true;
       };
     }
@@ -55,17 +57,44 @@ export class AuthService {
     
   }
 
-  getNewAccessToken() : void
+  NewAccessToken() 
   {
     var expiredAccessToken = localStorage.getItem('Token');
     var refreshToken = localStorage.getItem('RefreshToken');
 
+    if (!refreshToken)
+    {
+      this.redirectAfterExpiredAccessToken();
+      return;
+    }
+
     var urlForRequest = this.url + "new-access-token";
+
     var objectForRequest = {
       accessToken : expiredAccessToken,
       refreshToken : refreshToken
     }
-    var response = this.http.post(urlForRequest, objectForRequest, {observe: 'response'});
+    this.http.post(urlForRequest, objectForRequest, {observe: 'response'}).subscribe(
+      (response: HttpResponse<any>) => {
+
+        localStorage.removeItem('RefreshToken');
+        localStorage.removeItem('Expiration');
+        localStorage.removeItem('Token');
+
+        localStorage.setItem('Token', response.body.accessToken);
+      },
+      (error: any) => {
+        console.log(`houve um erro ao tentar se comunicar com o servidor! err: ${error.message}`);
+      }
+    )
+  }
+
+  redirectAfterExpiredAccessToken(): void 
+  {
+    localStorage.removeItem('userId');
+    localStorage.removeItem('Token');
+
+    this.router.navigate(["/login"]);
   }
 
   createAccount(data: any) : Observable<any>
@@ -78,6 +107,15 @@ export class AuthService {
   {
     const urlForRequest = this.url + "login";
     return this.http.post(urlForRequest, data, {observe: 'response'});
+  }
+
+  logout() : void
+  {
+    if (typeof window == 'undefined' || typeof window.localStorage == 'undefined') {
+      return;
+    } 
+
+    localStorage.clear();
   }
 
   getHeaders() {
