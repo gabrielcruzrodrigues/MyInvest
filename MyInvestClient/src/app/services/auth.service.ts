@@ -62,6 +62,12 @@ export class AuthService {
     var expiredAccessToken = localStorage.getItem('Token');
     var refreshToken = localStorage.getItem('RefreshToken');
 
+    if (!refreshToken)
+    {
+      this.redirectAfterExpiredAccessToken();
+      return;
+    }
+
     var urlForRequest = this.url + "new-access-token";
 
     var objectForRequest = {

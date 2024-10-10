@@ -58,7 +58,8 @@ export class ViewPursesComponent implements OnInit{
       error: (err) => {
         if (err.status === 401)
         {
-          this.authService.redirectAfterExpiredAccessToken();
+          this.isLoading = false;
+          this.authService.NewAccessToken();
           return;
         }
 
