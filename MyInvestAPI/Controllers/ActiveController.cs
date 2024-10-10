@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Api;
 using MyInvestAPI.Data;
@@ -20,6 +21,7 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Active>> Create(CreateActiveViewModel activeViewModel)
         {
             if (activeViewModel is null)
@@ -31,24 +33,28 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Active>>> GetAll()
         {
             return Ok(await _repository.GetAllAsync());
         }
 
         [HttpGet("purses")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Active>>> GetAllWithPurses()
         {
             return Ok(await _repository.GetAllWithPursesAsync());
         }
 
         [HttpGet("{id}", Name = "SearchActive")]
+        [Authorize]
         public async Task<ActionResult<Active>> GetById(int id)
         {
             return Ok(await _repository.GetByIdAsync(id));
         }
 
         [HttpGet("{id}/purses")]
+        [Authorize]
         public async Task<ActionResult<Active>> GetByIdWithPurses(int id)
         {
             var ActiveVerify = await _repository.GetByIdWithPursesAsync(id);
@@ -59,7 +65,8 @@ namespace MyInvestAPI.Controllers
             return Ok(ActiveVerify);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{activeId}")]
+        [Authorize]
         public async Task<IActionResult> Update(int activeId, UpdateActiveViewModel activeViewModel)
         {
             _repository.Update(activeId, activeViewModel);
@@ -67,6 +74,7 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             _repository.Delete(id);
@@ -79,7 +87,15 @@ namespace MyInvestAPI.Controllers
             return Ok(await _repository.SearchActiveAsync(active, dYDesiredPercentage));
         }
 
+        [HttpGet("/search-active-purse-details/{purseId}")]
+        [Authorize]
+        public async Task<ActionResult<IEnumerable<ActiveReturnForPurseDetails>>> searchActivesForPurseDetails(int purseId)
+        {
+            return Ok(await _repository.GetActivesForShowInPurseDetails(purseId));
+        }
+
         [HttpGet("/get-actives/{purseId}")]
+        [Authorize]
         public async Task<ActionResult> GetActivesByPurseId(int purseId)
         {
             return Ok(await _repository.GetActivesByPurseId(purseId));

@@ -12,15 +12,14 @@ namespace MyInvestAPI.ViewModels
 
         public User CreateUser()
         {
-            return new User(name: Name, password: Password, email: Email, phone: Phone);
+            return new User(username: Name, password: Password, email: Email, phone: Phone);
         }
 
         public User UpdateUser(User user)
         {
-            user.Name = this.Name;
-            user.Password = this.Password;
+            user.UserName = this.Name;
             user.Email = this.Email;
-            user.Phone = this.Phone;
+            user.PhoneNumber = this.Phone;
             user.LastUpdatedAt = DateTime.UtcNow;
             return user;
         }

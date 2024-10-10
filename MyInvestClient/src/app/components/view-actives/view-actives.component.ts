@@ -5,18 +5,23 @@ import { HttpResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { LoadingComponent } from '../layout/loading/loading.component';
 import { AuthService } from '../../services/auth.service';
+import { BackComponent } from '../layout/back/back.component';
 
 interface Active {
-  id: string,
-  code: string,
-  type: string,
-  dyDesiredPercentage: string
+  id: string
+  ativo: string,
+  tipo: string,
+  dividentYield: string,
+  precoAtual: string,
+  preco_Teto: string,
+  indicacao: string,
+  proventos_pagos: string
 }
 
 @Component({
   selector: 'app-view-actives',
   standalone: true,
-  imports: [CommonModule, LoadingComponent],
+  imports: [CommonModule, LoadingComponent, BackComponent],
   templateUrl: './view-actives.component.html',
   styleUrl: './view-actives.component.scss'
 })
@@ -24,8 +29,13 @@ export class ViewActivesComponent implements OnInit{
   purseId: string = '';
   userId: string = '';
   actives: Active[] = [];
-  @ViewChild('message', { static: false }) message!: ElementRef;
-  @ViewChild('titles', { static: false }) titles!: ElementRef;
+  activesQty: number = 0;
+  selectedMenu: string = 'RESUMO';
+  redirectBackLink: string = '/purses';
+
+  @ViewChild('actions_menu', { static: false }) actions_menu!: ElementRef;
+  @ViewChild('actions', { static: false }) actions!: ElementRef;
+
   isLoading: boolean = true;
 
   constructor(
@@ -49,9 +59,8 @@ export class ViewActivesComponent implements OnInit{
       return;
     }
 
-    this.activeService.searchActivesByPurseId(param).subscribe({
+    this.activeService.searchActivesForShowPurseDetails(param).subscribe({
       next: (response: HttpResponse<any>) => {
-        this.isLoading = false;
         if (response.status === 200)
         {
           this.populateTheArrayOfActives(response.body);
@@ -61,14 +70,13 @@ export class ViewActivesComponent implements OnInit{
         this.isLoading = false;
         if (err.status === 404)
         {
-          this.message.nativeElement.classList.add('active');
           return;
         }
         if (err.status === 500)
         {
           if (typeof window !== 'undefined')
           {
-            alert("Carteira criada com sucesso!");
+            alert("Houve um erro ao tentar buscar os ativos!");
           }
         }
         console.log(err);
@@ -76,31 +84,45 @@ export class ViewActivesComponent implements OnInit{
     })
   }
 
+  selectOptionMenu(optionMenu: string): void
+  {
+    this.selectedMenu = optionMenu;
+  }
+
+  ngAfterViewInit(): void {
+    this.actions_menu.nativeElement.addEventListener('click', () => {
+      this.actions.nativeElement.classList.add('active');
+    })
+  }
+
   populateTheArrayOfActives(body: any): void
   {
-    if (body.actives.length > 0)
+    if (body.length > 0)
     {
-      this.actives = body.actives.map((active: any) => {
+      this.actives = body.map((active: any) => {
         return {
-          id: active.active_Id,
-          code: active.code,
-          type: active.type,
-          dyDesiredPercentage: active.dyDesiredPercentage
+          id: active.id,
+          ativo: active.ativo,
+          tipo: active.tipo,
+          dividentYield: active.dividentYield,
+          precoAtual: active.precoAtual,
+          preco_Teto: active.preco_Teto,
+          indicacao: active.indicacao,
+          proventos_pagos: active.proventos_pagos
         }
       });
-      this.titles.nativeElement.classList.add('active');
+      this.activesQty = body.length;
       this.isLoading = false;
     }
     else
     {
-      this.message.nativeElement.classList.add('active');
       this.isLoading = false;
     }
   }
 
   redirectToActive(code: string, dyDesiredPercentage: string): void
   {
-    this.router.navigate([`/view-active-info/${code}/${dyDesiredPercentage}`]);
+    this.router.navigate([`/view-ticker/${code}/${dyDesiredPercentage}`]);
   }
 
   createActive(): void 
@@ -110,22 +132,24 @@ export class ViewActivesComponent implements OnInit{
 
   deleteActive(purseId: any): void 
   {
+    this.isLoading = true;
     this.activeService.delete(purseId).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.status === 204)
         {
-          this.actives.filter(active => active.id !== purseId);
+          this.actives = this.actives.filter(active => active.id !== purseId);
+          this.isLoading = false;
         }
 
         if (this.actives.length == 0) {
-          this.titles.nativeElement.classList.remove('active');
-          this.message.nativeElement.classList.add('active');
+
         }
       },
       error: (err) => {
         if (typeof window !== 'undefined')
         {
           alert("Ocorreu um erro ao tentar deletar o ativo!");
+          this.isLoading = false;
           console.log(`Ocorreu um erro ao tentar deletar o ativo! err: ${err.message}`);
           return;
         }

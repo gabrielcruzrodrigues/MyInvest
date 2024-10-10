@@ -8,99 +8,134 @@
      }
 }
 
-.main-section h1 {
+h1 {
      text-align: center;
-     font-size: 36px;
      color: $primary-color;
-     margin: 20px 0;
-}
-
-.purses {
-     padding: 10px;
-     background-color: white;
-     width: 90%;
+     border-bottom: 1px solid #ccc;
+     width: 20%;
      margin: 0 auto;
+}
+
+.main-section {
+     width: 90%;
+     background-color: white;
+     margin: 30px auto;
      border-radius: 10px;
+     position: relative;
 }
 
-.container{
-     display: grid;
-     grid-template-columns: 1.5fr 2fr 1fr 1.5fr;
-     gap: 10px;
-     padding: 5px 0;
-     border-bottom: 2px solid #ccc;
-     text-align: center;
-}
-
-.container:hover 
-{
-     background-color: #466be7;
-     border-radius: 10px;
-     color: white;
-     cursor: pointer;
-}
-
-.titles {
-     grid-template-columns: 1.5fr 2fr 1fr 1.5fr;
+.menu {
      background-color: $primary-color;
-     padding: 7px;
-     margin-bottom: 10px;
-     border-radius: 5px;
+     height: 12%;
+     height: 60px;
+     display: flex;
      align-items: center;
-     display: none;
+     border-radius: 10px 10px 0 0;
 }
 
-.titles.active {
-     display: grid;
+.menu ul {
+     display: flex;
+     width: 100%;
+     height: 100%;
+     display: flex;
+     justify-content: left;
+     align-items: center;
+     
 }
 
-.titles div {
-     text-align: center;
-     font-size: 18px;
+.menu ul li {
+     list-style: none;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     color: white;
+     height: 100%;
+     width: 8%;
+     height: 100%;
+     cursor: pointer;
+     transition: 0.3s;
+     border-radius: 8px 8px 0 0;
+}
+
+.menu ul li:hover {
+     background-color: $secundary-color;
+     color: white;
+     border-left: 1px solid #ccc;
+     border-right: 1px solid #ccc;
+     border-top: 2px solid #ccc;
+}
+
+.selected {
+     background-color: $secundary-color; 
      color: white;
 }
 
-.column {
-     display: flex;
-     justify-content: center;
-     font-size: 16px;
-     width: 100%;
-     align-items: center;
-} 
-
-.divisor {
-     border-left: 2px solid #CCC;
+// actions
+.actions {
+     display: block;
+     margin-bottom: 10%;
 }
 
-.add {
-     position: fixed;
-     right: 5%;
-     bottom: 5%;
-     cursor: pointer;
-}
-
-.add-icon {
-     width: 80px;
-}
-
-.message {
-     text-align: center;
-     font-size: 18px;
-     color: #272727;
-     display: none;
-}
-
-.message.active {
+.actions.active {
      display: block;
 }
 
-.actions-container {
+.first-infos {
+     background-color: $secundary-color;
      display: flex;
-     justify-content: center;
-     gap: 10px
+     justify-content: space-around;
+     padding: 10px 0;
 }
 
-.actions {
+.first-infos p {
+     font-weight: 700;
+}
+
+.actions-infos {
+     background-color: white;
+     padding: 1%;
+     width: 100%;
+     border: 1px solid #ccc;
+     border-collapse: collapse;
+     text-align: center;
+     // table-layout: fixed;
+     padding-bottom: 20px;
+}
+
+.actions-infos th, .actions-infos td {
+     border: 1px solid #ccc;
+     padding: 8px;
+     vertical-align: top;
+ }
+
+.actions-infos th {
+     font-weight: 400;
+     background-color: #e5e5e5;
+     vertical-align: middle;
+}
+
+.actions-infos td {
+     padding: 15px;
+     border-bottom: 1px solid #ccc;
+     font-weight: 600;
+     font-size: 15px;
+     vertical-align: middle;
+}
+
+.actions-infos tbody tr:nth-child(even) {
+     background-color: #e5e5e58a !important;
+}
+
+.actions-infos tbody tr {
+     cursor: pointer;
+}
+
+//actions-buttons
+.actions-button-container {
+     cursor: default;
+}
+
+.actions-button {
      border-radius: 5px;
      cursor: pointer;
      border: 2px solid $primary-color;
@@ -113,64 +148,95 @@
 
 .edit {
      background-color: yellow;
+     margin-right: 10%;
 }
 
 .delete {
      background-color: red;
 }
 
-@media (min-width: 600px)
-{
-     .container{
-          grid-template-columns: 2fr 2fr 1fr 1fr;
-     }
-     
-     .titles {
-          grid-template-columns: 2fr 2fr 1fr 1fr;
-     }
-
-     .actions-container {
-          gap: 20px
-     }
+// add icon 
+.add {
+     position: fixed;
+     right: 5%;
+     bottom: 5%;
+     cursor: pointer;
 }
 
-@media (min-width: 910px)
-{
-     .container{
-          grid-template-columns: 2fr 2fr 0.5fr 1fr;
-     }
-     
-     .titles {
-          grid-template-columns: 2fr 2fr 0.5fr 1fr;
-     }
-
-     .cards {
-          justify-content: space-between;
-          flex-direction: row;
-          padding: 0 5%;
-          flex-wrap: wrap;
-          gap: 20px;
-     }
-
-     .card {
-          padding: 2%;
-          height: 200px;
-          width: 48%;
-     }
+.add-icon {
+     width: 80px;
+     background-color: $primary-color;
+     border-radius: 50%;
 }
 
-@media (min-width: 1070px)
-{
-     .main-section h1 {
-          margin-bottom: 40px;
-     }
-     .cards {
-          padding: 0 5%;
-          justify-content: space-between;
-          flex-direction: row;
+
+@media (max-width: 906px) {
+     h1 {
+          width: 100%;
      }
 
-     .card {
-          width: 31%;
+     .menu ul li {
+          display: none;
      }
-}
+
+     .actions-infos {
+         display: block;
+         width: 100%;
+         border: none;
+     }
+ 
+     .actions-infos thead {
+         display: none;
+     }
+ 
+     .actions-infos tbody {
+         display: block;
+         width: 100%;
+     }
+ 
+     .actions-infos tbody tr {
+         display: block;
+         border: 1px solid #ccc;
+         border-radius: 10px;
+         margin-bottom: 15px;
+         padding: 10px;
+     }
+ 
+     .actions-infos td {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         padding: 10px;
+         border: none;
+         border-bottom: 1px solid #ccc;
+         text-align: left;
+     }
+ 
+     .actions-infos td:last-child {
+         border-bottom: none;
+     }
+ 
+     .actions-infos td::before {
+         content: attr(data-label);
+         font-weight: 600;
+         margin-right: 10px;
+         color: $primary-color;
+     }
+
+     .actions-button-container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+     }
+
+     .actions-button {
+          width: 100%;
+     }
+ }
+ 
+@media (max-width: 1402px) {
+     .menu ul li {
+         width: 10%;
+     }
+ }
+

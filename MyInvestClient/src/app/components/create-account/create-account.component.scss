@@ -10,9 +10,13 @@
 }
 
 .main-section {
-     width: 100%;
+     width: 90%;
+     margin: 3% auto;
      padding: 5% 10%;
      animation: fadeIn 0.2s ease-in;
+     border: 1px solid #ccc;
+     border-radius: 10px;
+     background-color: white;
 }
 
 .main-section h1 {
@@ -70,6 +74,15 @@
      transition: opacity 0.3s ease-in-out;
      margin-bottom: 5px;
      padding: 0;
+}
+
+.redirectLogin {
+     color: $primary-color;
+     text-decoration: none;
+}
+
+form {
+     text-align: center;
 }
 
 @media (min-width: 870px) {

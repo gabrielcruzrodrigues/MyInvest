@@ -1,34 +1,61 @@
+<app-back [link]="redirectBackLink"></app-back>
+
+<h1>Meus ativos</h1>
+
 <section class="main-section">
-     <h1>Meus ativos</h1>
-
-     <div class="message" #message>
-          <p>Você não tem ativos cadastrados...</p>
+     <div class="menu">
+          <ul>
+               <li #resume (click)="selectOptionMenu('RESUMO')" [ngClass]="{'selected': selectedMenu === 'RESUMO'}">RESUMO</li>
+               <li #actions_menu (click)="selectOptionMenu('ACOES')" [ngClass]="{'selected': selectedMenu === 'ACOES'}">AÇÕES</li>
+               <li #fiis (click)="selectOptionMenu('FIIS')" [ngClass]="{'selected': selectedMenu === 'FIIS'}">FIIS</li>
+          </ul>
      </div>
-
-     <div class="purses">
-          <div class="titles" #titles>
-               <div>Codigo</div>
-               <div>Tipo</div>
-               <div>DY desejado</div>
-               <div>Ações</div>
+     
+     <div class="actions" #actions>
+          <div class="first-infos">
+               <p>INVESTIMENTOS: {{ activesQty }}</p>
           </div>
-          <div class="container" *ngFor="let active of actives">
-               <div class="column" (click)="redirectToActive(active.code, active.dyDesiredPercentage)">{{ active.code }}</div>
-               <div class="column divisor" (click)="redirectToActive(active.code, active.dyDesiredPercentage)">{{ active.type }}</div>
-               <div class="column divisor">{{ active.dyDesiredPercentage }}%</div>
-               <div class="actions-container column divisor">
-                    <button class="actions edit">
-                         <img src="assets/edit.png" (click)="updateActive(active.id, active.code, active.dyDesiredPercentage)">
-                    </button>
-                    <button class="actions delete" (click)="deleteActive(active.id)">
-                         <img src="assets/delete.png">
-                    </button>
-               </div>
-          </div>
+          <table class="actions-infos">
+               <thead>
+                   <tr>
+                       <th>Ativo</th>
+                       <th>Quantidade</th>
+                       <th>Tipo</th>
+                       <th>DY</th>
+                       <th>Preço atual</th>
+                       <th>Dividendos pagos</th>
+                       <th>Preço teto</th>
+                       <th>Indicação</th>
+                       <th>ações</th>
+                   </tr>
+               </thead>
+               <tbody>
+                   <tr *ngFor="let active of actives" (click)="redirectToActive(active.ativo, active.dividentYield)">
+                       <td>{{ active.ativo }}</td>
+                       <td>-</td>
+                       <td>{{ active.tipo }}</td>
+                       <td>{{ active.dividentYield }}</td>
+                       <td>{{ active.precoAtual }}</td>
+                       <td>{{ active.dividentYield }}</td>
+                       <td>{{ active.preco_Teto }}</td>
+                       <td>{{ active.indicacao }}</td>
+                       <td class="actions-button-container" (click)="$event.stopPropagation()">
+                              <button class="actions-button edit" (click)="updateActive(active.id, active.ativo, active.dividentYield)">
+                                   <img src="assets/edit.png">
+                              </button>
+                              <button class="actions-button delete" (click)="deleteActive(active.id)">
+                                   <img src="assets/delete.png">
+                              </button>
+                       </td>
+                   </tr>
+               </tbody>
+           </table>
+     </div>
+     <div class="add" (click)="createActive()">
+          <img src="/assets/add.png" class="add-icon">
      </div>
 </section>
 
-<div class="add" (click)="createActive()">
-     <img src="/assets/add.png" class="add-icon">
-</div>
+
+
 <app-loading [isLoading]="isLoading"></app-loading>

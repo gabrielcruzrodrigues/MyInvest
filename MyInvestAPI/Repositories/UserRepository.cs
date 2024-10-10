@@ -17,22 +17,6 @@ namespace MyInvestAPI.Repositories
             _logger = logger;
         }
 
-        public async Task<User> CreateAsync(CreateUserViewModel userViewModel)
-        {
-            User user = userViewModel.CreateUser();
-
-            try
-            {
-                await _context.Users.AddAsync(user);
-                await _context.SaveChangesAsync();
-                return user;
-            } 
-            catch(Exception ex)
-            {
-                _logger.LogError($"An error occured when tryning to create the user! err: {ex.Message}");
-                throw new HttpResponseException(500, "An error occured when tryning to create the user");
-            }
-        }
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await _context.Users
@@ -57,60 +41,63 @@ namespace MyInvestAPI.Repositories
                 .ToListAsync();
         }
 
-        public async Task<User> GetByIdAsync(int id)
+        public async Task<User> GetByIdAsync(string id)
         {
-            if (id <= 0)
-                throw new HttpResponseException(400, "The ID must be greater than 0!");
+            if (string.IsNullOrEmpty(id))
+                throw new HttpResponseException(400, "O id não pode ser nulo ou vazio!");
 
             var user = await _context.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(user => user.User_Id == id);
+                .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)
-                throw new HttpResponseException(404, $"The user with id {id} not found!");
+                throw new HttpResponseException(404, $"O usuário com o ID {id} não foi encontrado!");
 
             return user;
         }
 
-        public async Task<User> GetUserWithAllPursesByIdAsync(int id)
+        public async Task<User> GetUserWithAllPursesByIdAsync(string id)
         {
-            if (id <= 0)
-                throw new HttpResponseException(400, "The ID must be greater than 0!");
+            if (string.IsNullOrEmpty(id))
+                throw new HttpResponseException(400, "O id não pode ser nulo ou vazio!");
 
             var user = await _context.Users
                 .AsNoTracking()
                 .Include(user => user.Purses)
-                .FirstOrDefaultAsync(user => user.User_Id == id);
+                .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)
-                throw new HttpResponseException(404, $"The user with id {id} not found!");
+                throw new HttpResponseException(404, $"O usuário com o ID {id} não foi encontrado!");
 
             return user;
         }
 
-        public async Task<User> GetUserWithAllPursesAndActivesByIdAsync(int id)
+        public async Task<User> GetUserWithAllPursesAndActivesByIdAsync(string id)
         {
-            if (id <= 0)
-                throw new HttpResponseException(400, "The ID must be greater than 0!");
+            if (string.IsNullOrEmpty(id))
+                throw new HttpResponseException(400, "O id não pode ser nulo ou vazio!");
 
             var user = await _context.Users
                 .Include(user => user.Purses)
                 .ThenInclude(purse => purse.Actives)
                 .AsNoTracking()
-                .FirstOrDefaultAsync(user => user.User_Id == id);
+                .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)
-                throw new HttpResponseException(404, $"The user with id {id} not found!");
+                throw new HttpResponseException(404, $"O usuário com o ID {id} não foi encontrado!");
 
             return user;
         }
 
-        public void Update(int id, CreateUserViewModel userViewModel)
+        public void Update(string id, CreateUserViewModel userViewModel)
         {
-            User userVerify = _context.Users.FirstOrDefault(user => user.User_Id == id);
+            if (string.IsNullOrEmpty(id))
+                throw new HttpResponseException(400, "O id não pode ser nulo ou vazio!");
+
+            User userVerify = _context.Users.FirstOrDefault(user => user.Id == id.ToString());
 
             if (userVerify == null)
-                throw new HttpResponseException(404, $"The user with ID {id} not found!");
+                throw new HttpResponseException(404, $"O usuário com o ID {id} não foi encontrado!");
 
             User user = userViewModel.UpdateUser(userVerify);
 
@@ -122,16 +109,19 @@ namespace MyInvestAPI.Repositories
             catch (Exception err)
             {
                 _logger.LogError($"========= Ocorreu um erro ao tentar atualizar o usuário! err: {err.Message}");
-                throw new HttpResponseException(500, "An error occured when tryning to update the user");
+                throw new HttpResponseException(500, "Ocorreu um erro ao tentar atualizar o usuário!");
             }
         }
 
-        public void Delete(int id)
+        public void Delete(string id)
         {
-            User user = _context.Users.FirstOrDefault(user => user.User_Id == id);
+            if (string.IsNullOrEmpty(id))
+                throw new HttpResponseException(400, "O id não pode ser nulo ou vazio!");
+
+            User user = _context.Users.FirstOrDefault(user => user.Id == id.ToString());
 
             if (user == null)
-                throw new HttpResponseException(404, $"The user with ID {id} not found!");
+                throw new HttpResponseException(404, $"O Usuário com o ID {id} não foi encontrado!");
 
             try
             {
@@ -140,8 +130,8 @@ namespace MyInvestAPI.Repositories
             }
             catch(Exception ex)
             {
-                _logger.LogError($"========= Ocorreu um erro ao tentar deletar o usuário! err: {ex.Message}");
-                throw new HttpResponseException(500, "An error occured when tryning to delete the user");
+                _logger.LogError($"Ocorreu um erro ao tentar deletar o usuário! err: {ex.Message}");
+                throw new HttpResponseException(500, "Ocorreu um erro ao tentar deletar o usuário!");
             }
         }
     }

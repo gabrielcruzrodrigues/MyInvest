@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Domain;
 using MyInvestAPI.Repositories;
@@ -17,68 +18,65 @@ namespace MyInvestAPI.Controllers
             _repository = IUserRepository;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync(CreateUserViewModel userViewModel)
-        {
-            if (userViewModel is null)
-                return BadRequest("The User body must not be null.");
-
-            var userCreated = await _repository.CreateAsync(userViewModel);
-            return new CreatedAtRouteResult("GetUser", new { id = userCreated.User_Id }, userCreated);
-        }
-
         [HttpGet]
+        [Authorize]
         public async Task<IEnumerable<User>> GetAllUsers()
         {
             return await _repository.GetAllUsersAsync();
         }
 
+        [Authorize]
         [HttpGet("purses")]
         public async Task<IEnumerable<User>> GetAllUsersWithPurses()
         {
             return await _repository.GetAllUsersWithPursesAsync();
         }
 
+        [Authorize]
         [HttpGet("purses/actives")]
         public async Task<IEnumerable<User>> GetAllUsersWithPursesAndActives()
         {
             return await _repository.GetAllUsersWithPursesAndActivesAsync();
         }
 
-        [HttpGet("{id:int}", Name ="GetUser")]
-        public async Task<ActionResult<User>> GetById(int id)
+        [Authorize]
+        [HttpGet("{userId}", Name ="GetUser")]
+        public async Task<ActionResult<User>> GetById(string userId)
         {
-            return Ok(await _repository.GetByIdAsync(id));
+            return Ok(await _repository.GetByIdAsync(userId));
         }
 
-        [HttpGet("{id:int}/purses")]
-        public async Task<ActionResult<User>> GetUserWithAllPursesById(int id)
+        [Authorize]
+        [HttpGet("{userId}/purses")]
+        public async Task<ActionResult<User>> GetUserWithAllPursesById(string userId)
         {
-            return Ok(await _repository.GetUserWithAllPursesByIdAsync(id));
+            return Ok(await _repository.GetUserWithAllPursesByIdAsync(userId));
         }
 
-        [HttpGet("{id:int}/purses/actives")]
-        public async Task<ActionResult<User>> GetUserWithAllPursesAndActivesById(int id)
+        [Authorize]
+        [HttpGet("{userId}/purses/actives")]
+        public async Task<ActionResult<User>> GetUserWithAllPursesAndActivesById(string userId)
         {
-            return Ok(await _repository.GetUserWithAllPursesAndActivesByIdAsync(id));
+            return Ok(await _repository.GetUserWithAllPursesAndActivesByIdAsync(userId));
         }
 
-
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, CreateUserViewModel userViewModel)
+        [Authorize]
+        [HttpPut("{userId}")]
+        public IActionResult Update(string userId, CreateUserViewModel userViewModel)
         {
             if (userViewModel is null)
                 return BadRequest("The data for update must not be null.");
 
-            _repository.Update(id, userViewModel);
+            _repository.Update(userId, userViewModel);
 
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [Authorize]
+        [HttpDelete("{userId}")]
+        public IActionResult Delete(string userId)
         {
-            _repository.Delete(id);
+            _repository.Delete(userId);
             return NoContent();
         }
     }

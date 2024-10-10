@@ -1,27 +1,75 @@
+<app-back [link]="redirectBackLink"></app-back>
+
 <section class="main-section">
-     <h1>Buscar ativos</h1>
-     <p class="subtitle">Use o campo abaixo para pesquisar as informações sobre novos ativos!</p>
+     <div class="title">
+          <h1>Buscar ativos</h1>
+          <p class="subtitle">Pesquise seus ativos pelo ticker!</p>
+     </div>
 
      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <p class="description-input">Pesquise o ativo pelo seu ticker</p>
 
-          <div class="error-container">
-               <p class="error-message" *ngIf="form.get('name')?.errors?.['required'] && form.get('name')?.touched">
-                    O nome não pode ser nulo ao realizar uma pesquisa!
-               </p>
-          </div>
           <label>Título do ticker:</label>
           <input type="text" placeholder="Ex: 'AAPL'" formControlName="name">
-
+          <div class="error-container">
+               <p class="error-message" *ngIf="form.get('name')?.errors?.['required'] && form.get('name')?.touched">
+                    O nome não pode ser nulo!
+               </p>
+          </div>
+          
+          <label>DY (Dividend Yield) esperado:</label>
+          <input type="text" placeholder="Ex: 5%" formControlName="dy" (input)="onInputChange($event)" [value]="dYDisplayValue">
           <div class="error-container">
                <p class="error-message" *ngIf="form.get('dy')?.errors?.['required'] && form.get('dy')?.touched">
                     O DY (Dividend Yield) não pode ser nulo
                </p>
           </div>
-          <label>DY (Dividend Yield) esperado:</label>
-          <input type="text" placeholder="Ex: 5%" formControlName="dy" (input)="onInputChange($event)" [value]="dYDisplayValue">
 
           <button type="submit">Buscar ativo</button>
      </form>
+</section>
+<section class="common-searches">
+     <div class="title">
+          <h2>Buscas frequêntes</h2>
+          <p>Tickers famosos com o DY de 6%</p>
+     </div>
+
+     <div class="searches">
+          <div class="card" (click)="searchFixedActions('AAPL')">
+               <img src="/assets/apple-icon.png">
+               <p>AAPL</p>
+          </div>
+          <div class="card" (click)="searchFixedActions('MSFT')">
+               <img src="/assets/microsoft-icon.png">
+               <p>MSFT</p>
+          </div>
+          <div class="card" (click)="searchFixedActions('BBAS3.SA')">
+               <img src="/assets/banco-do-brasil-icon.svg">
+               <p>BBAS3</p>
+          </div>
+          <div class="card" (click)="searchFixedActions('SONY')">
+               <img src="/assets/sony-icon.png">
+               <p>SONY</p>
+          </div>
+          <div class="card" (click)="searchFixedActions('PETR4.SA')">
+               <img src="/assets/petrobras-icon.png">
+               <p>PETR4</p>
+          </div>
+          <div class="card" (click)="searchFixedActions('VALE3.SA')">
+               <img class="vale" src="/assets/vale-icon.png">
+               <p>VALE3</p>
+          </div>
+          <div class="card" (click)="searchFixedActions('NVDA')">
+               <img src="/assets/nvidia-icon.png">
+               <p>NVDA</p>
+          </div>
+          <div class="card" (click)="searchFixedActions('BBDC4.SA')">
+               <img src="/assets/bradesco-icon.png">
+               <p>BBDC4</p>
+          </div>
+          <div class="card" (click)="searchFixedActions('ITUB4.SA')">
+               <img class="vale" src="/assets/itau-icon.png">
+               <p>ITUB4</p>
+          </div>
+     </div>
 </section>
 <app-loading [isLoading]="isLoading"></app-loading>

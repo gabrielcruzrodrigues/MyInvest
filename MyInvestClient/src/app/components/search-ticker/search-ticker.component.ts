@@ -5,19 +5,21 @@ import { ActiveService } from '../../services/active.service';
 import { HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LoadingComponent } from '../layout/loading/loading.component';
+import { BackComponent } from '../layout/back/back.component';
 
 @Component({
   selector: 'app-search-ticker',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, LoadingComponent],
+  imports: [ReactiveFormsModule, CommonModule, LoadingComponent, BackComponent],
   templateUrl: './search-ticker.component.html',
   styleUrl: './search-ticker.component.scss'
 })
 export class SearchTickerComponent {
   form: FormGroup;
   isLoading: boolean = false;
+  redirectBackLink: string = '/purses';
 
-  percentValue: number | null = null;
+  percentValue: number | null = 6;  
   dYDisplayValue: string = '';
 
   constructor(
@@ -62,12 +64,16 @@ export class SearchTickerComponent {
           {
             alert("Não foi encontrado nenhum ativo com o ticker informado.");
             return;
-          }
-          if (err.status === 500)
+
+          } 
+          else if (err.status === 500)
           {
             alert("Houve um erro ao tentar buscar esse ativo!");
+          } 
+          else 
+          {
+            alert("Houve um erro ao tentar buscar o ativo, tente novamente mais tarde!")
           }
-          console.log(err);
         }
       })
     }
@@ -92,5 +98,15 @@ export class SearchTickerComponent {
       this.percentValue = null;
       this.dYDisplayValue = '';
     }
+  }
+
+  searchFixedActions(action: string) : void
+  {
+    this.form.patchValue({
+      name: action,
+      dy: 6
+    });
+    this.dYDisplayValue = '6%';
+    this.onSubmit()
   }
 }

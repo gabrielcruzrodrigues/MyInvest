@@ -4,8 +4,10 @@
           <button class="hamburger" #hamburger></button>
           <ul class="nav-list">
                <li><a href="/search-ticker">Buscar novos ativos</a></li>
-               <li><a href="/purses">Minhas carteiras</a></li>
-               <li><a href="/create-account">Minha conta</a></li>
+               <li class="authenticated" #purses><a href="/purses">Minhas carteiras</a></li>
+               <li #createAccount><a href="/register">Criar conta</a></li>
+               <li #login><a href="/login">Fazer login</a></li>
+               <li class="authenticated" #myaccount><a href="#">Minha conta</a></li>
           </ul>
      </nav>
 </header>

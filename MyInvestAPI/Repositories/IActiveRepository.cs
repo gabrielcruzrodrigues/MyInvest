@@ -14,5 +14,6 @@ namespace MyInvestAPI.Repositories
         void Delete(int id);
         Task<ActiveReturn> SearchActiveAsync(string active, string dYDesiredPercentage);
         Task<Purse> GetActivesByPurseId(int purseId);
+        Task<IEnumerable<ActiveReturnForPurseDetails>> GetActivesForShowInPurseDetails(int purseId);
     }
 }

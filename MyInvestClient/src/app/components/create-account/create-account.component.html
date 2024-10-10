@@ -5,14 +5,14 @@
 
         <!-- Nome -->
         <div class="error-container">
-            <p class="error-message" *ngIf="form.get('name')?.errors?.['required'] && form.get('name')?.touched">
+            <p class="error-message" *ngIf="form.get('username')?.errors?.['required'] && form.get('username')?.touched">
                 O campo nome é obrigatório!
             </p>
-            <p class="error-message" *ngIf="form.get('name')?.errors?.['minlength'] && form.get('name')?.touched">
+            <p class="error-message" *ngIf="form.get('username')?.errors?.['minlength'] && form.get('username')?.touched">
                 O nome deve ter pelo menos 3 caracteres!
             </p>
         </div>
-        <input type="text" name="name" placeholder="Nome" formControlName="name">
+        <input type="text" name="username" placeholder="Nome" formControlName="username">
 
         <!-- Email -->
         <div class="error-container">
@@ -24,17 +24,6 @@
             </p>
         </div>
         <input type="email" name="email" placeholder="Email" formControlName="email">
-
-        <!-- phone -->
-        <div class="error-container">
-            <p class="error-message" *ngIf="form.get('phone')?.errors?.['required'] && form.get('phone')?.touched">
-                O campo telefone é obrigatório!
-            </p>
-            <p class="error-message" *ngIf="form.get('phone')?.errors?.['minlength'] && form.get('phone')?.touched">
-                O telefone deve ter pelo menos 11 caracteres!
-            </p>
-        </div>
-        <input type="text" name="phone" placeholder="Telefone" formControlName="phone">
 
         <!-- password -->
         <div class="error-container">
@@ -59,6 +48,7 @@
         <input type="password" name="password2" placeholder="Digite sua senha novamente" formControlName="verifyPassword">
 
         <button type="submit">Criar conta</button>
+        <a href="/login" class="redirectLogin">Já tem uma conta? faça login clicando aqui!</a>
     </form>
 </section>
 <app-loading [isLoading]="isLoading"></app-loading>

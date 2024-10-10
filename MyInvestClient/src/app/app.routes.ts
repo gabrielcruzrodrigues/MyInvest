@@ -8,13 +8,11 @@ import { ViewActivesComponent } from './components/view-actives/view-actives.com
 import { ViewTickerFinalComponent } from './components/view-ticker-final/view-ticker-final.component';
 import { EditPurseComponent } from './components/edit-purse/edit-purse.component';
 import { EditActiveComponent } from './components/edit-active/edit-active.component';
+import { LoginComponent } from './components/login/login.component';
 
 export const routes: Routes = [
      {
           path: '', component: SearchTickerComponent
-     },
-     {
-          path: 'create-account', component: CreateAccountComponent
      },
      {
           path: 'purses', component: ViewPursesComponent
@@ -39,5 +37,11 @@ export const routes: Routes = [
      },
      {
           path: 'view-active-info/:name/:dividentYield', component: ViewTickerFinalComponent
+     },
+     {
+          path: 'register', component: CreateAccountComponent
+     },
+     {
+          path: 'login', component: LoginComponent
      }
 ];

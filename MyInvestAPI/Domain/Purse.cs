@@ -20,7 +20,7 @@ namespace MyInvestAPI.Domain
         public DateTime LastUpdatedAt { get; set; }
 
         [ForeignKey("User")]
-        public int User_Id { get; set; }
+        public string User_Id { get; set; }
 
         [JsonIgnore]
         public User? User { get; set; }
@@ -30,7 +30,7 @@ namespace MyInvestAPI.Domain
         public Purse()
         { }
 
-        public Purse(string name, string description, int user_id)
+        public Purse(string name, string description, string user_id)
         {
             this.Name = name;
             this.Description = description;

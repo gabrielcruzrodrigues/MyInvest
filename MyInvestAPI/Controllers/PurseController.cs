@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Data;
@@ -20,6 +21,7 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Purse>> Create(CreatePurseViewModel purseViewModel)
         {
             if (purseViewModel is null)
@@ -31,30 +33,35 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Purse>>> GetAll()
         {
             return Ok(await _repository.GetAllAsync());
         }
 
         [HttpGet("actives")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Purse>>> GetAllWithActives()
         {
             return Ok(_repository.GetAllWithActivesAsync());
         }
 
         [HttpGet("{id:int}", Name = "GetPurse")]
+        [Authorize]
         public async Task<ActionResult<Purse>> getById(int id)
         {
             return Ok(await _repository.GetByIdAsync(id));
         }
 
         [HttpGet("{id:int}/actives")]
+        [Authorize]
         public async Task<ActionResult<Purse>> getByIdWithActives(int id)
         {
             return Ok(await _repository.GetByIdWithActivesAsync(id));
         }
 
         [HttpPut("{id:int}")]
+        [Authorize]
         public async Task<IActionResult> Update(int id, UpdatePurseViewModel purseViewModel)
         {
             if (purseViewModel is null)
@@ -66,6 +73,7 @@ namespace MyInvestAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             _repository.Delete(id);

@@ -26,18 +26,17 @@ export class CreateAccountComponent implements OnInit{
     private route: Router
   ) {
     this.form = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
+      username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.minLength(11)]],
       password: ['', [Validators.required, this.passwordStrengthValidator()]],
       verifyPassword: ['', Validators.required]
     }, {validators: this.passwordsMatchValidator() });
   }
 
   ngOnInit(): void {
-    if (this.authService.verifyIfUserIdLogged()) {
-      this.route.navigate(["/"])
-    }
+    // if (!this.authService.verifyIfUserIdLogged()) {
+    //   this.route.navigate(["/login"])
+    // }
   }
 
   onSubmit(): void
@@ -45,18 +44,26 @@ export class CreateAccountComponent implements OnInit{
     if (this.form.valid)
     {
       this.isLoading = true;
-      this.userService.create(this.form.value).subscribe({
+      this.authService.createAccount(this.form.value).subscribe({
         next: (response: HttpResponse<any>) => {
           if (response.status === 201)
           {
             this.authService.configureLocalStorage(response.body);
             this.isLoading = false;
-            alert("Usuário criado com sucesso!");
-            this.route.navigate(["/"]);
+            alert("Sua conta foi criada com sucesso!");
+            this.route.navigate(["/purses"]);
+            return;
           }
+          alert("Uma resposta inédita foi recebida do servidor!");
         },
         error: (error) => {
           this.isLoading = false;
+          console.log(error);
+          if (error.status === 400)
+          {
+            alert(error.error.message);
+            return;
+          }
           alert("Ocorreu um erro ao tentar criar o usuário.");
         }
       })

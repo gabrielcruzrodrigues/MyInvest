@@ -132,7 +132,7 @@ namespace MyInvestAPI.Repositories
         {
             try
             {
-                return await YahooFinanceApiClient.GetActive(active, dYDesiredPercentage);
+                return await YahooFinanceApiClient.CreateActiveReturn(active, dYDesiredPercentage);
             }
             catch (KeyNotFoundException ex)
             {
@@ -142,7 +142,7 @@ namespace MyInvestAPI.Repositories
             catch (Exception ex)
             {
                 _logger.LogError($"Un error occured when tryning search actives! err: {ex.Message}");
-                throw new HttpResponseException(500, "Un error occured when tryning search actives");
+                throw new HttpResponseException(500, ex.Message);
             }
         }
 
@@ -156,6 +156,33 @@ namespace MyInvestAPI.Repositories
                 throw new HttpResponseException(404, $"The purse with id {purseId} not found!");
 
             return Purse;
+        }
+
+        public async Task<IEnumerable<ActiveReturnForPurseDetails>> GetActivesForShowInPurseDetails(int purseId)
+        {
+            try
+            {
+                var purse = await _context.Purses
+                            .Include(p => p.Actives)
+                            .AsNoTracking()
+                            .FirstOrDefaultAsync(p => p.Purse_Id == purseId);
+
+                if (purse is null)
+                    throw new HttpResponseException(404, $"A carteira com o id {purseId} não foi encontrada!");
+
+                List<ActiveReturnForPurseDetails> actives = new();
+                foreach (var active in purse.Actives)
+                {
+                    actives.Add(await YahooFinanceApiClient.CreateActiveReturnForPurseDetails(active.Code, active.DYDesiredPercentage.ToString(), active.Active_Id));
+                }
+
+                return actives;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Um erro ocorreu ao tentar buscar os ativos! err: {ex.Message}");
+                throw new HttpResponseException(500, ex.Message);
+            }
         }
     }
 }

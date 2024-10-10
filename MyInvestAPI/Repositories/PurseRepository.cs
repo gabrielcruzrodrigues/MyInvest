@@ -19,7 +19,7 @@ public class PurseRepository : IPurseRepository
 
     public async Task<Purse> CreateAsync(CreatePurseViewModel purseViewModel)
     {
-        var userVerify = await _context.Users.FirstOrDefaultAsync(u => u.User_Id == purseViewModel.User_Id);
+        var userVerify = await _context.Users.FirstOrDefaultAsync(u => u.Id == purseViewModel.User_Id.ToString());
 
         if (userVerify is null)
             throw new HttpResponseException(404, $"The user with ID {purseViewModel.User_Id} not found!");
