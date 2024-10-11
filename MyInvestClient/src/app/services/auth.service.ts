@@ -2,12 +2,13 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { development_environments } from '../environments/development-environments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  url: string = 'https://localhost:7021/Auth/';
+  url: string = development_environments.url + '/Auth/';
   
   constructor(private http: HttpClient, private router: Router) { }
   
