@@ -12,12 +12,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-  @ViewChild('hamburger', { static: false }) hamburger!: ElementRef;
-  @ViewChild('nav', { static: false }) nav!: ElementRef;
   @ViewChild('purses') purses!: ElementRef;
-  @ViewChild('logout') logout!: ElementRef;
-  @ViewChild('login') login!: ElementRef;
   @ViewChild('createAccount') createAccount!: ElementRef;
+  @ViewChild('login') login!: ElementRef;
+  @ViewChild('logout') logout!: ElementRef;
 
   constructor(
     private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef
@@ -35,15 +33,11 @@ export class NavbarComponent {
   }
 
   initComponent(): void {
-    this.hamburger.nativeElement.addEventListener('click', () => {
-      this.nav.nativeElement.classList.toggle('active');
-    });
-
     if (this.authService.verifyIfUserIdLogged()) {
-      this.purses.nativeElement.classList.add('active');
-      this.logout.nativeElement.classList.add('active');
-      this.createAccount.nativeElement.classList.add('no-active');
-      this.login.nativeElement.classList.add('no-active');
+      this.purses.nativeElement.classList.remove('unauthenticated');
+      this.createAccount.nativeElement.classList.add('unauthenticated');
+      this.login.nativeElement.classList.add('unauthenticated');
+      this.logout.nativeElement.classList.remove('unauthenticated');
     }
   }
 }
