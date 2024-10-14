@@ -10,10 +10,11 @@ import { EditPurseComponent } from './components/edit-purse/edit-purse.component
 import { EditActiveComponent } from './components/edit-active/edit-active.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { HomepageComponent } from './components/homepage/homepage.component';
 
 export const routes: Routes = [
      {
-          path: '', component: SearchTickerComponent
+          path: '', component: HomepageComponent
      },
      {
           path: 'purses', component: ViewPursesComponent
