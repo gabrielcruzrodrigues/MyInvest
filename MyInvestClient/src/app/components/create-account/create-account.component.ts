@@ -15,7 +15,7 @@ import { LoadingComponent } from '../layout/loading/loading.component';
   templateUrl: './create-account.component.html',
   styleUrl: './create-account.component.scss'
 })
-export class CreateAccountComponent implements OnInit{
+export class CreateAccountComponent {
   form: FormGroup;
   isLoading: boolean = false;
 
@@ -30,48 +30,38 @@ export class CreateAccountComponent implements OnInit{
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, this.passwordStrengthValidator()]],
       verifyPassword: ['', Validators.required]
-    }, {validators: this.passwordsMatchValidator() });
+    }, { validators: this.passwordsMatchValidator() });
   }
 
-  ngOnInit(): void {
-    // if (!this.authService.verifyIfUserIdLogged()) {
-    //   this.route.navigate(["/login"])
-    // }
-  }
+  onSubmit(): void {
+    if (this.form.invalid) {
+      const formErrors = this.getFormValidationErrors();
+      alert(`Erros no formulário: \n${formErrors}`);
+      return;
+    }
 
-  onSubmit(): void
-  {
-    if (this.form.valid)
-    {
-      this.isLoading = true;
-      this.authService.createAccount(this.form.value).subscribe({
-        next: (response: HttpResponse<any>) => {
-          if (response.status === 201)
-          {
-            this.authService.configureLocalStorage(response.body);
-            this.isLoading = false;
-            alert("Sua conta foi criada com sucesso!");
-            this.route.navigate(["/purses"]);
-            return;
-          }
-          alert("Uma resposta inédita foi recebida do servidor!");
-        },
-        error: (error) => {
+    this.isLoading = true;
+    this.authService.createAccount(this.form.value).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.status === 201) {
+          this.authService.configureLocalStorage(response.body);
           this.isLoading = false;
-          console.log(error);
-          if (error.status === 400)
-          {
-            alert(error.error.message);
-            return;
-          }
-          alert("Ocorreu um erro ao tentar criar o usuário.");
+          alert("Sua conta foi criada com sucesso!");
+          this.route.navigate(["/purses"]);
+          return;
         }
-      })
-    }
-    else 
-    {
-      this.form.markAllAsTouched();
-    }
+        alert("Uma resposta inédita foi recebida do servidor!");
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.log(error);
+        if (error.status === 400) {
+          alert(error.error.message);
+          return;
+        }
+        alert("Ocorreu um erro ao tentar criar o usuário.");
+      }
+    })
   }
 
   passwordsMatchValidator(): ValidatorFn {
@@ -101,5 +91,40 @@ export class CreateAccountComponent implements OnInit{
       }
       return null;
     }
+  }
+
+  getFormValidationErrors(): string {
+    let errors: string[] = [];
+  
+    Object.keys(this.form.controls).forEach(key => {
+      const controlErrors = this.form.get(key)?.errors;
+      if (controlErrors) {
+        Object.keys(controlErrors).forEach(errorKey => {
+          switch (errorKey) {
+            case 'required':
+              errors.push(`${key}: Este campo é obrigatório.`);
+              break;
+            case 'minlength':
+              const minLength = controlErrors['minlength'].requiredLength;
+              errors.push(`${key}: O valor precisa ter pelo menos ${minLength} caracteres.`);
+              break;
+            case 'email':
+              errors.push(`${key}: O formato do email está incorreto.`);
+              break;
+            case 'passwordStrength':
+              errors.push(`password: A senha precisa ter pelo menos 8 caracteres.`);
+              break;
+            case 'passwordsMismatch':
+              errors.push(`password: As senhas não coincidem.`);
+              break;
+            default:
+              errors.push(`${key}: Erro desconhecido.`);
+              break;
+          }
+        });
+      }
+    });
+  
+    return errors.join('\n');
   }
 }

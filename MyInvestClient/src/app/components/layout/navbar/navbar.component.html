@@ -9,10 +9,12 @@
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <div class="navbar-nav ms-auto py-0">
       <a href="/" class="nav-item nav-link active">Página inicial</a>
-      <a href="search-ticker" class="nav-item nav-link">Buscar Ativos</a>
+      <a href="/search-ticker" class="nav-item nav-link">Buscar Ativos</a>
+      <a #purses href="/purses" class="unauthenticated nav-item nav-link">Minhas carteiras</a>
       <a href="#" class="nav-item nav-link">Sobre nós</a>
-      <a href="/login" class="nav-item nav-link">Fazer login</a>
+      <a #login href="/login" class=" nav-item nav-link">Fazer login</a>
+      <a #logout href="/logout" class="unauthenticated nav-item nav-link">Sair da conta</a>
     </div>
-    <a href="/register" class="btn btn-primary rounded-pill py-2 px-4 my-3 my-lg-0 flex-shrink-0 m-lg-2">Criar conta</a>
+    <a #createAccount href="/register" class="btn btn-primary rounded-pill py-2 px-4 my-3 my-lg-0 flex-shrink-0 m-lg-2">Criar conta</a>
   </div>
 </nav>
