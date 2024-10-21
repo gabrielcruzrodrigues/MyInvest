@@ -1,35 +1,44 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
-import { NavbarComponent } from './components/layout/navbar/navbar.component';
-import { AuthService } from './services/auth.service';
-import { FooterComponent } from './components/layout/footer/footer.component';
+import {Component, OnInit} from '@angular/core';
+import {Router, Event, NavigationEnd} from '@angular/router';
+import { AppService } from '@services/app.service';
+import {environment} from 'environments/environment';
+import {GoogleAnalyticsService} from 'ngx-google-analytics';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, NavbarComponent, FooterComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
-  title = 'MyInvestClient';
+export class AppComponent implements OnInit {
+    constructor(
+        private router: Router,
+        protected $gaService: GoogleAnalyticsService,
+        private appService: AppService
+    ) {
+        this.router.events.subscribe((event: Event) => {
+            if (
+                event instanceof NavigationEnd &&
+                environment.NODE_ENV === 'production'
+            ) {
+                this.$gaService.pageView(event.url);
+            }
+        });
+    }
 
-  constructor(private authService: AuthService, private router: Router) {}
-
-  ngOnInit(): void {
-    var expirationTokenDate = this.authService.getExpirationTokenDate();
+    ngOnInit(): void {
+        var expirationTokenDate = this.appService.getExpirationTokenDate();
+        
+        if (!expirationTokenDate)
+        {
+          return;
+        }
     
-    if (!expirationTokenDate)
-    {
-      return;
-    }
-
-    const expirationDate = new Date(expirationTokenDate);
-    const currentDate = new Date();
-
-    if (currentDate >= expirationDate)
-    {
-      this.authService.NewAccessToken();
-    }
-  }
+        const expirationDate = new Date(expirationTokenDate);
+        const currentDate = new Date();
+    
+        if (currentDate >= expirationDate)
+        {
+          this.appService.NewAccessToken();
+        }
+      }
 }

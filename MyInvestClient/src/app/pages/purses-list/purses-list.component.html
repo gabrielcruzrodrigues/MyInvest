@@ -1,0 +1,62 @@
+<app-spinner [isLoading]="isLoading"></app-spinner>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+     <div class="container-fluid">
+          <div class="row mb-2">
+               <div class="col-sm-6">
+                    <h1>Carteiras</h1>
+               </div>
+               <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                         <li class="breadcrumb-item"><a href="#">Home</a></li>
+                         <li class="breadcrumb-item active">Carteiras</li>
+                    </ol>
+               </div>
+          </div>
+     </div>
+     <!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+     <!-- Default box -->
+     <div class="container-fluid">
+          <div class="card">
+               <div class="card-header">
+                    <a href="/create-purse" class="btn btn-primary">Criar nova carteira</a>
+               </div>
+
+               <table class="table table-striped    text-center">
+                    <thead class="thead-dark">
+                         <tr>
+                              <th scope="col">nome</th>
+                              <th scope="col">descrição</th>
+                              <th scope="col">criação</th>
+                              <th scope="col">ativos</th>
+                              <th scope="col">ações</th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                         <tr *ngFor="let purse of purses" class="align-items-center cursor-pointer" (click)="redirectToViewActives(purse.purse_Id)">
+                              <th class="align-middle" scope="row">{{ purse.name }}</th>
+                              <td class="align-middle">{{ purse.description }}</td>
+                              <td class="align-middle">{{ purse.createdAt }}</td>
+                              <td class="align-middle">-</td>
+                              <td class="align-middle">
+                                   <button class="btn btn-warning mr-3" (click)="redirectToUpdatePurse(purse.purse_Id);$event.stopPropagation()">
+                                        <fa-icon [icon]="faEdit"></fa-icon>
+                                   </button>
+                                   <button class="btn btn-danger" (click)="deletePurse(purse.purse_Id);$event.stopPropagation()">
+                                        <fa-icon [icon]="faTrash"></fa-icon>
+                                   </button>
+                              </td>
+                         </tr>
+                    </tbody>
+               </table>
+
+          </div>
+     </div>
+     <!-- /.card -->
+</section>
+<!-- /.content -->
