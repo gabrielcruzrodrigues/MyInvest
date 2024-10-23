@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {Router, Event, NavigationEnd} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, Event, NavigationEnd } from '@angular/router';
 import { AppService } from '@services/app.service';
-import {environment} from 'environments/environment';
-import {GoogleAnalyticsService} from 'ngx-google-analytics';
+import { environment } from 'environments/environment';
+import { GoogleAnalyticsService } from 'ngx-google-analytics';
 
 @Component({
     selector: 'app-root',
@@ -27,18 +27,16 @@ export class AppComponent implements OnInit {
 
     ngOnInit(): void {
         var expirationTokenDate = this.appService.getExpirationTokenDate();
-        
-        if (!expirationTokenDate)
-        {
-          return;
+
+        if (!expirationTokenDate) {
+            return;
         }
-    
+
         const expirationDate = new Date(expirationTokenDate);
         const currentDate = new Date();
-    
-        if (currentDate >= expirationDate)
-        {
-          this.appService.NewAccessToken();
+
+        if (currentDate >= expirationDate) {
+            this.appService.NewAccessToken();
         }
-      }
+    }
 }

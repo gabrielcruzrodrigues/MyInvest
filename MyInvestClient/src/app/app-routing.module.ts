@@ -13,6 +13,7 @@ import {SubMenuComponent} from '@pages/main-menu/sub-menu/sub-menu.component';
 import { PursesListComponent } from '@pages/purses-list/purses-list.component';
 import { ActivesListComponent } from '@pages/actives-list/actives-list.component';
 import { CreatePurseComponent } from '@pages/create-purse/create-purse.component';
+import { CreateActiveComponent } from '@pages/create-active/create-active.component';
 
 const routes: Routes = [
     {
@@ -32,6 +33,14 @@ const routes: Routes = [
             {
                 path: 'view-actives/:purse',
                 component: ActivesListComponent
+            },
+            {
+                path: 'create-active/:purseId',
+                component: CreateActiveComponent
+            },
+            {
+                path: 'create-active',
+                component: CreateActiveComponent
             },
             {
                 path: 'create-purse',

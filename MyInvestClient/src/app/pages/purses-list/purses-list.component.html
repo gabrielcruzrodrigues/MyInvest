@@ -27,7 +27,7 @@
                     <a href="/create-purse" class="btn btn-primary">Criar nova carteira</a>
                </div>
 
-               <table class="table table-striped    text-center">
+               <table class="table table-striped text-center">
                     <thead class="thead-dark">
                          <tr>
                               <th scope="col">nome</th>
@@ -38,7 +38,7 @@
                          </tr>
                     </thead>
                     <tbody>
-                         <tr *ngFor="let purse of purses" class="align-items-center cursor-pointer" (click)="redirectToViewActives(purse.purse_Id)">
+                         <tr *ngFor="let purse of purses" class="cursor align-items-center" (click)="redirectToViewActives(purse.purse_Id)">
                               <th class="align-middle" scope="row">{{ purse.name }}</th>
                               <td class="align-middle">{{ purse.description }}</td>
                               <td class="align-middle">{{ purse.createdAt }}</td>
