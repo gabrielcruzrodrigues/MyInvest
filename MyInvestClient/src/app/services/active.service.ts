@@ -1,19 +1,19 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { development_environments } from '../environments/development-environments';
 import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
+import { AppService } from './app.service';
+import { environment } from 'environments/environment.prod';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ActiveService {
 
-  url: string = development_environments.url;
-  headers = this.authService.getHeaders();
+  url: string = environment.URL;
+  headers = this.appService.getHeaders();
 
   constructor(
-    private http: HttpClient, private authService: AuthService
+    private http: HttpClient, private appService: AppService
   ) { }
 
 
@@ -51,18 +51,17 @@ export class ActiveService {
   delete(purseId: string): Observable<any>
   {
     const urlForRequest = this.url + "/active/" + purseId;
-    console.log(urlForRequest)
     return this.http.delete(urlForRequest, {headers: this.headers, observe: 'response' });
   }
 
   update(activeId: string, dYDesiredPercentage: number): Observable<any>
   {
     const urlForRequest = this.url + "/active/" + activeId;
-    console.log(urlForRequest);
 
     const objForRequest = {
       dyDesiredPercentage: dYDesiredPercentage
     }
     return this.http.put(urlForRequest, objForRequest, {headers: this.headers, observe: 'response' });
   }
+
 }

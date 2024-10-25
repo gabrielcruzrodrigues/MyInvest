@@ -1,27 +1,54 @@
-# MyInvestClient
+<p align="center" style="margin-bottom: 32px">
+  <a href="https://erdkse.com" >
+    <img src="https://raw.githubusercontent.com/erdkse/adminlte-3-angular/main/src/assets/img/logo.png" alt="AdminLTE logo" width="75" height="75">
+  </a>
+</p>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.8.
+<h1 align="center">Admin LTE 3.2.0 - Angular 18.0.0</h1>
 
-## Development server
+<p>
+  This repository is a form of original AdminLTE project. It is aim to use AdminLTE template with Angular.
+</p>
+<br>
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+<span align="center">
 
-## Code scaffolding
+![Stars](https://img.shields.io/github/stars/erdkse/adminlte-3-angular?style=flat-square)
+![Forks](https://img.shields.io/github/forks/erdkse/adminlte-3-angular?style=flat-square)
+![Issues](https://img.shields.io/github/issues/erdkse/adminlte-3-angular?style=flat-square)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-green.svg?style=flat-square)](#contributors-)
+![GitHub last commit](https://img.shields.io/github/last-commit/erdkse/adminlte-3-angular.svg)
+[![License](https://img.shields.io/github/license/erdkse/adminlte-3-angular.svg)](LICENSE)
+![Sponsors](https://img.shields.io/github/sponsors/erdkse.svg)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+</span>
 
-## Build
+## Demo
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Online demo: https://www.erdkse.com/projects/preview/adminlte-angular
 
-## Running unit tests
+To login website you can `create` a user. All authenication related features are `working` and `live`!
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+`Firebase` is added as backend provider to increase better user experince.
 
-## Running end-to-end tests
+## Development
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+First, install the dependencies with `npm install` command.
 
-## Further help
+You need to run `npm run firebase:start` on a different terminal and keep it running.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Then, in the project directory, you can run: `npm run serve`
+
+Open [http://localhost:4200](http://localhost:4200) to view it in the browser.
+
+## License
+
+[![License](https://img.shields.io/github/license/erdkse/adminlte-3-angular.svg)](/LICENSE)
+
+Released 2021 by [Erdi Köse](https://erdkse.com)
+
+## Support for more
+
+If you liked my work and would like to support for my expenses like server costs, please; (ie. `Firebase`)
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/erdkse)
