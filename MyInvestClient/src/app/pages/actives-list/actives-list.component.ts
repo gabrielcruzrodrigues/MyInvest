@@ -125,7 +125,7 @@ export class ActivesListComponent implements OnInit{
 
   createActive(): void 
   {
-    this.router.navigate(["/"]);
+    // this.router.navigate(["/"]);
   }
 
   deleteActive(purseId: any): void 
@@ -137,7 +137,6 @@ export class ActivesListComponent implements OnInit{
         {
           this.actives = this.actives.filter(active => active.id !== purseId);
           this.isLoading = false;
-          return;
         }
       },
       error: (err) => {

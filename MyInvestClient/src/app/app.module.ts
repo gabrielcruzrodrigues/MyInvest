@@ -9,7 +9,7 @@ import {LoginComponent} from '@modules/login/login.component';
 import {HeaderComponent} from '@modules/main/header/header.component';
 import {FooterComponent} from '@modules/main/footer/footer.component';
 import {MenuSidebarComponent} from '@modules/main/menu-sidebar/menu-sidebar.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ProfileComponent} from '@pages/profile/profile.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RegisterComponent} from '@modules/register/register.component';
@@ -105,7 +105,8 @@ registerLocaleData(localeEn, 'en-EN');
             preventDuplicates: true
         }),
         NgxGoogleAnalyticsModule.forRoot(environment.GA_ID),
-        FontAwesomeModule
+        FontAwesomeModule,
+        FormsModule
     ],
     providers: [provideHttpClient(withInterceptorsFromDi())]
 })

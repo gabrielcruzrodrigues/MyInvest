@@ -44,6 +44,8 @@ export class CreateActiveComponent implements OnInit {
   percentValue: number | null = null;
   dYDisplayValue: string = '';
 
+  alreadySearched: boolean = false;
+
   hasUpdatedInputAutomatically: boolean = false;
 
   active: Active = {
@@ -80,6 +82,12 @@ export class CreateActiveComponent implements OnInit {
   ngOnInit(): void {
     this.userId = this.appService.getId();
 
+    var param = this.activedRoute.snapshot.paramMap.get('purseId');
+    if (param != null)
+    {
+      this.selectedPurseId = param;
+    } 
+
     this.userService.getPurses(this.userId).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.status === 200) {
@@ -101,7 +109,7 @@ export class CreateActiveComponent implements OnInit {
   }
 
   searchTicker() {
-    
+
     if (this.form.invalid) {
 
       const activeNameErrors = this.form.get('activeName')?.errors;
@@ -114,6 +122,8 @@ export class CreateActiveComponent implements OnInit {
       if (percentValueErrors?.['required']) {
         this.toastr.error('O campo DY desejado é obrigatório.');
       }
+
+      this.alreadySearched = false;
 
       return;
     }
@@ -129,6 +139,7 @@ export class CreateActiveComponent implements OnInit {
       next: (response: HttpResponse<any>) => {
         if (response.status === 200) {
           this.populateActiveFields(response.body);
+          this.alreadySearched = true;
           this.isLoading = false;
         }
         else {
@@ -138,6 +149,7 @@ export class CreateActiveComponent implements OnInit {
       error: (err) => {
         this.isLoading = false;
         if (typeof window !== 'undefined') {
+          this.alreadySearched = false;
           alert("Aconteceu um erro ao tentar buscar o ticker!");
         }
       }
@@ -169,29 +181,40 @@ export class CreateActiveComponent implements OnInit {
   }
 
   addActive(): void {
-    if (this.selectedPurseId !== '') {
-      this.isLoading = true;
-
-      if (this.percentValue === null) {
-        if (typeof window !== 'undefined') {
-          alert("O DY (Dividend Yield) não pode ser nulo !");
-        }
-        return;
-      }
-
-      this.activeService.create(this.selectedPurseId, this.active.tipo, this.active.ativo, this.percentValue?.toString()).subscribe({
-        next: (response: HttpResponse<any>) => {
-          if (response.status === 201) {
-            this.isLoading = false;
-            this.router.navigate(["/purses"]);
-          }
-        },
-        error: (err) => {
-          this.isLoading = false;
-          console.log(err);
-        }
-      })
+    if (this.alreadySearched === false) {
+      this.toastr.error("Você precisa buscar pelo ativo primeiro!");
+      return;
     }
+
+    if (this.selectedPurseId === '') {
+      this.toastr.error("Selecione uma carteira!");
+      return;
+    }
+
+    if (this.form.get('activeName')?.value === '') {
+      this.toastr.error("Você precisa adicionar um ticker primeiro!");
+      return;
+    }
+
+    if (this.percentValue === null) {
+      this.toastr.error("O DY desejado não pode ser nulo!");
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.activeService.create(this.selectedPurseId, this.active.tipo, this.active.ativo, this.percentValue?.toString()).subscribe({
+      next: (response: HttpResponse<any>) => {
+        if (response.status === 201) {
+          this.isLoading = false;
+          this.router.navigate(["/purses"]);
+        }
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.log(err);
+      }
+    });
   }
 
   onInputChange(event: any): void {

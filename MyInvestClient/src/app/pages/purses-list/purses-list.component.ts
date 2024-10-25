@@ -75,8 +75,6 @@ export class PursesListComponent implements OnInit{
     else {
       this.isLoading = false;
     }
-
-    console.log(purses);
   }
   
   createPurse(): void 

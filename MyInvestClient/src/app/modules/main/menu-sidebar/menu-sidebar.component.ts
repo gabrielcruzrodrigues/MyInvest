@@ -41,7 +41,7 @@ export const MENU = [
     {
         name: 'Buscar ativos ',
         iconClasses: 'fas fa-search-dollar',
-        path: ['/blan']
+        path: ['/create-active']
     },
     {
         name: 'Carteiras ',

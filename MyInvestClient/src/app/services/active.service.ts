@@ -51,14 +51,12 @@ export class ActiveService {
   delete(purseId: string): Observable<any>
   {
     const urlForRequest = this.url + "/active/" + purseId;
-    console.log(urlForRequest)
     return this.http.delete(urlForRequest, {headers: this.headers, observe: 'response' });
   }
 
   update(activeId: string, dYDesiredPercentage: number): Observable<any>
   {
     const urlForRequest = this.url + "/active/" + activeId;
-    console.log(urlForRequest);
 
     const objForRequest = {
       dyDesiredPercentage: dYDesiredPercentage

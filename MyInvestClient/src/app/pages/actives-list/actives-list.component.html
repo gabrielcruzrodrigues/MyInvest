@@ -77,10 +77,10 @@
                               <td class="align-middle">{{ active.preco_Teto }}</td>
                               <td class="align-middle">{{ active.indicacao }}</td>
                               <td class="align-middle">
-                                   <button class="btn btn-warning mr-3" (click)="updateActive(active.id, active.ativo, active.dividentYield)">
+                                   <button class="btn btn-warning mr-3" (click)="updateActive(active.id, active.ativo, active.dividentYield); $event.stopPropagation()">
                                         <fa-icon [icon]="faEdit"></fa-icon>
                                    </button>
-                                   <button class="btn btn-danger" (click)="deleteActive(active.id)">
+                                   <button class="btn btn-danger" (click)="deleteActive(active.id); $event.stopPropagation()">
                                         <fa-icon [icon]="faTrash"></fa-icon>
                                    </button>
                               </td>
