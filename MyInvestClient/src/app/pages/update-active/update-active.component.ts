@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActiveService } from '@services/active.service';
@@ -29,22 +29,20 @@ interface Purse {
 }
 
 @Component({
-  selector: 'app-create-active',
-  templateUrl: './create-active.component.html',
-  styleUrl: './create-active.component.scss'
+  selector: 'app-update-active',
+  templateUrl: './update-active.component.html',
+  styleUrl: './update-active.component.scss'
 })
-export class CreateActiveComponent implements OnInit {
-  isLoading: boolean = true;
+export class UpdateActiveComponent {
   userId: string = '';
-  purses: Purse[] = [];
-  selectedPurseId: string = '';
-
-  form: FormGroup;
   activeName: string = '';
+  activeId: string = '';
+  form: FormGroup;
+
+  isLoading: boolean = true;
+
   percentValue: number | null = null;
   dYDisplayValue: string = '';
-
-  alreadySearched: boolean = false;
 
   hasUpdatedInputAutomatically: boolean = false;
 
@@ -68,7 +66,6 @@ export class CreateActiveComponent implements OnInit {
     private activeService: ActiveService,
     private appService: AppService,
     private activedRoute: ActivatedRoute,
-    private userService: UserService,
     private router: Router,
     private fb: FormBuilder,
     private toastr: ToastrService,
@@ -81,65 +78,32 @@ export class CreateActiveComponent implements OnInit {
 
   ngOnInit(): void {
     this.userId = this.appService.getId();
+    var activeNameParam = this.activedRoute.snapshot.paramMap.get('name');
+    var percentValueParam = this.activedRoute.snapshot.paramMap.get('percentValue');
+    var activeIdParam = this.activedRoute.snapshot.paramMap.get('activeId');
 
-    var param = this.activedRoute.snapshot.paramMap.get('purseId');
-    if (param != null)
-    {
-      this.selectedPurseId = param;
-    } 
+    activeNameParam !== null ? this.activeName = activeNameParam : this.toastr.error("Aconteceu um erro ao tentar buscar o ticker!");
+    percentValueParam !== null ? this.percentValue = parseInt(percentValueParam) : this.toastr.error("Aconteceu um erro ao tentar buscar o ticker!");
+    activeIdParam !== null ? this.activeId = activeIdParam : this.toastr.error("Aconteceu um erro ao tentar buscar o ticker!");
 
-    this.userService.getPurses(this.userId).subscribe({
-      next: (response: HttpResponse<any>) => {
-        if (response.status === 200) {
-          response.body.purses.forEach((purse: any) => {
-            const newPurse: Purse = {
-              id: purse.purse_Id,
-              name: purse.name
-            };
-            this.purses.push(newPurse);
-          });
-          this.isLoading = false;
-        }
-      },
-      error: (err) => {
-        this.isLoading = false;
-        console.log(err);
-      }
-    })
+    this.form.patchValue({ percentValue: this.percentValue, activeName: this.activeName });
+
+    this.searchTicker();
   }
 
   searchTicker() {
+    const param = this.form.get('percentValue')?.value;
 
-    if (this.form.invalid) {
-
-      const activeNameErrors = this.form.get('activeName')?.errors;
-      const percentValueErrors = this.form.get('percentValue')?.errors;
-
-      if (activeNameErrors?.['required']) {
-        this.toastr.error('O campo ticker é obrigatório.');
-      }
-
-      if (percentValueErrors?.['required']) {
-        this.toastr.error('O campo DY desejado é obrigatório.');
-      }
-
-      this.alreadySearched = false;
-
+    if (param === 0 || param < 0 || param === null || isNaN(param)) {
+      this.toastr.error("DY invalido!");
       return;
     }
 
     this.isLoading = true;
-    if (this.percentValue === null) {
-      this.toastr.error("O DY (Dividend Yield) não pode ser nulo!");
-      this.isLoading = false;
-      return;
-    }
-
-    this.activeService.search(this.form.get('activeName')?.value, this.percentValue).subscribe({
+    this.activeService.search(this.activeName, this.percentValue).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.status === 200) {
           this.populateActiveFields(response.body);
-          this.alreadySearched = true;
           this.isLoading = false;
         }
         else {
@@ -149,7 +113,6 @@ export class CreateActiveComponent implements OnInit {
       error: (err) => {
         this.isLoading = false;
         if (typeof window !== 'undefined') {
-          this.alreadySearched = false;
           this.toastr.error("Aconteceu um erro ao tentar buscar o ticker!");
         }
       }
@@ -157,7 +120,6 @@ export class CreateActiveComponent implements OnInit {
   }
 
   populateActiveFields(body: any): void {
-
     this.active = {
       data: body.data || '',
       ativo: body.ativo || '',
@@ -173,48 +135,34 @@ export class CreateActiveComponent implements OnInit {
       crecimento_De_Dividendos_5_anos: body.crecimento_De_Dividendos_5_anos || '',
       proventos_pagos: body.proventos_pagos || ''
     }
-
     if (!this.hasUpdatedInputAutomatically) {
       this.dYDisplayValue = body.dividentYield;
       this.hasUpdatedInputAutomatically = false;
     }
+
+    this.isLoading = false;
   }
 
-  addActive(): void {
-    if (this.alreadySearched === false) {
-      this.toastr.error("Você precisa buscar pelo ativo primeiro!");
-      return;
-    }
-
-    if (this.selectedPurseId === '') {
-      this.toastr.error("Selecione uma carteira!");
-      return;
-    }
-
-    if (this.form.get('activeName')?.value === '') {
-      this.toastr.error("Você precisa adicionar um ticker primeiro!");
-      return;
-    }
-
-    if (this.percentValue === null) {
-      this.toastr.error("O DY desejado não pode ser nulo!");
-      return;
-    }
-
+  updateActive(): void {
     this.isLoading = true;
 
-    this.activeService.create(this.selectedPurseId, this.active.tipo, this.active.ativo, this.percentValue?.toString()).subscribe({
+    if (this.form.get('percentValue')?.value === '') {
+      this.toastr.error("O DY não pode ser nulo");
+      this.isLoading = false;
+      return;
+    }
+
+    this.activeService.update(this.activeId, this.percentValue).subscribe({
       next: (response: HttpResponse<any>) => {
-        if (response.status === 201) {
-          this.isLoading = false;
+        this.isLoading = false;
+        if (response.status === 204) {
           this.router.navigate(["/purses"]);
         }
       },
       error: (err) => {
         this.isLoading = false;
-        console.log(err);
       }
-    });
+    })
   }
 
   onInputChange(event: any): void {
@@ -226,9 +174,14 @@ export class CreateActiveComponent implements OnInit {
       this.dYDisplayValue = `${numericValue}%`;
     }
 
-    if (numericValue === 0 || numericValue < 0 && numericValue === null && isNaN(numericValue)) {
-      this.toastr.error("DY incorreto!");
+    if (numericValue === null || isNaN(numericValue)) {
+      this.toastr.error("O DY deve ser numérico e não pode estar em branco!");
+      return;
     }
-    this.isLoading = false;
+    
+    if (numericValue === 0 || numericValue < 0) {
+      this.toastr.error("DY invalido!");
+      return;
+    }
   }
 }

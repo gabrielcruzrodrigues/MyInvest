@@ -1,0 +1,141 @@
+<app-spinner [isLoading]="isLoading"></app-spinner>
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+     <div class="container-fluid">
+          <div class="row mb-2">
+               <div class="col-sm-6">
+                    <h1>Atualizar ativo existente</h1>
+               </div>
+               <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                         <li class="breadcrumb-item"><a href="#">Home</a></li>
+                         <li class="breadcrumb-item"><a href="/purses">Carteiras</a></li>
+                         <li class="breadcrumb-item active">ativos</li>
+                         <li class="breadcrumb-item active">Atualizar ativo existente</li>
+                    </ol>
+               </div>
+          </div>
+     </div>
+     <!-- /.container-fluid -->
+</section>
+
+<!-- Main content -->
+<section class="content">
+     <!-- Default box -->
+     <div class="container-fluid">
+          <div class="card">
+               <div class="card-header text-center">
+                    <!-- <h4 class="mb-0">PESQUISAR ATIVO</h4> -->
+               </div>
+
+               <div class="container d-flex justify-content-center align-items-center p-4 w-100">
+                    <form class="w-50" [formGroup]="form" (ngSubmit)="searchTicker()">
+                         <div class="row">
+                              <div class="d-flex align-items-center">
+                                   <div class="mb-3 me-3 flex-grow-1 mr-4">
+                                        <label for="exampleInputEmail1" class="form-label">Ticker</label>
+                                        <input type="text" formControlName="activeName" class="form-control" readonly>
+                                   </div>
+                                   <div class="mb-3 me-3 flex-grow-1 mr-4">
+                                        <label for="exampleInputEmail2" class="form-label">DY desejado</label>
+                                        <input type="text" formControlName="percentValue" class="form-control"
+                                             (input)="onInputChange($event)" [value]="dYDisplayValue">
+                                   </div>
+                                   <div class="mt-3">
+                                        <button class="btn btn-primary align-self-baseline">Pesquisar</button>
+                                   </div>
+                              </div>
+                         </div>
+                    </form>
+               </div>
+
+               <section>
+                    <div class="text-center mb-3">
+                         <h4 class="mb-0">PRINCIPAIS INDICADORES {{ active.ativo }}</h4>
+                    </div>
+                    <div class="card mb-0">
+                         <div class="card-body">
+
+                              <div class="row g-3 d-flex justify-content-center">
+                                   <div class="col-md-5">
+                                        <div class="border p-3 rounded">
+                                             <p class="mb-1 text-muted">DATA DA CONSULTA</p>
+                                             <p class="mb-0 fw-bold">{{ active.data }}</p>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-5">
+                                        <div class="border p-3 rounded">
+                                             <p class="mb-1 text-muted">DIVIDEND YIELD</p>
+                                             <p class="mb-0 fw-bold">{{ active.dividentYield }}</p>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-5">
+                                        <div class="border p-3 rounded">
+                                             <p class="mb-1 text-muted">P/VP</p>
+                                             <p class="mb-0 fw-bold">{{ active.p_VP }}</p>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-5">
+                                        <div class="border p-3 rounded">
+                                             <p class="mb-1 text-muted">P/L</p>
+                                             <p class="mb-0 fw-bold">{{ active.p_L }}</p>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-5">
+                                        <div class="border p-3 rounded">
+                                             <p class="mb-1 text-muted">ROE</p>
+                                             <p class="mb-0 fw-bold">{{ active.roe }}</p>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-5">
+                                        <div class="border p-3 rounded">
+                                             <p class="mb-1 text-muted">CRESC. DIVID. 5 ANOS</p>
+                                             <p class="mb-0 fw-bold">{{ active.crecimento_De_Dividendos_5_anos }}</p>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-5">
+                                        <div class="border p-3 rounded">
+                                             <p class="mb-1 text-muted">PREÇO ATUAL</p>
+                                             <p class="mb-0 fw-bold">{{ active.precoAtual }}</p>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-5">
+                                        <div class="border p-3 rounded">
+                                             <p class="mb-1 text-muted">PREÇO TETO</p>
+                                             <p class="mb-0 fw-bold">{{ active.preco_Teto }}</p>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-5">
+                                        <div class="border p-3 rounded">
+                                             <p class="mb-1 text-muted">PROVENTOS PAGOS</p>
+                                             <p class="mb-0 fw-bold">{{ active.proventos_pagos }}</p>
+                                        </div>
+                                   </div>
+
+                                   <div class="col-md-5">
+                                        <div class="border p-3 rounded">
+                                             <p class="mb-1 text-muted">INDICAÇÃO</p>
+                                             <p class="mb-0 fw-bold">{{ active.indicacao }}</p>
+                                        </div>
+                                   </div>
+                              </div>
+                         </div>
+                         <button class="btn btn-primary my-3 w-50 mx-auto" (click)="updateActive()">Atualizar</button>
+                    </div>
+
+               </section>
+
+
+
+          </div>
+     </div>
+</section>

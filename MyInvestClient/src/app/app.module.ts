@@ -50,6 +50,7 @@ import { ActivesListComponent } from './pages/actives-list/actives-list.componen
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CreatePurseComponent } from './pages/create-purse/create-purse.component';
 import { CreateActiveComponent } from './pages/create-active/create-active.component';
+import { UpdateActiveComponent } from './pages/update-active/update-active.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -88,7 +89,8 @@ registerLocaleData(localeEn, 'en-EN');
         ActivesListComponent,
         SpinnerComponent,
         CreatePurseComponent,
-        CreateActiveComponent
+        CreateActiveComponent,
+        UpdateActiveComponent
     ],
     bootstrap: [AppComponent],
     imports: [

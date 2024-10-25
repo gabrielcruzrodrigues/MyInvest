@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ActiveService } from '@services/active.service';
 import { AppService } from '@services/app.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface Active {
   id: string
@@ -37,7 +38,8 @@ export class ActivesListComponent implements OnInit{
     private activeService: ActiveService,
     private activedRoute: ActivatedRoute,
     private appService: AppService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -50,13 +52,12 @@ export class ActivesListComponent implements OnInit{
     } 
     else 
     {
-      alert("Ocorreu um erro ao tentar buscar os ativos!");
+      this.toastr.error("Ocorreu um erro ao tentar buscar os ativos!");
       return;
     }
 
     this.activeService.searchActivesForShowPurseDetails(param).subscribe({
       next: (response: HttpResponse<any>) => {
-        console.log(response);
         if (response.status === 200)
         {
           this.populateTheArrayOfActives(response.body);
@@ -79,10 +80,9 @@ export class ActivesListComponent implements OnInit{
         {
           if (typeof window !== 'undefined')
           {
-            alert("Houve um erro ao tentar buscar os ativos!");
+            this.toastr.error("Houve um erro ao tentar buscar os ativos!");
           }
         }
-        console.log(err);
       }
     })
   }
@@ -110,7 +110,6 @@ export class ActivesListComponent implements OnInit{
       });
       this.activesQty = body.length;
       this.isLoading = false;
-      console.log(this.actives);
     }
     else
     {
@@ -118,14 +117,9 @@ export class ActivesListComponent implements OnInit{
     }
   }
 
-  redirectToActive(code: string, dyDesiredPercentage: string): void
-  {
-    this.router.navigate([`/view-ticker/${code}/${dyDesiredPercentage}`]);
-  }
-
   createActive(): void 
   {
-    // this.router.navigate(["/"]);
+    this.router.navigate(["/"]);
   }
 
   deleteActive(purseId: any): void 
@@ -142,7 +136,7 @@ export class ActivesListComponent implements OnInit{
       error: (err) => {
         if (typeof window !== 'undefined')
         {
-          alert("Ocorreu um erro ao tentar deletar o ativo!");
+          this.toastr.error("Ocorreu um erro ao tentar deletar o ativo!");
           this.isLoading = false;
           console.log(`Ocorreu um erro ao tentar deletar o ativo! err: ${err.message}`);
           return;
@@ -153,7 +147,6 @@ export class ActivesListComponent implements OnInit{
 
   updateActive(activeId: string, activeCode: string, percentValue: string)
   {
-    this.router.navigate(["/edit-ticker/" + activeId + "/" +  activeCode + "/" + percentValue])
+    this.router.navigate(["/update-active/" + activeId + "/" +  activeCode + "/" + percentValue])
   }
-
 }

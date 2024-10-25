@@ -14,6 +14,7 @@ import { PursesListComponent } from '@pages/purses-list/purses-list.component';
 import { ActivesListComponent } from '@pages/actives-list/actives-list.component';
 import { CreatePurseComponent } from '@pages/create-purse/create-purse.component';
 import { CreateActiveComponent } from '@pages/create-active/create-active.component';
+import { UpdateActiveComponent } from '@pages/update-active/update-active.component';
 
 const routes: Routes = [
     {
@@ -47,13 +48,9 @@ const routes: Routes = [
                 component: CreatePurseComponent
             },
             {
-                path: 'sub-menu-1',
-                component: SubMenuComponent
+                path: 'update-active/:activeId/:name/:percentValue',
+                component: UpdateActiveComponent
             },
-            {
-                path: '',
-                component: DashboardComponent
-            }
         ]
     },
     {
