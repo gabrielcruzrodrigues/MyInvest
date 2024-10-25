@@ -21,6 +21,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     public isAuthLoading = false;
     public isGoogleLoading = false;
     public isFacebookLoading = false;
+    public isLoading = false;
 
     constructor(
         private renderer: Renderer2,
@@ -34,22 +35,27 @@ export class RegisterComponent implements OnInit, OnDestroy {
             'register-page'
         );
         this.registerForm = new UntypedFormGroup({
+            username: new UntypedFormControl(null, Validators.required),
             email: new UntypedFormControl(null, Validators.required),
             password: new UntypedFormControl(null, [Validators.required]),
             retypePassword: new UntypedFormControl(null, [Validators.required])
         });
     }
 
-    async registerByAuth() {
+    registerByAuth() {
+        this.isLoading = true;
         if (this.registerForm.valid) {
             this.isAuthLoading = true;
-            await this.appService.registerWithEmail(
+            this.appService.registerWithEmail(
+                this.registerForm.value.username,
                 this.registerForm.value.email,
                 this.registerForm.value.password
             );
             this.isAuthLoading = false;
+            this.isLoading = false;
         } else {
             this.toastr.error('Form is not valid!');
+            this.isLoading = false;
         }
     }
 
