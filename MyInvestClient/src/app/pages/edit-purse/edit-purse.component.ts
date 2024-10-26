@@ -40,11 +40,14 @@ export class EditPurseComponent {
           if (response.status === 204) {
             this.isLoading = false;
             this.toastr.success("Carteira atualizada com sucesso!");
-            this.route.navigate(["/purses"]);
+            this.route.navigate(["/purses"]).then(() => {
+              location.reload();
+            });
+            return;
           }
           else {
             this.isLoading = false;
-            console.log("Foi retornada uma resposta inesperada pelo servidor!");
+            this.toastr.error("Foi retornada uma resposta inesperada pelo servidor!");
           }
         },
         error: (err) => {

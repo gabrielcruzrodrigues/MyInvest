@@ -112,7 +112,7 @@ registerLocaleData(localeEn, 'en-EN');
         }),
         NgxGoogleAnalyticsModule.forRoot(environment.GA_ID),
         FontAwesomeModule,
-        FormsModule
+        FormsModule,
     ],
     providers: [provideHttpClient(withInterceptorsFromDi())]
 })
