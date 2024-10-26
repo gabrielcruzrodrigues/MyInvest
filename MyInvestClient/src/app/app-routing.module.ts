@@ -16,6 +16,7 @@ import { CreatePurseComponent } from '@pages/create-purse/create-purse.component
 import { CreateActiveComponent } from '@pages/create-active/create-active.component';
 import { UpdateActiveComponent } from '@pages/update-active/update-active.component';
 import { LoginPageComponent } from '@pages/login-page/login-page.component';
+import { EditPurseComponent } from '@pages/edit-purse/edit-purse.component';
 
 const routes: Routes = [
     {
@@ -47,6 +48,10 @@ const routes: Routes = [
             {
                 path: 'create-purse',
                 component: CreatePurseComponent
+            },
+            {
+                path: 'edit-purse/:id',
+                component: EditPurseComponent
             },
             {
                 path: 'update-active/:activeId/:name/:percentValue',

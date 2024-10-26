@@ -64,7 +64,7 @@ export class CreatePurseComponent {
         if (response.status === 201) {
           this.isLoading = false;
           if (typeof window !== 'undefined') {
-            alert("Carteira criada com sucesso!");
+            this.toastr.success("Carteira criada com sucesso!");
           }
 
           this.route.navigate(["/purses"]);
@@ -73,7 +73,7 @@ export class CreatePurseComponent {
           this.isLoading = false;
           console.log("Houve uma resposta inesperada do servidor.");
           if (typeof window !== 'undefined') {
-            alert("Houve um problema ao criar a carteira!");
+            this.toastr.error("Houve um problema ao criar a carteira!");
           }
         }
       },
@@ -85,7 +85,7 @@ export class CreatePurseComponent {
 
         this.isLoading = false;
         if (typeof window !== 'undefined') {
-          alert("Houve um erro ao tentar criar uma carteira!");
+          this.toastr.error("Houve um erro ao tentar criar uma carteira!");
         }
       }
     })

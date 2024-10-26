@@ -52,6 +52,7 @@ import { CreatePurseComponent } from './pages/create-purse/create-purse.componen
 import { CreateActiveComponent } from './pages/create-active/create-active.component';
 import { UpdateActiveComponent } from './pages/update-active/update-active.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
+import { EditPurseComponent } from './pages/edit-purse/edit-purse.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -92,7 +93,8 @@ registerLocaleData(localeEn, 'en-EN');
         CreatePurseComponent,
         CreateActiveComponent,
         UpdateActiveComponent,
-        LoginPageComponent
+        LoginPageComponent,
+        EditPurseComponent
     ],
     bootstrap: [AppComponent],
     imports: [
