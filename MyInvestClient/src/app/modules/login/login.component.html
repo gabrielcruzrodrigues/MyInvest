@@ -3,7 +3,7 @@
         <a [routerLink]="['/']" class="h1"><b>Admin</b>LTE</a>
     </div>
     <div class="card-body">
-        <p class="login-box-msg">Entrar e iniciar uma conta</p>
+        <p class="login-box-msg">Sign in to start your session</p>
 
         <form [formGroup]="loginForm" (ngSubmit)="loginByAuth()">
             <div class="input-group mb-3">
@@ -24,7 +24,7 @@
                     formControlName="password"
                     type="password"
                     class="form-control"
-                    placeholder="senha"
+                    placeholder="Password"
                 />
                 <div class="input-group-append">
                     <div class="input-group-text">
@@ -33,6 +33,12 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-7">
+                    <div class="icheck-primary">
+                        <input type="checkbox" id="remember" />
+                        <label for="remember"> Remember Me </label>
+                    </div>
+                </div>
                 <!-- /.col -->
                 <div class="col-5">
                     <pf-button
@@ -41,7 +47,7 @@
                         [disabled]="isFacebookLoading || isGoogleLoading"
                         (click)="loginByAuth()"
                     >
-                        Entrar
+                        Sign In
                     </pf-button>
                 </div>
                 <!-- /.col -->
@@ -56,7 +62,7 @@
                 [disabled]="true || isAuthLoading || isGoogleLoading"
             >
                 <i class="fab fa-facebook mr-2"></i>
-                Entrar usando Facebook
+                Sign in using Facebook
             </pf-button>
             <pf-button
                 [variant]="'danger'"
@@ -65,16 +71,16 @@
                 (click)="loginByGoogle()"
             >
                 <i class="fab fa-google mr-2"></i>
-                Entrar usando Google+
+                Sign in using Google+
             </pf-button>
         </div>
 
         <p class="mb-1">
-            <a [routerLink]="['/forgot-password']">Esqueci minha senha</a>
+            <a [routerLink]="['/forgot-password']">I forgot my password</a>
         </p>
         <p class="mb-0">
             <a [routerLink]="['/register']" class="text-center">
-                Criar uma nova conta
+                Register a new membership
             </a>
         </p>
     </div>
