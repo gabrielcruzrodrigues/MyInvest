@@ -33,6 +33,7 @@ export class PursesService {
   {
     const headers = this.appService.getHeaders();
     const urlForRequest = this.url + "/" + id;
+    console.log(urlForRequest);
     return this.http.get(urlForRequest, {headers, observe: 'response' });
   }
 

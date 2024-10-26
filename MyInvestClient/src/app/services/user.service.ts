@@ -19,7 +19,7 @@ export class UserService {
   
   getPurses(userId: any): Observable<any>
   {
-    const urlForRequest = this.url + `/a2ad6ab3-d2a9-4a14-bc0d-6d4ff035197b/purses`;
+    const urlForRequest = this.url + `/${userId}/purses`;
     return this.http.get(urlForRequest, {headers: this.headers, observe: 'response'});
   }
 

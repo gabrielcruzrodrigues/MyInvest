@@ -37,7 +37,7 @@ export class PursesListComponent implements OnInit{
 
   ngOnInit(): void {
     this.userId = this.appService.getId();
-
+   
     this.userService.getPurses(this.userId).subscribe({
       next: (response: HttpResponse<any>) => {
         if (response.status === 200)
