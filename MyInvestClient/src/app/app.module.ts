@@ -51,6 +51,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { CreatePurseComponent } from './pages/create-purse/create-purse.component';
 import { CreateActiveComponent } from './pages/create-active/create-active.component';
 import { UpdateActiveComponent } from './pages/update-active/update-active.component';
+import { LoginPageComponent } from './pages/login-page/login-page.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -90,7 +91,8 @@ registerLocaleData(localeEn, 'en-EN');
         SpinnerComponent,
         CreatePurseComponent,
         CreateActiveComponent,
-        UpdateActiveComponent
+        UpdateActiveComponent,
+        LoginPageComponent
     ],
     bootstrap: [AppComponent],
     imports: [

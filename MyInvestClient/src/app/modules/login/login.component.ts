@@ -33,6 +33,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             'login-page'
         );
         this.loginForm = new UntypedFormGroup({
+            username: new UntypedFormControl(null, Validators.required),
             email: new UntypedFormControl(null, Validators.required),
             password: new UntypedFormControl(null, Validators.required)
         });

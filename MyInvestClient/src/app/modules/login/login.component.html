@@ -1,88 +1,95 @@
-<div class="card card-outline card-primary">
-    <div class="card-header text-center">
-        <a [routerLink]="['/']" class="h1"><b>Admin</b>LTE</a>
-    </div>
-    <div class="card-body">
-        <p class="login-box-msg">Sign in to start your session</p>
+<section class="main-section">
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">Início</a></li>
+                <li><a href="#">Sobre</a></li>
+                <li><a href="#">Ajuda</a></li>
+            </ul>
+        </nav>
+        <div id="logo">
+            <img src="assets/img/logo-pig.png" alt="">
+            <span>MyInvest</span>
+        </div>
+    </header>
 
-        <form [formGroup]="loginForm" (ngSubmit)="loginByAuth()">
-            <div class="input-group mb-3">
-                <input
-                    formControlName="email"
-                    type="email"
-                    class="form-control"
-                    placeholder="Email"
-                />
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-envelope"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="input-group mb-3">
-                <input
-                    formControlName="password"
-                    type="password"
-                    class="form-control"
-                    placeholder="Password"
-                />
-                <div class="input-group-append">
-                    <div class="input-group-text">
-                        <span class="fas fa-lock"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-7">
-                    <div class="icheck-primary">
-                        <input type="checkbox" id="remember" />
-                        <label for="remember"> Remember Me </label>
-                    </div>
-                </div>
-                <!-- /.col -->
-                <div class="col-5">
-                    <pf-button
-                        [variant]="'primary'"
-                        [loading]="isAuthLoading"
-                        [disabled]="isFacebookLoading || isGoogleLoading"
-                        (click)="loginByAuth()"
-                    >
-                        Sign In
-                    </pf-button>
-                </div>
-                <!-- /.col -->
-            </div>
-        </form>
-
-        <div class="social-auth-links text-center mb-3">
-            <pf-button
-                class="mb-2"
-                [variant]="'primary'"
-                [loading]="isFacebookLoading"
-                [disabled]="true || isAuthLoading || isGoogleLoading"
-            >
-                <i class="fab fa-facebook mr-2"></i>
-                Sign in using Facebook
-            </pf-button>
-            <pf-button
-                [variant]="'danger'"
-                [loading]="isGoogleLoading"
-                [disabled]="isAuthLoading || isFacebookLoading"
-                (click)="loginByGoogle()"
-            >
-                <i class="fab fa-google mr-2"></i>
-                Sign in using Google+
-            </pf-button>
+    <main>
+        <div id="man-logo">
+            <img src="assets/img/avatar-man.png" alt="iamge avatar-man">
         </div>
 
-        <p class="mb-1">
-            <a [routerLink]="['/forgot-password']">I forgot my password</a>
-        </p>
-        <p class="mb-0">
-            <a [routerLink]="['/register']" class="text-center">
-                Register a new membership
-            </a>
-        </p>
-    </div>
-    <!-- /.login-card-body -->
-</div>
+        <div id="container-contact">
+            <section id="contact">
+                <form action="#" method="post">
+                    <h2>Entre com sua conta</h2>
+                    <div class="item-input">
+                        <label for="inEmail">Email: </label>
+                        <input type="email" name="inEmail" id="inEmail" autocomplete="on"
+                            placeholder="Digite seu email">
+                    </div>
+
+                    <div class="item-input">
+                        <label for="inPassword">Senha: </label>
+                        <input type="password" name="inPassword" id="inPassword" autocomplete="on"
+                            placeholder="Digite sua senha">
+                    </div>
+                </form>
+            </section>
+
+            <div id="active-contacts">
+                <div>
+                    <ul>
+                        <li><a href="">Não tem uma conta? Inscreva-se agora.</a></li>
+                        <li><a href="">Recuperar minha senha.</a></li>
+                    </ul>
+                </div>
+                <button id="btn-entrar" type="submit">Entrar</button>
+            </div>
+        </div>
+
+        <div id="container-social">
+            <div class="item-social">
+                <div class="container-icon-social">
+                    <i class="fa-solid fa-phone"></i>
+                </div>
+                <div class="content-item-social">
+                    <span>Whatsapp</span>
+                    <span>+55 73 98102-3484</span>
+                </div>
+            </div>
+
+            <div class="item-social">
+                <div class="container-icon-social">
+                    <i class="fa-solid fa-envelope"></i>
+                </div>
+                <div class="content-item-social">
+                    <span>E-Mail</span>
+                    <span>marcosmoraisjryahoo.com.br</span>
+                </div>
+            </div>
+
+            <div class="item-social">
+                <div class="container-icon-social">
+                    <i class="fa-solid fa-globe"></i>
+                </div>
+                <div class="content-item-social">
+                    <span>Website</span>
+                    <span><a href="https://linktr.ee/marcosmoraisjr" target="_blank"
+                            rel="noopener noreferrer">linktr.ee/marcosmoraisjr</a></span>
+                </div>
+            </div>
+
+            <div class="item-social">
+                <div class="container-icon-social">
+                    <i class="fa-solid fa-house"></i>
+                </div>
+                <div class="content-item-social">
+                    <span>Address</span>
+                    <span>Brasil</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://kit.fontawesome.com/0a1412cd70.js" crossorigin="anonymous"></script>
+</section>

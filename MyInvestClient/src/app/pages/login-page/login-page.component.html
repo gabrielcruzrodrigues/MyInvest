@@ -1,0 +1,95 @@
+<section class="main-section" style="background: url('/assets/img/background.png') no-repeat center center/cover;">
+     <header>
+          <nav>
+               <ul>
+                    <li><a href="#">Início</a></li>
+                    <li><a href="#">Sobre</a></li>
+                    <li><a href="#">Ajuda</a></li>
+               </ul>
+          </nav>
+          <div id="logo">
+               <img src="assets/img/logo-pig.png" alt="">
+               <span>MyInvest</span>
+          </div>
+     </header>
+
+     <main>
+          <div id="man-logo">
+               <img src="assets/img/avatar-man.png" alt="iamge avatar-man">
+          </div>
+
+          <div id="container-contact">
+               <section id="contact">
+                    <form action="#" method="post" [formGroup]="loginForm">
+                         <h2>Entre com sua conta</h2>
+                         <div class="item-input">
+                              <label for="inEmail">Email: </label>
+                              <input formControlName="email" type="email" name="inEmail" id="inEmail" autocomplete="on"
+                                   placeholder="Digite seu email">
+                         </div>
+
+                         <div class="item-input">
+                              <label for="inPassword">Senha: </label>
+                              <input formControlName="password" type="password" name="inPassword" id="inPassword" autocomplete="on"
+                                   placeholder="Digite sua senha">
+                         </div>
+                    </form>
+               </section>
+
+               <div id="active-contacts">
+                    <div>
+                         <ul>
+                              <li><a href="/register">Não tem uma conta? Inscreva-se agora.</a></li>
+                              <li><a href="/login">Recuperar minha senha.</a></li>
+                         </ul>
+                    </div>
+                    <button id="btn-entrar" (click)="loginByAuth()">Entrar</button>
+               </div>
+          </div>
+
+          <div id="container-social">
+               <div class="item-social">
+                    <div class="container-icon-social">
+                         <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="content-item-social">
+                         <span>Whatsapp</span>
+                         <span>+55 73 98102-3484</span>
+                    </div>
+               </div>
+
+               <div class="item-social">
+                    <div class="container-icon-social">
+                         <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="content-item-social">
+                         <span>E-Mail</span>
+                         <span>marcosmoraisjryahoo.com.br</span>
+                    </div>
+               </div>
+
+               <div class="item-social">
+                    <div class="container-icon-social">
+                         <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="content-item-social">
+                         <span>Website</span>
+                         <span><a href="https://linktr.ee/marcosmoraisjr" target="_blank"
+                                   rel="noopener noreferrer">linktr.ee/marcosmoraisjr</a></span>
+                    </div>
+               </div>
+
+               <div class="item-social">
+                    <div class="container-icon-social">
+                         <i class="fas fa-home"></i>
+                    </div>
+                    <div class="content-item-social">
+                         <span>Address</span>
+                         <span>Brasil</span>
+                    </div>
+               </div>
+          </div>
+     </main>
+
+     <script src="https://kit.fontawesome.com/0a1412cd70.js" crossorigin="anonymous"></script>
+</section>

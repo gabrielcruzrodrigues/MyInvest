@@ -15,6 +15,7 @@ import { ActivesListComponent } from '@pages/actives-list/actives-list.component
 import { CreatePurseComponent } from '@pages/create-purse/create-purse.component';
 import { CreateActiveComponent } from '@pages/create-active/create-active.component';
 import { UpdateActiveComponent } from '@pages/update-active/update-active.component';
+import { LoginPageComponent } from '@pages/login-page/login-page.component';
 
 const routes: Routes = [
     {
@@ -55,7 +56,7 @@ const routes: Routes = [
     },
     {
         path: 'login',
-        component: LoginComponent,
+        component: LoginPageComponent,
         canActivate: [NonAuthGuard]
     },
     {
