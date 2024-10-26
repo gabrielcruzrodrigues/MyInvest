@@ -13,7 +13,7 @@ import {
 import { GoogleAuthProvider } from 'firebase/auth';
 import { firebaseAuth } from '@/firebase';
 import { environment } from 'environments/environment.prod';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 const provider = new GoogleAuthProvider();
@@ -45,19 +45,29 @@ export class AppService {
         );
     }
 
-    async registerWithEmail(email: string, password: string) {
-        try {
-            const result = await createUserWithEmailAndPassword(
-                firebaseAuth,
-                email,
-                password
-            );
-            this.user = result.user;
-            this.router.navigate(['/']);
-            return result;
-        } catch (error) {
-            this.toastr.error(error.message);
-        }
+    async registerWithEmail(username: string, email: string, password: string) {
+        const urlForRequest = this.url + "register";
+        var data = { username: username, email: email, password: password }
+        
+
+        this.http.post(urlForRequest, data).subscribe({
+            next: (response: HttpResponse<any>) => {
+                this.configureLocalStorage(response);
+                this.user = response.body;
+                this.router.navigate(['/']);
+                
+            },
+            error: (error: HttpErrorResponse) => {
+                if (error.status === 401)
+                {
+                    this.toastr.error("Credenciais incorretas!");
+                }
+                if (error.status === 400)
+                {
+                    this.toastr.error(error.error.message);
+                }
+            }
+        });
     }
 
     loginWithEmail(email: string, password: string) {
@@ -114,7 +124,6 @@ export class AppService {
     // }
 
     configureLocalStorage(body: any): void {
-        console.log(body);
         if (body) {
             localStorage.setItem('userId', body.userId);
             localStorage.setItem('Token', body.token);

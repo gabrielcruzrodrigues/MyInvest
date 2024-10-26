@@ -3,9 +3,22 @@
         <a [routerLink]="['/']" class="h1"><b>Admin</b>LTE</a>
     </div>
     <div class="card-body">
-        <p class="login-box-msg">Register a new membership</p>
+        <p class="login-box-msg">Criar nova conta</p>
 
         <form [formGroup]="registerForm" (ngSubmit)="registerByAuth()">
+            <div class="input-group mb-3">
+                <input
+                    formControlName="username"
+                    type="email"
+                    class="form-control"
+                    placeholder="Username"
+                />
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <span class="fas fa-user"></span>
+                    </div>
+                </div>
+            </div>
             <div class="input-group mb-3">
                 <input
                     formControlName="email"
@@ -46,7 +59,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-7">
+                <!-- <div class="col-7">
                     <div class="icheck-primary">
                         <input
                             type="checkbox"
@@ -58,15 +71,15 @@
                             I agree to the <a href="#">terms</a>
                         </label>
                     </div>
-                </div>
+                </div> -->
                 <!-- /.col -->
-                <div class="col-5">
+                <div class="col-12">
                     <pf-button
                         [loading]="isAuthLoading"
                         [disabled]="isFacebookLoading || isGoogleLoading"
                         (click)="registerByAuth()"
                     >
-                        Register
+                        Criar conta
                     </pf-button>
                 </div>
                 <!-- /.col -->
@@ -80,7 +93,7 @@
                 [disabled]="true || isAuthLoading || isGoogleLoading"
             >
                 <i class="fab fa-facebook mr-2"></i>
-                Sign up using Facebook
+                Entrar usando Facebook
             </pf-button>
             <pf-button
                 [loading]="isGoogleLoading"
@@ -89,12 +102,14 @@
                 variant="danger"
             >
                 <i class="fab fa-google mr-2"></i>
-                Sign up using Google+
+                Entrar usando Google+
             </pf-button>
         </div>
 
-        <a [routerLink]="['/login']" class="text-center">
-            I already have a membership</a
-        >
+        <div class="d-flex w-100 align-items-center justify-content-center">
+            <a [routerLink]="['/login']">
+                Ja tenho uma conta</a
+            >
+        </div>
     </div>
 </div>
