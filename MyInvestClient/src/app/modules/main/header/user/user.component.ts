@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import {AppService} from '@services/app.service';
 import {DateTime} from 'luxon';
 
@@ -9,6 +10,7 @@ import {DateTime} from 'luxon';
 })
 export class UserComponent implements OnInit {
     public user;
+    public faUser = faUser;
 
     constructor(private appService: AppService) {}
 

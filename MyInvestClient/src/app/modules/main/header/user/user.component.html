@@ -1,28 +1,19 @@
 <pf-dropdown [hideArrow]="true" class="user-menu">
     <div slot="head">
         <a class="nav-link">
-            <!-- <pf-image
-                [src]="user.photoURL"
-                fallbackSrc="assets/img/default-profile.png"
-                class="user-image-small"
-                width="25"
-                height="25"
-                alt="User Image"
-                rounded="true"
-            /> -->
+            <fa-icon [icon]="faUser" class="user-image-small" [style.fontSize.px]="15"></fa-icon>
         </a>
     </div>
     <div slot="body">
-        <li class="user-header bg-primary">
-            <!-- <pf-image
-                [src]="user.photoURL"
-                fallbackSrc="assets/img/default-profile.png"
-                class="user-image-big"
-                alt="User Image"
-                width="90"
-                height="90"
-                rounded="true"
-            /> -->
+        <li class="user-header bg-dark">
+            <ng-container *ngIf="!user?.photoURL; else userImage">
+                <fa-icon [icon]="faUser" class="user-image-big" [style.fontSize.px]="90"></fa-icon>
+            </ng-container>
+
+            <ng-template #userImage>
+                <pf-image [src]="user.photoURL" fallbackSrc="assets/img/default-profile.png" class="user-image-big"
+                    alt="User Image" width="90" height="90" rounded="true" />
+            </ng-template>
 
             <p>
                 {{ user?.email }}
@@ -56,7 +47,7 @@
                 Profile
             </a>
             <a (click)="logout()" class="btn btn-default btn-flat float-right">
-                Sign out
+                Sair
             </a>
         </li>
     </div>
