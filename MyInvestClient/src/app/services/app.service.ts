@@ -219,9 +219,7 @@ export class AppService {
         }
 
         localStorage.clear();
-        this.router.navigate(["/login"]).then(() => {
-            location.reload();
-        });
+        this.router.navigate(["/login"]);
     }
 
     getHeaders() {
