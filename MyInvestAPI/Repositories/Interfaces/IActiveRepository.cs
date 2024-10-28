@@ -1,7 +1,7 @@
 ﻿using MyInvestAPI.Domain;
 using MyInvestAPI.ViewModels;
 
-namespace MyInvestAPI.Repositories
+namespace MyInvestAPI.Repositories.Interfaces
 {
     public interface IActiveRepository
     {

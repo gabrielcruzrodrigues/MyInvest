@@ -10,6 +10,8 @@ using MyInvestAPI.Services;
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
+using MyInvestAPI.Repositories.Interfaces;
+using MyInvestAPI.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,8 +105,9 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPurseRepository, PurseRepository>();
 builder.Services.AddScoped<IActiveRepository, ActiveRepository>();
-builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
 

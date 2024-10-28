@@ -1,7 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace MyInvestAPI.Services
+namespace MyInvestAPI.Services.Interfaces
 {
     public interface ITokenService
     {

@@ -26,17 +26,6 @@ namespace MyInvestAPI.Extensions
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         await context.Response.WriteAsJsonAsync(new { message = "Ocorreu um erro inesperado." });
                     }
-
-
-                    //var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-                    //if (contextFeature != null)
-                    //{
-                    //    await context.Response.WriteAsync(new ErrorDetails()
-                    //    {
-                    //        StatusCode = context.Response.StatusCode,
-                    //        Message = contextFeature.Error.Message
-                    //    }.ToString());
-                    //}
                 });
             });
         }

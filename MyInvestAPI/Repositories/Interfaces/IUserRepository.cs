@@ -1,7 +1,7 @@
 ﻿using MyInvestAPI.Domain;
 using MyInvestAPI.ViewModels;
 
-namespace MyInvestAPI.Repositories;
+namespace MyInvestAPI.Repositories.Interfaces;
 
 public interface IUserRepository
 {
@@ -11,6 +11,6 @@ public interface IUserRepository
     Task<User> GetByIdAsync(string userId);
     Task<User> GetUserWithAllPursesByIdAsync(string userId);
     Task<User> GetUserWithAllPursesAndActivesByIdAsync(string userId);
-    void Update(string userId, CreateUserViewModel userViewModel);
-    void Delete(string userId);
+    Task Update(User user);
+    Task Delete(User user);
 }

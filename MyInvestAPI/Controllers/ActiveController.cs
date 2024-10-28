@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Api;
 using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
-using MyInvestAPI.Repositories;
+using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.ViewModels;
 
 namespace MyInvestAPI.Controllers

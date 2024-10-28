@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MyInvestAPI.Domain;
-using MyInvestAPI.Services;
 using MyInvestAPI.ViewModels.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using MyInvestAPI.Extensions;
+using MyInvestAPI.Repositories.Interfaces;
+using MyInvestAPI.Services.Interfaces;
 
 namespace MyInvestAPI.Repositories
 {

@@ -1,7 +1,7 @@
 ﻿using MyInvestAPI.Domain;
 using MyInvestAPI.ViewModels.Auth;
 
-namespace MyInvestAPI.Repositories;
+namespace MyInvestAPI.Repositories.Interfaces;
 
 public interface IAuthRepository
 {

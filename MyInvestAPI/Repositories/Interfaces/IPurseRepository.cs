@@ -2,7 +2,7 @@
 using MyInvestAPI.ViewModels;
 using System.Diagnostics.Contracts;
 
-namespace MyInvestAPI.Repositories;
+namespace MyInvestAPI.Repositories.Interfaces;
 
 public interface IPurseRepository
 {
@@ -12,5 +12,5 @@ public interface IPurseRepository
     Task<Purse> GetByIdAsync(int id);
     Task<Purse> GetByIdWithActivesAsync(int id);
     void Update(int id, UpdatePurseViewModel updatePurseViewModel);
-    void Delete(int id); 
+    void Delete(int id);
 }

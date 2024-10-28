@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyInvestAPI.Domain;
-using MyInvestAPI.Repositories;
-using MyInvestAPI.Services;
+using MyInvestAPI.Repositories.Interfaces;
+using MyInvestAPI.Services.Interfaces;
 using MyInvestAPI.ViewModels.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

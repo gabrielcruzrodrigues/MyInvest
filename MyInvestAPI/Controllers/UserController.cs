@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Domain;
-using MyInvestAPI.Repositories;
+using MyInvestAPI.Repositories.Interfaces;
+using MyInvestAPI.Services.Interfaces;
 using MyInvestAPI.ViewModels;
 
 namespace MyInvestAPI.Controllers
@@ -11,11 +12,11 @@ namespace MyInvestAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        public readonly IUserRepository _repository;
+        public readonly IUserService _repository;
 
-        public UserController(IUserRepository IUserRepository)
+        public UserController(IUserService userService)
         {
-            _repository = IUserRepository;
+            _repository = userService;
         }
 
         [HttpGet]
@@ -62,7 +63,7 @@ namespace MyInvestAPI.Controllers
 
         [Authorize]
         [HttpPut("{userId}")]
-        public IActionResult Update(string userId, CreateUserViewModel userViewModel)
+        public IActionResult UpdateAsync(string userId, CreateUserViewModel userViewModel)
         {
             if (userViewModel is null)
                 return BadRequest("The data for update must not be null.");

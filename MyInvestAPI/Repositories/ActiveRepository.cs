@@ -3,6 +3,7 @@ using MyInvestAPI.Api;
 using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
 using MyInvestAPI.Extensions;
+using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.ViewModels;
 using System;
 
