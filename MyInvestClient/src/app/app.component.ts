@@ -29,7 +29,7 @@ export class AppComponent implements OnInit {
         var expirationTokenDate = this.appService.getExpirationTokenDate();
 
         if (!expirationTokenDate) {
-            return;
+            this.router.navigate(["/login"]);
         }
 
         const expirationDate = new Date(expirationTokenDate);
