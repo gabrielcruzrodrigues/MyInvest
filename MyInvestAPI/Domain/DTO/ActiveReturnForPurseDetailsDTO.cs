@@ -1,8 +1,8 @@
-﻿namespace MyInvestAPI.Domain
+﻿namespace MyInvestAPI.Domain.DTO
 {
-    public class ActiveReturnForPurseDetails
+    public class ActiveReturnForPurseDetailsDTO
     {
-        public int Id {get; set; }
+        public int Id { get; set; }
         public string? Ativo { get; set; }
         public string? Tipo { get; set; }
         public string? DividentYield { get; set; }

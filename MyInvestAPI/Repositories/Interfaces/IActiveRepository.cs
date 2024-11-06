@@ -1,4 +1,5 @@
 ﻿using MyInvestAPI.Domain;
+using MyInvestAPI.Domain.DTO;
 using MyInvestAPI.ViewModels;
 
 namespace MyInvestAPI.Repositories.Interfaces
@@ -14,6 +15,6 @@ namespace MyInvestAPI.Repositories.Interfaces
         void Delete(int id);
         Task<ActiveReturn> SearchActiveAsync(string active, string dYDesiredPercentage);
         Task<Purse> GetActivesByPurseId(int purseId);
-        Task<IEnumerable<ActiveReturnForPurseDetails>> GetActivesForShowInPurseDetails(int purseId);
+        Task<IEnumerable<ActiveReturnForPurseDetailsDTO>> GetActivesForShowInPurseDetails(int purseId);
     }
 }

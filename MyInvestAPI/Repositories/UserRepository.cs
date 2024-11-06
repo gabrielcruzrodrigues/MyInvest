@@ -50,6 +50,7 @@ namespace MyInvestAPI.Repositories
         {
             var user = await _context.Users
                 .AsNoTracking()
+                .Where(u => u.Active == ActiveEnum.ACTIVE)
                 .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)
@@ -63,6 +64,7 @@ namespace MyInvestAPI.Repositories
             var user = await _context.Users
                 .AsNoTracking()
                 .Include(user => user.Purses)
+                .Where(u => u.Active == ActiveEnum.ACTIVE)
                 .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)
@@ -75,8 +77,9 @@ namespace MyInvestAPI.Repositories
         {
             var user = await _context.Users
                 .Include(user => user.Purses)
-                .ThenInclude(purse => purse.Actives)
-                .AsNoTracking()
+                    .ThenInclude(purse => purse.Actives)
+                    .AsNoTracking()
+                .Where(u => u.Active == ActiveEnum.ACTIVE)
                 .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)

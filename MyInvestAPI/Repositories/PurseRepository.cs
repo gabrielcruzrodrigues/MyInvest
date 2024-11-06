@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
+using MyInvestAPI.Domain.Enums;
 using MyInvestAPI.Extensions;
 using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.ViewModels;
@@ -18,15 +19,8 @@ public class PurseRepository : IPurseRepository
         _logger = logger;
     }
 
-    public async Task<Purse> CreateAsync(CreatePurseViewModel purseViewModel)
+    public async Task<Purse> CreateAsync(Purse purse)
     {
-        var userVerify = await _context.Users.FirstOrDefaultAsync(u => u.Id == purseViewModel.User_Id.ToString());
-
-        if (userVerify is null)
-            throw new HttpResponseException(404, $"The user with ID {purseViewModel.User_Id} not found!");
-
-        Purse purse = purseViewModel.CreatePurse();
-
         try
         {
             await _context.Purses.AddAsync(purse);
@@ -45,6 +39,7 @@ public class PurseRepository : IPurseRepository
     {
         return await _context.Purses
             .AsNoTracking()
+            .Where(p => p.Active == ActiveEnum.ACTIVE)
             .ToListAsync();
     }
 
@@ -52,17 +47,16 @@ public class PurseRepository : IPurseRepository
     {
         return await _context.Purses
             .AsNoTracking()
+            .Where(p => p.Active == ActiveEnum.ACTIVE)
             .Include(p => p.Actives)
             .ToListAsync();
     }
 
     public async Task<Purse> GetByIdAsync(int id)
     {
-        if (id <= 0)
-            throw new HttpResponseException(400, "The ID must be greater than 0!");
-
         var purse = await _context.Purses
                             .AsNoTracking()
+                            .Where(p => p.Active == ActiveEnum.ACTIVE)
                             .FirstOrDefaultAsync(p => p.Purse_Id == id);
 
         if (purse is null)
@@ -73,12 +67,10 @@ public class PurseRepository : IPurseRepository
 
     public async Task<Purse> GetByIdWithActivesAsync(int id)
     {
-        if (id <= 0)
-            throw new HttpResponseException(400, "The ID must be greater than 0!");
-
         var purse = await _context.Purses
             .Include(p => p.Actives)
             .AsNoTracking()
+            .Where(p => p.Active == ActiveEnum.ACTIVE)
             .FirstOrDefaultAsync(p => p.Purse_Id == id);
 
         if (purse is null)
@@ -87,19 +79,12 @@ public class PurseRepository : IPurseRepository
         return purse;
     }
 
-    public void Update(int id, UpdatePurseViewModel updatePurseViewModel)
+    public async Task Update(Purse purse)
     {
-        var purseVerify = _context.Purses.FirstOrDefault(p => p.Purse_Id == id);
-
-        if (purseVerify is null)
-            throw new HttpResponseException(404, $"The purse with id {id} not found!");
-
-        Purse purse = updatePurseViewModel.UpdatePurse(purseVerify);
-
         try
         {
             _context.Entry(purse).State = EntityState.Modified;
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
@@ -108,17 +93,14 @@ public class PurseRepository : IPurseRepository
         }
     }
 
-    public void Delete(int id)
+    public async Task Disable(int id)
     {
-        var purse = _context.Purses.FirstOrDefault(p => p.Purse_Id == id);
-
-        if (purse is null)
-            throw new HttpResponseException(404, $"The purse with id {id} not found!");
-
         try
         {
-            _context.Purses.Remove(purse);
-            _context.SaveChangesAsync();
+            var purse = await GetByIdAsync(id);
+            purse.Active = Domain.Enums.ActiveEnum.DISABLE;
+            _context.Entry(purse).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {

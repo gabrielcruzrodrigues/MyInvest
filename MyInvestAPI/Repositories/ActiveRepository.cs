@@ -2,6 +2,7 @@
 using MyInvestAPI.Api;
 using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
+using MyInvestAPI.Domain.DTO;
 using MyInvestAPI.Extensions;
 using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.ViewModels;
@@ -159,7 +160,7 @@ namespace MyInvestAPI.Repositories
             return Purse;
         }
 
-        public async Task<IEnumerable<ActiveReturnForPurseDetails>> GetActivesForShowInPurseDetails(int purseId)
+        public async Task<IEnumerable<ActiveReturnForPurseDetailsDTO>> GetActivesForShowInPurseDetails(int purseId)
         {
             try
             {
@@ -171,7 +172,7 @@ namespace MyInvestAPI.Repositories
                 if (purse is null)
                     throw new HttpResponseException(404, $"A carteira com o id {purseId} não foi encontrada!");
 
-                List<ActiveReturnForPurseDetails> actives = new();
+                List<ActiveReturnForPurseDetailsDTO> actives = new();
                 foreach (var active in purse.Actives)
                 {
                     actives.Add(await YahooFinanceApiClient.CreateActiveReturnForPurseDetails(active.Code, active.DYDesiredPercentage.ToString(), active.Active_Id));

@@ -2,6 +2,7 @@
 using YahooFinanceApi;
 using MyInvestAPI.Extensions;
 using Newtonsoft.Json.Linq;
+using MyInvestAPI.Domain.DTO;
 
 namespace MyInvestAPI.Api;
 
@@ -32,7 +33,7 @@ public class YahooFinanceApiClient
         return search[$"{active}"];
     }
 
-    public static async Task<ActiveReturnForPurseDetails> CreateActiveReturnForPurseDetails(string ticker, string dYDesiredPercentage, int activeId)
+    public static async Task<ActiveReturnForPurseDetailsDTO> CreateActiveReturnForPurseDetails(string ticker, string dYDesiredPercentage, int activeId)
     {
         Security result = await GetActive(ticker, dYDesiredPercentage);
 
@@ -52,7 +53,7 @@ public class YahooFinanceApiClient
 
         DateTime currentDate = DateTime.Now;
 
-        ActiveReturnForPurseDetails activeReturnForPurseDetails = new ();
+        ActiveReturnForPurseDetailsDTO activeReturnForPurseDetails = new ();
         activeReturnForPurseDetails.Id = activeId;
         activeReturnForPurseDetails.Ativo = result.Symbol;
         activeReturnForPurseDetails.Tipo = VerifyType(result.QuoteType);

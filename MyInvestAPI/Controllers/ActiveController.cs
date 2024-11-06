@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Api;
 using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
+using MyInvestAPI.Domain.DTO;
 using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.ViewModels;
 
@@ -89,7 +90,7 @@ namespace MyInvestAPI.Controllers
 
         [HttpGet("/search-active-purse-details/{purseId}")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<ActiveReturnForPurseDetails>>> searchActivesForPurseDetails(int purseId)
+        public async Task<ActionResult<IEnumerable<ActiveReturnForPurseDetailsDTO>>> searchActivesForPurseDetails(int purseId)
         {
             return Ok(await _repository.GetActivesForShowInPurseDetails(purseId));
         }

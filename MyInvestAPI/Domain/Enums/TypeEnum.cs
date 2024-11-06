@@ -1,4 +1,4 @@
-﻿namespace MyInvestAPI.Domain
+﻿namespace MyInvestAPI.Domain.Enums
 {
     public enum TypeEnum
     {

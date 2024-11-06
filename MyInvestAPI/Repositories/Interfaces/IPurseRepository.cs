@@ -6,11 +6,11 @@ namespace MyInvestAPI.Repositories.Interfaces;
 
 public interface IPurseRepository
 {
-    Task<Purse> CreateAsync(CreatePurseViewModel purseViewModel);
+    Task<Purse> CreateAsync(Purse purse);
     Task<IEnumerable<Purse>> GetAllAsync();
     Task<IEnumerable<Purse>> GetAllWithActivesAsync();
     Task<Purse> GetByIdAsync(int id);
     Task<Purse> GetByIdWithActivesAsync(int id);
-    void Update(int id, UpdatePurseViewModel updatePurseViewModel);
-    void Delete(int id);
+    Task Update(Purse purse);
+    Task Disable(int id);
 }

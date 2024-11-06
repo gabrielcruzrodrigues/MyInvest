@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 
-namespace MyInvestAPI.Domain
+namespace MyInvestAPI.Domain.DTO
 {
-    public class ErrorDetails
+    public class ErrorDetailsDTO
     {
         public int StatusCode { get; set; }
         public string? Message { get; set; }

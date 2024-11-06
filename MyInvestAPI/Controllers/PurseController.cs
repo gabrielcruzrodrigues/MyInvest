@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
-using MyInvestAPI.Repositories.Interfaces;
+using MyInvestAPI.Services.Interfaces;
 using MyInvestAPI.ViewModels;
 
 namespace MyInvestAPI.Controllers
@@ -13,11 +10,11 @@ namespace MyInvestAPI.Controllers
     [ApiController]
     public class PurseController : ControllerBase
     {
-        public readonly IPurseRepository _repository;
+        public readonly IPurseService _service;
 
-        public PurseController(IPurseRepository IPurseRepository)
+        public PurseController(IPurseService IPurseService)
         {
-            _repository = IPurseRepository;
+            _service = IPurseService;
         }
 
         [HttpPost]
@@ -27,7 +24,7 @@ namespace MyInvestAPI.Controllers
             if (purseViewModel is null)
                 return BadRequest("The body for create purse must not be null.");
 
-            var purseCreated = await _repository.CreateAsync(purseViewModel);
+            var purseCreated = await _service.CreateAsync(purseViewModel);
                 
             return new CreatedAtRouteResult("GetPurse", new { id = purseCreated.Purse_Id }, purseCreated);
         }
@@ -36,28 +33,28 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Purse>>> GetAll()
         {
-            return Ok(await _repository.GetAllAsync());
+            return Ok(await _service.GetAllAsync());
         }
 
         [HttpGet("actives")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<Purse>>> GetAllWithActives()
         {
-            return Ok(_repository.GetAllWithActivesAsync());
+            return Ok(await _service.GetAllWithActivesAsync());
         }
 
         [HttpGet("{id:int}", Name = "GetPurse")]
         [Authorize]
         public async Task<ActionResult<Purse>> getById(int id)
         {
-            return Ok(await _repository.GetByIdAsync(id));
+            return Ok(await _service.GetByIdAsync(id));
         }
 
         [HttpGet("{id:int}/actives")]
         [Authorize]
         public async Task<ActionResult<Purse>> getByIdWithActives(int id)
         {
-            return Ok(await _repository.GetByIdWithActivesAsync(id));
+            return Ok(await _service.GetByIdWithActivesAsync(id));
         }
 
         [HttpPut("{id:int}")]
@@ -67,16 +64,16 @@ namespace MyInvestAPI.Controllers
             if (purseViewModel is null)
                 return BadRequest("The body for update purse must not be null.");
 
-            _repository.Update(id, purseViewModel);
+            await _service.Update(id, purseViewModel);
 
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            _repository.Delete(id);
+            await _service.Delete(id);
             return NoContent();
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MyInvestAPI.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -19,6 +20,9 @@ namespace MyInvestAPI.Domain
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
 
+        [Required]
+        public ActiveEnum Active { get; set; }
+
         [ForeignKey("User")]
         public string User_Id { get; set; }
 
@@ -32,12 +36,13 @@ namespace MyInvestAPI.Domain
 
         public Purse(string name, string description, string user_id)
         {
-            this.Name = name;
-            this.Description = description;
-            this.CreatedAt = DateTime.UtcNow;
-            this.LastUpdatedAt = DateTime.UtcNow;
-            this.User_Id = user_id;
-            this.Actives = new List<Active>();
+            Description = description;
+            Name = name;
+            CreatedAt = DateTime.UtcNow;
+            LastUpdatedAt = DateTime.UtcNow;
+            User_Id = user_id;
+            Actives = new List<Active>();
+            Active = ActiveEnum.ACTIVE;
         }
     }
 }
