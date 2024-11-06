@@ -75,9 +75,9 @@ namespace MyInvestAPI.Controllers
 
         [Authorize]
         [HttpDelete("{userId}")]
-        public IActionResult Delete(string userId)
+        public async Task<IActionResult> Delete(string userId)
         {
-            _repository.Delete(userId);
+            await _repository.Delete(userId);
             return NoContent();
         }
     }

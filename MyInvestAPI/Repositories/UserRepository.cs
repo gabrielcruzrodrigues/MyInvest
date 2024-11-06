@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
+using MyInvestAPI.Domain.Enums;
 using MyInvestAPI.Extensions;
 using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.ViewModels;
@@ -22,6 +23,7 @@ namespace MyInvestAPI.Repositories
         {
             return await _context.Users
                 .AsNoTracking()
+                .Where(u => u.Active == ActiveEnum.ACTIVE)
                 .ToListAsync();
         }
 
@@ -29,6 +31,7 @@ namespace MyInvestAPI.Repositories
         {
             return await _context.Users
                 .Include(user => user.Purses)
+                .Where(u => u.Active == ActiveEnum.ACTIVE)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -36,6 +39,7 @@ namespace MyInvestAPI.Repositories
         public async Task<IEnumerable<User>> GetAllUsersWithPursesAndActivesAsync()
         {
             return await _context.Users
+                .Where(u => u.Active == ActiveEnum.ACTIVE)
                 .Include(user => user.Purses)
                     .ThenInclude(purse => purse.Actives)
                 .AsNoTracking()
@@ -95,17 +99,19 @@ namespace MyInvestAPI.Repositories
             }
         }
 
-        public async Task Delete(User user)
+        public async Task Disable(string userId)
         {
             try
             {
-                _context.Users.Remove(user);
+                var user = await GetByIdAsync(userId);
+                user.Active = ActiveEnum.DISABLE;
+                _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             catch(Exception ex)
             {
-                _logger.LogError($"Ocorreu um erro ao tentar deletar o usuário! err: {ex.Message}");
-                throw new HttpResponseException(500, "Ocorreu um erro ao tentar deletar o usuário!");
+                _logger.LogError($"Ocorreu um erro ao tentar desativar o usuário! err: {ex.Message}");
+                throw new HttpResponseException(500, "Ocorreu um erro ao tentar desativar o usuário!");
             }
         }
     }

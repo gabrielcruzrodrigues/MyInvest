@@ -70,8 +70,7 @@ namespace MyInvestAPI.Services
             if (string.IsNullOrEmpty(id))
                 throw new HttpResponseException(400, "O id não pode ser nulo ou vazio!");
 
-            User user = await _repository.GetByIdAsync(id);
-            await _repository.Delete(user);
+            await _repository.Disable(id);
         }
     }
 }

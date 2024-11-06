@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using MyInvestAPI.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,6 +15,8 @@ namespace MyInvestAPI.Domain
 
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
+        [Required]
+        public ActiveEnum Active { get; set; }
 
         public ICollection<Purse>? Purses { get; set; }
 
@@ -26,6 +29,7 @@ namespace MyInvestAPI.Domain
             this.CreatedAt = DateTime.UtcNow;
             this.LastUpdatedAt = DateTime.UtcNow;
             this.Purses = new List<Purse>();
+            this.Active = ActiveEnum.ACTIVE;
         }
     }
 }

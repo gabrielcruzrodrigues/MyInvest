@@ -95,7 +95,8 @@ namespace MyInvestAPI.Repositories
                 UserName = request.Username,
                 CreatedAt = DateTime.UtcNow,
                 LastUpdatedAt = DateTime.UtcNow,
-                Purses = new List<Purse>()
+                Purses = new List<Purse>(),
+                Active = Domain.Enums.ActiveEnum.ACTIVE
             };
 
             var result = await _userManager.CreateAsync(user, request.Password!);

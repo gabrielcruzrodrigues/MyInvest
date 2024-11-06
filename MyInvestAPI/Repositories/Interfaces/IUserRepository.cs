@@ -12,5 +12,5 @@ public interface IUserRepository
     Task<User> GetUserWithAllPursesByIdAsync(string userId);
     Task<User> GetUserWithAllPursesAndActivesByIdAsync(string userId);
     Task Update(User user);
-    Task Delete(User user);
+    Task Disable(string userId);
 }
