@@ -38,8 +38,8 @@ namespace MyInvestAPI.Repositories
             }
             catch(Exception ex)
             {
-                _logger.LogError($"An Error occured when tryning create active! err: {ex.Message}");
-                throw new HttpResponseException(500, "An Error occured when tryning create active!");
+                _logger.LogError($"Um erro aconteceu ao tentar criar um ativo! err: {ex.Message}");
+                throw new HttpResponseException(500, "Um erro aconteceu ao tentar criar um ativo!");
             }
         }
 
@@ -61,14 +61,14 @@ namespace MyInvestAPI.Repositories
         public async Task<Active> GetByIdAsync(int id)
         {
             if (id <= 0)
-                throw new HttpResponseException(400, "The ID must be greater than 0!");
+                throw new HttpResponseException(400, "O id deve ser maior que 0!");
 
             var active = await _context.Actives
                 .AsNoTracking()
                 .FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
 
             if (active is null)
-                throw new HttpResponseException(404, $"The active with id {id} not found!");
+                throw new HttpResponseException(404, $"O id com o id {id} não foi encontrado!");
 
             return active;
         }
@@ -76,7 +76,7 @@ namespace MyInvestAPI.Repositories
         public async Task<Active> GetByIdWithPursesAsync(int id)
         {
             if (id <= 0)
-                throw new HttpResponseException(400, "The ID must be greater than 0!");
+                throw new HttpResponseException(400, "O id deve ser maior que 0!");
 
             var active = await _context.Actives
                 .AsNoTracking()
@@ -84,49 +84,49 @@ namespace MyInvestAPI.Repositories
                 .FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
 
             if (active is null)
-                throw new HttpResponseException(404, $"The active with id {id} not found!");
+                throw new HttpResponseException(404, $"O id com o id {id} não foi encontrado!");
 
             return active;
         }
 
-        public void Update(int id, UpdateActiveViewModel updateActiveViewModel)
+        public async Task Update(int id, UpdateActiveViewModel updateActiveViewModel)
         {
             var activeVerify = _context.Actives.FirstOrDefault(active => active.Active_Id.Equals(id));
 
             if (activeVerify is null)
-                throw new HttpResponseException(404, $"The active with id {id} not found!");
+                throw new HttpResponseException(404, $"O id com o id {id} não foi encontrado!");
 
             var active = updateActiveViewModel.UpdateActive(activeVerify);
 
             try
             {
                 _context.Entry(active).State = EntityState.Modified;
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occured when tryning to update the user! err: {ex.Message}");
-                throw new HttpResponseException(500, "An Erro occured when tryning update active!");;
+                _logger.LogError($"Um erro aconteceu ao tentar atualizar um ativo! err: {ex.Message}");
+                throw new HttpResponseException(500, "Um erro aconteceu ao tentar atualizar um ativo!");;
             }
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
             Active active = _context.Actives
                 .FirstOrDefault(active => active.Active_Id.Equals(id));
 
             if (active is null)
-                throw new HttpResponseException(404, $"The active with id {id} not found!");
+                throw new HttpResponseException(404, $"O ativo com o id {id} não foi encontrado!");
 
             try
             {
                 _context.Actives.Remove(active);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error occured when tryning to delete the user! err: {ex.Message}");
-                throw new HttpResponseException(500, "An Erro occured when tryning delete active!"); ;
+                _logger.LogError($"Um erro aconteceu ao tentar desabilitar um ativo! err: {ex.Message}");
+                throw new HttpResponseException(500, "Um erro aconteceu ao tentar desabilitar um ativo!"); ;
             }
         }
 
@@ -138,12 +138,12 @@ namespace MyInvestAPI.Repositories
             }
             catch (KeyNotFoundException ex)
             {
-                _logger.LogError($"The active {active} not found! err: {ex.Message}");
-                throw new HttpResponseException(404, $"The active {active} not found!");
+                _logger.LogError($"O ativo com o id {active} não foi encontrado! err: {ex.Message}");
+                throw new HttpResponseException(404, $"O ativo com o id { active } não foi encontrado!");
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Un error occured when tryning search actives! err: {ex.Message}");
+                _logger.LogError($"Um erro ocorreu ao tentar buscar os ativos! err: {ex.Message}");
                 throw new HttpResponseException(500, ex.Message);
             }
         }
@@ -155,7 +155,7 @@ namespace MyInvestAPI.Repositories
                 .FirstOrDefaultAsync(p => p.Purse_Id == purseId);
 
             if (Purse is null || !Purse.Actives.Any())
-                throw new HttpResponseException(404, $"The purse with id {purseId} not found!");
+                throw new HttpResponseException(404, $"A carteira com o id {purseId} não foi encontrada!");
 
             return Purse;
         }

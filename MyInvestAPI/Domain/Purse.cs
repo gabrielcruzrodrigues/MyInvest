@@ -21,7 +21,7 @@ namespace MyInvestAPI.Domain
         public DateTime LastUpdatedAt { get; set; }
 
         [Required]
-        public ActiveEnum Active { get; set; }
+        public ActiveEnum Enable { get; set; }
 
         [ForeignKey("User")]
         public string User_Id { get; set; }
@@ -42,7 +42,7 @@ namespace MyInvestAPI.Domain
             LastUpdatedAt = DateTime.UtcNow;
             User_Id = user_id;
             Actives = new List<Active>();
-            Active = ActiveEnum.ACTIVE;
+            Enable = ActiveEnum.ACTIVE;
         }
     }
 }

@@ -29,8 +29,8 @@ public class PurseRepository : IPurseRepository
         }
         catch (Exception ex)
         {
-            _logger.LogError($"An error occured when tryning create user! ex: {ex.Message}");
-            throw new HttpResponseException(500, "An error occured when tryning create purse");
+            _logger.LogError($"Um erro ocorreu ao tentar criar a carteira! ex: {ex.Message}");
+            throw new HttpResponseException(500, "Um erro ocorreu ao tentar criar a carteira!");
         }
     }
 
@@ -39,7 +39,7 @@ public class PurseRepository : IPurseRepository
     {
         return await _context.Purses
             .AsNoTracking()
-            .Where(p => p.Active == ActiveEnum.ACTIVE)
+            .Where(p => p.Enable == ActiveEnum.ACTIVE)
             .ToListAsync();
     }
 
@@ -47,7 +47,7 @@ public class PurseRepository : IPurseRepository
     {
         return await _context.Purses
             .AsNoTracking()
-            .Where(p => p.Active == ActiveEnum.ACTIVE)
+            .Where(p => p.Enable == ActiveEnum.ACTIVE)
             .Include(p => p.Actives)
             .ToListAsync();
     }
@@ -56,11 +56,11 @@ public class PurseRepository : IPurseRepository
     {
         var purse = await _context.Purses
                             .AsNoTracking()
-                            .Where(p => p.Active == ActiveEnum.ACTIVE)
+                            .Where(p => p.Enable == ActiveEnum.ACTIVE)
                             .FirstOrDefaultAsync(p => p.Purse_Id == id);
 
         if (purse is null)
-            throw new HttpResponseException(404, $"The purse with id {id} not found!");
+            throw new HttpResponseException(404, $"A carteira com o id {id} não foi encontrada!");
 
         return purse;
     }
@@ -70,11 +70,11 @@ public class PurseRepository : IPurseRepository
         var purse = await _context.Purses
             .Include(p => p.Actives)
             .AsNoTracking()
-            .Where(p => p.Active == ActiveEnum.ACTIVE)
+            .Where(p => p.Enable == ActiveEnum.ACTIVE)
             .FirstOrDefaultAsync(p => p.Purse_Id == id);
 
         if (purse is null)
-            throw new HttpResponseException(404, $"The purse with id {id} not found!");
+            throw new HttpResponseException(404, $"A carteira com o id {id} não foi encontrada!");
 
         return purse;
     }
@@ -88,8 +88,8 @@ public class PurseRepository : IPurseRepository
         }
         catch (Exception ex)
         {
-            _logger.LogError($"An Erro occured when tryning update purse! err: {ex.Message}");
-            throw new HttpResponseException(500, "An Erro occured when tryning update purse!");
+            _logger.LogError($"Um erro ocorreu ao tentar atualizar a carteira! err: {ex.Message}");
+            throw new HttpResponseException(500, "Um erro ocorreu ao tentar atualizar a carteira!!");
         }
     }
 
@@ -98,14 +98,14 @@ public class PurseRepository : IPurseRepository
         try
         {
             var purse = await GetByIdAsync(id);
-            purse.Active = Domain.Enums.ActiveEnum.DISABLE;
+            purse.Enable = Domain.Enums.ActiveEnum.DISABLE;
             _context.Entry(purse).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
-            _logger.LogError($"An Erro occured when tryning delete purse! err: {ex.Message}");
-            throw new HttpResponseException(500, "An Erro occured when tryning delete purse!");
+            _logger.LogError($"Um erro ocorreu ao tentar desabilitar a carteira! err: {ex.Message}");
+            throw new HttpResponseException(500, "Um erro ocorreu ao tentar desabilitar a carteira!!");
         }
     }
 }

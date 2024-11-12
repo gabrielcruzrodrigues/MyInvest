@@ -23,7 +23,7 @@ namespace MyInvestAPI.Repositories
         {
             return await _context.Users
                 .AsNoTracking()
-                .Where(u => u.Active == ActiveEnum.ACTIVE)
+                .Where(u => u.Enable == ActiveEnum.ACTIVE)
                 .ToListAsync();
         }
 
@@ -31,7 +31,7 @@ namespace MyInvestAPI.Repositories
         {
             return await _context.Users
                 .Include(user => user.Purses)
-                .Where(u => u.Active == ActiveEnum.ACTIVE)
+                .Where(u => u.Enable == ActiveEnum.ACTIVE)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -39,7 +39,7 @@ namespace MyInvestAPI.Repositories
         public async Task<IEnumerable<User>> GetAllUsersWithPursesAndActivesAsync()
         {
             return await _context.Users
-                .Where(u => u.Active == ActiveEnum.ACTIVE)
+                .Where(u => u.Enable == ActiveEnum.ACTIVE)
                 .Include(user => user.Purses)
                     .ThenInclude(purse => purse.Actives)
                 .AsNoTracking()
@@ -50,7 +50,7 @@ namespace MyInvestAPI.Repositories
         {
             var user = await _context.Users
                 .AsNoTracking()
-                .Where(u => u.Active == ActiveEnum.ACTIVE)
+                .Where(u => u.Enable == ActiveEnum.ACTIVE)
                 .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)
@@ -64,7 +64,7 @@ namespace MyInvestAPI.Repositories
             var user = await _context.Users
                 .AsNoTracking()
                 .Include(user => user.Purses)
-                .Where(u => u.Active == ActiveEnum.ACTIVE)
+                .Where(u => u.Enable == ActiveEnum.ACTIVE)
                 .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)
@@ -79,7 +79,7 @@ namespace MyInvestAPI.Repositories
                 .Include(user => user.Purses)
                     .ThenInclude(purse => purse.Actives)
                     .AsNoTracking()
-                .Where(u => u.Active == ActiveEnum.ACTIVE)
+                .Where(u => u.Enable == ActiveEnum.ACTIVE)
                 .FirstOrDefaultAsync(user => user.Id == id.ToString());
 
             if (user is null)
@@ -107,7 +107,7 @@ namespace MyInvestAPI.Repositories
             try
             {
                 var user = await GetByIdAsync(userId);
-                user.Active = ActiveEnum.DISABLE;
+                user.Enable = ActiveEnum.DISABLE;
                 _context.Entry(user).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }

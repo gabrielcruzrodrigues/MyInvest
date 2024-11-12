@@ -16,7 +16,7 @@ namespace MyInvestAPI.Domain
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
         [Required]
-        public ActiveEnum Active { get; set; }
+        public ActiveEnum Enable { get; set; }
 
         public ICollection<Purse>? Purses { get; set; }
 
@@ -25,11 +25,11 @@ namespace MyInvestAPI.Domain
 
         public User(string username, string password, string email, string phone)
         {
-            this.Email = email;
-            this.CreatedAt = DateTime.UtcNow;
-            this.LastUpdatedAt = DateTime.UtcNow;
-            this.Purses = new List<Purse>();
-            this.Active = ActiveEnum.ACTIVE;
+            Email = email;
+            CreatedAt = DateTime.UtcNow;
+            LastUpdatedAt = DateTime.UtcNow;
+            Purses = new List<Purse>();
+            Enable = ActiveEnum.ACTIVE;
         }
     }
 }

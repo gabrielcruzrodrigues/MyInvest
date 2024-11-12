@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MyInvestAPI.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace MyInvestAPI.Domain
@@ -21,6 +22,8 @@ namespace MyInvestAPI.Domain
         public DateTime CreatedAt { get; set; }
 
         public DateTime LastUpdatedAt { get; set; }
+        [Required]
+        public ActiveEnum Enable { get; set; }
         public ICollection<Purse> Purses { get; set; } = new List<Purse>();
     } 
 }
