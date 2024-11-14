@@ -24,6 +24,9 @@ namespace MyInvestAPI.Domain
         public DateTime LastUpdatedAt { get; set; }
         [Required]
         public ActiveEnum Enable { get; set; }
-        public ICollection<Purse> Purses { get; set; } = new List<Purse>();
+        [Required]
+        public int PurseId { get; set; }
+
+        public Purse Purse { get; set; }
     } 
 }

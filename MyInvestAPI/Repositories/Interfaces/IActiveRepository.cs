@@ -12,7 +12,7 @@ namespace MyInvestAPI.Repositories.Interfaces
         Task<Active> GetByIdAsync(int id);
         Task<Active> GetByIdWithPursesAsync(int id);
         Task UpdateAsync(Active active);
-        Task DisableAsync(Active active);
+        Task DisableAsync(int id);
         Task<ActiveReturn> SearchActiveAsync(string active, string dYDesiredPercentage);
         Task<Purse> GetActivesByPurseId(int purseId);
         Task<IEnumerable<ActiveReturnForPurseDetailsDTO>> GetActivesForShowInPurseDetails(Purse purse);

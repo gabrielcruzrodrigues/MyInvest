@@ -18,7 +18,7 @@ namespace MyInvestAPI.ViewModels
             active.Type = this.Type;
             active.CreatedAt = DateTime.UtcNow;
             active.LastUpdatedAt = DateTime.UtcNow;
-            active.Purses = new List<Purse>() { purse };
+            active.PurseId = purse.Purse_Id;
             active.Enable = Domain.Enums.ActiveEnum.ACTIVE;
             return active;
         }

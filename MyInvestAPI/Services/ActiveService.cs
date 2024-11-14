@@ -29,8 +29,7 @@ namespace MyInvestAPI.Services
 
         public async Task Delete(int id)
         {
-            Active active = await _activeRepository.GetByIdAsync(id);
-            await _activeRepository.DisableAsync(active);
+            await _activeRepository.DisableAsync(id);
         }
 
         public async Task<Purse> GetActivesByPurseId(int purseId)

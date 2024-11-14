@@ -47,7 +47,7 @@ namespace MyInvestAPI.Repositories
         public async Task<IEnumerable<Active>> GetAllWithPursesAsync()
         {
             return await _context.Actives
-                .Include(p => p.Purses)
+                .Include(p => p.Purse)
                 .Where(c => c.Enable.Equals(ActiveEnum.ACTIVE))
                 .AsNoTracking()
                 .ToListAsync();
@@ -70,7 +70,7 @@ namespace MyInvestAPI.Repositories
         {
             var active = await _context.Actives
                 .AsNoTracking()
-                .Include(p => p.Purses)
+                .Include(p => p.Purse)
                 .Where(c => c.Enable.Equals(ActiveEnum.ACTIVE))
                 .FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
 
@@ -94,12 +94,21 @@ namespace MyInvestAPI.Repositories
             }
         }
 
-        public async Task DisableAsync(Active active)
+        public async Task DisableAsync(int id)
         {
+            Active active = await _context.Actives
+                .FirstOrDefaultAsync(c => c.Active_Id.Equals(id));
+
+            if (active is null)
+            {
+                throw new HttpResponseException(404, $"O ativo com o id {id} não foi encontrado");
+            }
+
+            active.Enable = Domain.Enums.ActiveEnum.DISABLE;
+
             try
             {
-                active.Enable = Domain.Enums.ActiveEnum.DISABLE;
-                _context.Entry(active).State = EntityState.Modified;
+                _context.Actives.Update(active);
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex)
