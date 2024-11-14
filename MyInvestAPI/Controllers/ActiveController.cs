@@ -6,6 +6,7 @@ using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
 using MyInvestAPI.Domain.DTO;
 using MyInvestAPI.Repositories.Interfaces;
+using MyInvestAPI.Services.Interfaces;
 using MyInvestAPI.ViewModels;
 
 namespace MyInvestAPI.Controllers
@@ -14,11 +15,11 @@ namespace MyInvestAPI.Controllers
     [ApiController]
     public class ActiveController : ControllerBase
     {
-        public readonly IActiveRepository _repository;
+        public readonly IActiveService _service;
 
-        public ActiveController(IActiveRepository repository)
+        public ActiveController(IActiveService service)
         {
-            _repository = repository;
+            _service = service;
         }
 
         [HttpPost]
@@ -28,7 +29,7 @@ namespace MyInvestAPI.Controllers
             if (activeViewModel is null)
                 return BadRequest("O body para criar um novo ativo não deve ser nulo.");
 
-            Active activeCreated = await _repository.CreateAsync(activeViewModel);
+            Active activeCreated = await _service.CreateAsync(activeViewModel);
 
             return new CreatedAtRouteResult("SearchActive", new { id = activeCreated.Active_Id }, activeCreated);
         }
@@ -37,28 +38,28 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<Active>>> GetAll()
         {
-            return Ok(await _repository.GetAllAsync());
+            return Ok(await _service.GetAllAsync());
         }
 
         [HttpGet("purses")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<Active>>> GetAllWithPurses()
         {
-            return Ok(await _repository.GetAllWithPursesAsync());
+            return Ok(await _service.GetAllWithPursesAsync());
         }
 
         [HttpGet("{id}", Name = "SearchActive")]
         [Authorize]
         public async Task<ActionResult<Active>> GetById(int id)
         {
-            return Ok(await _repository.GetByIdAsync(id));
+            return Ok(await _service.GetByIdAsync(id));
         }
 
         [HttpGet("{id}/purses")]
         [Authorize]
         public async Task<ActionResult<Active>> GetByIdWithPurses(int id)
         {
-            var ActiveVerify = await _repository.GetByIdWithPursesAsync(id);
+            var ActiveVerify = await _service.GetByIdWithPursesAsync(id);
 
             if (ActiveVerify is null)
                 return NotFound("Active not found.");
@@ -70,7 +71,7 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<IActionResult> Update(int activeId, UpdateActiveViewModel activeViewModel)
         {
-            _repository.Update(activeId, activeViewModel);
+            _service.Update(activeId, activeViewModel);
             return NoContent();
         }
 
@@ -78,28 +79,28 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            _repository.Delete(id);
+            _service.Delete(id);
             return NoContent();
         }
 
         [HttpGet("/search-active/{active}/{dYDesiredPercentage}")]
         public async Task<ActionResult<ActiveReturn>> SearchActive(string active, string dYDesiredPercentage)
         {
-            return Ok(await _repository.SearchActiveAsync(active, dYDesiredPercentage));
+            return Ok(await _service.SearchActiveAsync(active, dYDesiredPercentage));
         }
 
         [HttpGet("/search-active-purse-details/{purseId}")]
         [Authorize]
         public async Task<ActionResult<IEnumerable<ActiveReturnForPurseDetailsDTO>>> searchActivesForPurseDetails(int purseId)
         {
-            return Ok(await _repository.GetActivesForShowInPurseDetails(purseId));
+            return Ok(await _service.GetActivesForShowInPurseDetails(purseId));
         }
 
         [HttpGet("/get-actives/{purseId}")]
         [Authorize]
         public async Task<ActionResult> GetActivesByPurseId(int purseId)
         {
-            return Ok(await _repository.GetActivesByPurseId(purseId));
+            return Ok(await _service.GetActivesByPurseId(purseId));
         }
     }
 }
