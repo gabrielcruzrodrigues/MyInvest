@@ -63,12 +63,12 @@ namespace MyInvestAPI.Controllers
 
         [Authorize]
         [HttpPut("{userId}")]
-        public IActionResult UpdateAsync(string userId, CreateUserViewModel userViewModel)
+        public async Task<IActionResult> UpdateAsync(string userId, CreateUserViewModel userViewModel)
         {
             if (userViewModel is null)
                 return BadRequest("The data for update must not be null.");
 
-            _repository.Update(userId, userViewModel);
+            await _repository.Update(userId, userViewModel);
 
             return NoContent();
         }

@@ -71,7 +71,7 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<IActionResult> Update(int activeId, UpdateActiveViewModel activeViewModel)
         {
-            _service.Update(activeId, activeViewModel);
+            await _service.Update(activeId, activeViewModel);
             return NoContent();
         }
 
@@ -79,7 +79,7 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            _service.Delete(id);
+            await _service.Delete(id);
             return NoContent();
         }
 

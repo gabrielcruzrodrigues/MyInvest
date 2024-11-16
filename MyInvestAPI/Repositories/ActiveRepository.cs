@@ -154,7 +154,7 @@ namespace MyInvestAPI.Repositories
             try
             { 
                 List<ActiveReturnForPurseDetailsDTO> actives = new();
-                foreach (var active in purse.Actives)
+                foreach (var active in purse.Actives.Where(a => a.Enable.Equals(ActiveEnum.ACTIVE)))
                 {
                     actives.Add(await YahooFinanceApiClient.CreateActiveReturnForPurseDetails(active.Code, active.DYDesiredPercentage.ToString(), active.Active_Id));
                 }
