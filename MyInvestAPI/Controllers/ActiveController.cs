@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MyInvestAPI.Api;
-using MyInvestAPI.Data;
 using MyInvestAPI.Domain;
 using MyInvestAPI.Domain.DTO;
-using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.Services.Interfaces;
 using MyInvestAPI.ViewModels;
+using System;
+using System.Security.Claims;
 
 namespace MyInvestAPI.Controllers
 {
@@ -16,10 +14,12 @@ namespace MyInvestAPI.Controllers
     public class ActiveController : ControllerBase
     {
         public readonly IActiveService _service;
+        public readonly IPurseService _purseService;
 
-        public ActiveController(IActiveService service)
+        public ActiveController(IActiveService service, IPurseService purseService)
         {
             _service = service;
+            _purseService = purseService;
         }
 
         [HttpPost]
@@ -28,6 +28,13 @@ namespace MyInvestAPI.Controllers
         {
             if (activeViewModel is null)
                 return BadRequest("O body para criar um novo ativo não deve ser nulo.");
+
+            var purse = await _purseService.GetByIdAsync(activeViewModel.Purse_Id);
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdFromToken != purse.User_Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Você não pode criar um ativo na carteira de outro usuário." });
+            }
 
             Active activeCreated = await _service.CreateAsync(activeViewModel);
 
@@ -52,7 +59,16 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<ActionResult<Active>> GetById(int id)
         {
-            return Ok(await _service.GetByIdAsync(id));
+            var active = await _service.GetByIdAsync(id);
+
+            var purse = await _purseService.GetByIdAsync(active.PurseId);
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdFromToken != purse.User_Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Você não pode buscar o ativo de outro usuário." });
+            }
+
+            return Ok(active);
         }
 
         [HttpGet("{id}/purses")]
@@ -64,6 +80,13 @@ namespace MyInvestAPI.Controllers
             if (ActiveVerify is null)
                 return NotFound("Active not found.");
 
+            var purse = await _purseService.GetByIdAsync(ActiveVerify.PurseId);
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdFromToken != purse.User_Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Você não pode buscar o ativo de outro usuário." });
+            }
+
             return Ok(ActiveVerify);
         }
 
@@ -71,6 +94,15 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<IActionResult> Update(int activeId, UpdateActiveViewModel activeViewModel)
         {
+            var active = await _service.GetByIdAsync(activeId);
+
+            var purse = await _purseService.GetByIdAsync(active.PurseId);
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdFromToken != purse.User_Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Você não pode atualizar o ativo de outro usuário." });
+            }
+
             await _service.Update(activeId, activeViewModel);
             return NoContent();
         }
@@ -79,6 +111,15 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
+            var active = await _service.GetByIdAsync(id);
+
+            var purse = await _purseService.GetByIdAsync(active.PurseId);
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdFromToken != purse.User_Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Você não pode deletar o ativo de outro usuário." });
+            }
+
             await _service.Delete(id);
             return NoContent();
         }
@@ -93,6 +134,13 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<ActionResult<IEnumerable<ActiveReturnForPurseDetailsDTO>>> searchActivesForPurseDetails(int purseId)
         {
+            var purse = await _purseService.GetByIdAsync(purseId);
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdFromToken != purse.User_Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Você não pode buscar os ativos de outros usuário." });
+            }
+
             return Ok(await _service.GetActivesForShowInPurseDetails(purseId));
         }
 

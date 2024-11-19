@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyInvestAPI.Domain;
 using MyInvestAPI.Services.Interfaces;
 using MyInvestAPI.ViewModels;
+using System.Security.Claims;
 
 namespace MyInvestAPI.Controllers
 {
@@ -21,6 +22,12 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<ActionResult<Purse>> Create(CreatePurseViewModel purseViewModel)
         {
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdFromToken != purseViewModel.User_Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Você não pode criar uma carteira para outro usuário." });
+            }
+
             if (purseViewModel is null)
                 return BadRequest("The body for create purse must not be null.");
 
@@ -45,16 +52,32 @@ namespace MyInvestAPI.Controllers
 
         [HttpGet("{id:int}", Name = "GetPurse")]
         [Authorize]
-        public async Task<ActionResult<Purse>> getById(int id)
+        public async Task<ActionResult<Purse>> GetById(int id)
         {
-            return Ok(await _service.GetByIdAsync(id));
+            var purse = await _service.GetByIdAsync(id);
+
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdFromToken != purse.User_Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Você não pode criar uma carteira para outro usuário." });
+            }
+
+            return Ok(purse);
         }
 
         [HttpGet("{id:int}/actives")]
         [Authorize]
-        public async Task<ActionResult<Purse>> getByIdWithActives(int id)
+        public async Task<ActionResult<Purse>> GetByIdWithActives(int id)
         {
-            return Ok(await _service.GetByIdWithActivesAsync(id));
+            var purse = await _service.GetByIdWithActivesAsync(id);
+
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdFromToken != purse.User_Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Você não pode criar uma carteira para outro usuário." });
+            }
+
+            return Ok(purse);
         }
 
         [HttpPut("{id:int}")]
@@ -63,6 +86,13 @@ namespace MyInvestAPI.Controllers
         {
             if (purseViewModel is null)
                 return BadRequest("The body for update purse must not be null.");
+
+            var purse = await _service.GetByIdAsync(id);
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdFromToken != purse.User_Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Você não pode atualizar a carteira de outro usuário." });
+            }
 
             await _service.Update(id, purseViewModel);
 
@@ -73,6 +103,13 @@ namespace MyInvestAPI.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
+            var purse = await _service.GetByIdAsync(id);
+            var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userIdFromToken != purse.User_Id)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { message = "Você não pode deletar a carteira de outro usuário." });
+            }
+
             await _service.Delete(id);
             return NoContent();
         }

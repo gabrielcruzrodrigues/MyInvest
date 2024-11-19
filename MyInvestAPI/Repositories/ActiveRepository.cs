@@ -61,7 +61,7 @@ namespace MyInvestAPI.Repositories
                 .FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
 
             if (active is null)
-                throw new HttpResponseException(404, $"O id com o id {id} não foi encontrado!");
+                throw new HttpResponseException(404, $"O ativo com o id {id} não foi encontrado!");
 
             return active;
         }
@@ -75,7 +75,7 @@ namespace MyInvestAPI.Repositories
                 .FirstOrDefaultAsync(active => active.Active_Id.Equals(id));
 
             if (active is null)
-                throw new HttpResponseException(404, $"O id com o id {id} não foi encontrado!");
+                throw new HttpResponseException(404, $"O ativo com o id {id} não foi encontrado!");
 
             return active;
         }
