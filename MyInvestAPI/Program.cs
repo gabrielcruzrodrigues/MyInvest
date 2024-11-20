@@ -110,6 +110,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IPurseService, PurseService>();
 builder.Services.AddScoped<IActiveService, ActiveService>();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
 
@@ -118,6 +119,9 @@ string postgreSqlConnection = builder.Configuration.GetConnectionString("Default
 
 builder.Services.AddDbContext<MyInvestContext>(options =>
     options.UseNpgsql(postgreSqlConnection));
+
+//----------------------------- Email service configure -----------------------------
+builder.Services.Configure<AuthMessageSenderCredentials>(builder.Configuration);
 
 var app = builder.Build();
 
