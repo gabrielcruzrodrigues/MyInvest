@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyInvestAPI.Domain;
 using MyInvestAPI.Repositories.Interfaces;
@@ -60,5 +61,19 @@ public class AuthController : ControllerBase
 
         var response = await _authRepository.GetNewTokenUsingRefreshToken(tokenViewModel);
         return Ok(response);
+    }
+
+    [Authorize]
+    [HttpGet("recover-password")]
+    public async Task<ActionResult> RecoverPassword()
+    {
+        var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (userIdFromToken is null)
+        {
+            return StatusCode(403, "Token invalido");
+        }
+
+        await _authRepository.RecoverPassword(userIdFromToken);
+        return Ok();
     }
 }
