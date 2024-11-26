@@ -155,13 +155,13 @@ namespace MyInvestAPI.Repositories
 
         public async Task<string> SaveTokenAndPrepareMessageForSendToUser(string userEmail)
         {
-            var user = _userManager.FindByEmailAsync(userEmail);
+            var user = await _userManager.FindByEmailAsync(userEmail);
             if (user is null)
             {
                 throw new HttpResponseException(404, "Usuário não encontrado!");
             }
 
-            return await _tokenService.GenerateAndReturnPasswordResetLinkAsync(user.Result);
+            return await _tokenService.GenerateAndReturnPasswordResetLinkAsync(user);
         }
     }
 }

@@ -40,9 +40,6 @@ namespace MyInvestAPI.Repositories
                                     .Where(p => p.Token.Equals(userResetToken))
                                     .FirstOrDefaultAsync();
 
-            if (passwordResetToken == null)
-                throw new HttpResponseException(404, "Token invalido ou não existente");
-
             return passwordResetToken;
         }
     }

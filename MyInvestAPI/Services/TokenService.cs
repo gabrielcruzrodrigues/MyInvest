@@ -57,20 +57,23 @@ namespace MyInvestAPI.Services
                 throw new Exception("FRONTEND_URL não configurado no ambiente.");
             }
 
-            var token = GeneratePasswordResetToken();
-            await _passwordResetTokenRepository.GetByTokenAsync(token);
+            string tokenForSave;
+            do
+            {
+                tokenForSave = GeneratePasswordResetToken();
+            }
+            while (await _passwordResetTokenRepository.GetByTokenAsync(tokenForSave) is not null);
 
             var passwordResetTokenForSave = new PasswordResetToken()
             {
                 UserId = user.Id,
-                Token = token,
+                Token = tokenForSave,
                 ExpirationTime = DateTime.UtcNow.AddMinutes(30),
             };
 
             var generatedPasswordResetToken = await _passwordResetTokenRepository.CreateAsync(passwordResetTokenForSave);
 
-            var encodedToken = Uri.EscapeDataString(generatedPasswordResetToken.Token);
-            return $"https://{frontendUrl}/reset-password?email={Uri.EscapeDataString(user.Email)}&token={encodedToken}";
+            return $"{frontendUrl}/reset-password?email={Uri.EscapeDataString(user.Email)}&token={generatedPasswordResetToken.Token}";
         }
 
         public string GenerateRefreshToken()
