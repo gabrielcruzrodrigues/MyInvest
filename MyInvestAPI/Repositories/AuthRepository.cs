@@ -16,16 +16,18 @@ namespace MyInvestAPI.Repositories
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
+        private readonly IEmailSender _emailSender;
 
         public AuthRepository(ITokenService tokenService, UserManager<User> userManager,
                               RoleManager<IdentityRole> roleManager, IConfiguration configuration,
-                              ILogger<AuthRepository> logger)
+                              ILogger<AuthRepository> logger, IEmailSender emailSender)
         {
             _tokenService = tokenService;
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _logger = logger;
+            _emailSender = emailSender;
         }
 
         public async Task<ResponseLoginViewModel> Login(LoginRequestViewModel request)
@@ -140,6 +142,20 @@ namespace MyInvestAPI.Repositories
             {
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(newAccessToken)
             };
+        }
+
+        public async Task RecoverPassword(string userEmail)
+        {
+            string toEmail = userEmail;
+            string subject = "MyInvest: Email de recuperação de senha";
+            string message = "apenas um teste por hora";
+            await _emailSender.SendEmailAsync(toEmail, subject, message);
+        }
+
+        public async Task SendPasswordResetLink(string userEmail)
+        {
+            var token = _tokenService.GeneratePasswordResetToken();
+            //await SaveResetTokenToDatabase(userEmail, token);
         }
     }
 }

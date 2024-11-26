@@ -12,6 +12,7 @@ using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.Services.Interfaces;
+using dotenv.net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -121,7 +122,19 @@ builder.Services.AddDbContext<MyInvestContext>(options =>
     options.UseNpgsql(postgreSqlConnection));
 
 //----------------------------- Email service configure -----------------------------
-builder.Services.Configure<AuthMessageSenderCredentials>(builder.Configuration);
+DotEnv.Load();
+
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddEnvironmentVariables();
+
+builder.Services.Configure<AuthMessageSenderCredentials>(options =>
+{
+    options.SenderEmail = Environment.GetEnvironmentVariable("SENDER_EMAIL");
+    options.PasswordSenderEmail = Environment.GetEnvironmentVariable("PASSWORD_EMAIL");
+});
+
+builder.Services.AddScoped<RoleManager<IdentityRole>>();
 
 var app = builder.Build();
 

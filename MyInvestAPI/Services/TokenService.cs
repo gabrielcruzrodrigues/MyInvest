@@ -32,6 +32,26 @@ namespace MyInvestAPI.Services
             return token;
         }
 
+        public string GeneratePasswordResetToken()
+        {
+            using var rng = RandomNumberGenerator.Create();
+            var bytes = new byte[32];
+            rng.GetBytes(bytes);
+            return Convert.ToBase64String(bytes);
+        }
+
+        public string GeneratePasswordResetLink(string userEmail, string token)
+        {
+            var frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL");
+            if (string.IsNullOrEmpty(frontendUrl))
+            {
+                throw new Exception("FRONTEND_URL não configurado no ambiente.");
+            }
+
+            var encodedToken = Uri.EscapeDataString(token);
+            return $"https://{frontendUrl}/reset-password?email={Uri.EscapeDataString(userEmail)}&token={encodedToken}";
+        }
+
         public string GenerateRefreshToken()
         {
             var secureRandomBytes = new byte[128];
@@ -67,6 +87,11 @@ namespace MyInvestAPI.Services
             }
 
             return principal;
+        }
+
+        public Task SaveResetTokenToDatabase(string userEmail, string token)
+        {
+            return null;
         }
     }
 }

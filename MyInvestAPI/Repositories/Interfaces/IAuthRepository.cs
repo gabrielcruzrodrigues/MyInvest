@@ -8,5 +8,6 @@ public interface IAuthRepository
     Task<ResponseLoginViewModel> Login(LoginRequestViewModel request);
     Task<ResponseLoginViewModel> Register(RegisterViewModel request);
     Task<object> GetNewTokenUsingRefreshToken(TokenViewModel tokenViewModel);
-    Task RecoverPassword(string userId);
+    Task RecoverPassword(string userEmail);
+    Task SendPasswordResetLink(string userEmail);
 }

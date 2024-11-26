@@ -14,12 +14,12 @@ namespace MyInvestAPI.Services
         public EmailSender(IOptions<AuthMessageSenderCredentials> credentials, ILogger<EmailSender> logger)
         {
             _logger = logger;
-            Credentials = credentials.Value;
+            Credentials = credentials.Value ?? throw new ArgumentNullException(nameof(credentials));
         }
 
         public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
-            if (string.IsNullOrEmpty(Credentials.SenderEmail) || string.IsNullOrEmpty(Credentials.PasswordSenderEmail)
+            if (string.IsNullOrEmpty(Credentials.SenderEmail) || string.IsNullOrEmpty(Credentials.PasswordSenderEmail))
             {
                 throw new Exception("Null credentials");
             }

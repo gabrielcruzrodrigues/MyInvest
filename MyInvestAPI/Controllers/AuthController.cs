@@ -63,17 +63,10 @@ public class AuthController : ControllerBase
         return Ok(response);
     }
 
-    [Authorize]
-    [HttpGet("recover-password")]
-    public async Task<ActionResult> RecoverPassword()
+    [HttpPost("recover-password")]
+    public async Task<ActionResult> RecoverPassword(string userEmail)
     {
-        var userIdFromToken = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userIdFromToken is null)
-        {
-            return StatusCode(403, "Token invalido");
-        }
-
-        await _authRepository.RecoverPassword(userIdFromToken);
+        await _authRepository.RecoverPassword(userEmail);
         return Ok();
     }
 }
