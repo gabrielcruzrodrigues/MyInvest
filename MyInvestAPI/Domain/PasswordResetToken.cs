@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace MyInvestAPI.Domain;
 
 [Table("PasswordResetTokens")]
-public class PasswordResetTokens
+public class PasswordResetToken
 {
     [Key]
     public int Id { get; set; }

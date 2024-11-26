@@ -9,5 +9,5 @@ public interface IAuthRepository
     Task<ResponseLoginViewModel> Register(RegisterViewModel request);
     Task<object> GetNewTokenUsingRefreshToken(TokenViewModel tokenViewModel);
     Task RecoverPassword(string userEmail);
-    Task SendPasswordResetLink(string userEmail);
+    Task<string> SaveTokenAndPrepareMessageForSendToUser(string userEmail);
 }

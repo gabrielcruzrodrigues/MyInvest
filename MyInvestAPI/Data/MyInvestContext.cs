@@ -11,7 +11,7 @@ namespace MyInvestAPI.Data
 
         public DbSet<Purse>? Purses { get; set; }
         public DbSet<Active>? Actives { get; set; }
-        public DbSet<PasswordResetTokens>? PasswordResetTokens { get; set; }
+        public DbSet<PasswordResetToken>? PasswordResetTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

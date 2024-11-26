@@ -146,16 +146,22 @@ namespace MyInvestAPI.Repositories
 
         public async Task RecoverPassword(string userEmail)
         {
+            var completeLink = await SaveTokenAndPrepareMessageForSendToUser(userEmail);
             string toEmail = userEmail;
             string subject = "MyInvest: Email de recuperação de senha";
-            string message = "apenas um teste por hora";
+            string message = $"Siga o link abaixo para recuperar a sua conta: {completeLink}";
             await _emailSender.SendEmailAsync(toEmail, subject, message);
         }
 
-        public async Task SendPasswordResetLink(string userEmail)
+        public async Task<string> SaveTokenAndPrepareMessageForSendToUser(string userEmail)
         {
-            var token = _tokenService.GeneratePasswordResetToken();
-            //await SaveResetTokenToDatabase(userEmail, token);
+            var user = _userManager.FindByEmailAsync(userEmail);
+            if (user is null)
+            {
+                throw new HttpResponseException(404, "Usuário não encontrado!");
+            }
+
+            return await _tokenService.GenerateAndReturnPasswordResetLinkAsync(user.Result);
         }
     }
 }

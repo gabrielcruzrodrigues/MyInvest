@@ -1,4 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using MyInvestAPI.Domain;
+using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,6 +11,13 @@ namespace MyInvestAPI.Services
 {
     public class TokenService : ITokenService
     {
+        private readonly IPasswordResetTokenRepository _passwordResetTokenRepository;
+
+        public TokenService(IPasswordResetTokenRepository passwordResetTokenRepository)
+        {
+            _passwordResetTokenRepository = passwordResetTokenRepository;
+        }
+
         public JwtSecurityToken GenerateAccessToken(IEnumerable<Claim> claims, IConfiguration _config)
         {
             var key = _config.GetSection("JWT").GetValue<string>("SecretKey") ?? 
@@ -32,7 +41,7 @@ namespace MyInvestAPI.Services
             return token;
         }
 
-        public string GeneratePasswordResetToken()
+        private string GeneratePasswordResetToken()
         {
             using var rng = RandomNumberGenerator.Create();
             var bytes = new byte[32];
@@ -40,7 +49,7 @@ namespace MyInvestAPI.Services
             return Convert.ToBase64String(bytes);
         }
 
-        public string GeneratePasswordResetLink(string userEmail, string token)
+        public async Task<string> GenerateAndReturnPasswordResetLink(User user)
         {
             var frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL");
             if (string.IsNullOrEmpty(frontendUrl))
@@ -48,8 +57,20 @@ namespace MyInvestAPI.Services
                 throw new Exception("FRONTEND_URL não configurado no ambiente.");
             }
 
-            var encodedToken = Uri.EscapeDataString(token);
-            return $"https://{frontendUrl}/reset-password?email={Uri.EscapeDataString(userEmail)}&token={encodedToken}";
+            var token = GeneratePasswordResetToken();
+            await _passwordResetTokenRepository.GetByTokenAsync(token);
+
+            var passwordResetTokenForSave = new PasswordResetToken()
+            {
+                UserId = user.Id,
+                Token = token,
+                ExpirationTime = DateTime.UtcNow.AddMinutes(30),
+            };
+
+            var generatedPasswordResetToken = await _passwordResetTokenRepository.CreateAsync(passwordResetTokenForSave);
+
+            var encodedToken = Uri.EscapeDataString(generatedPasswordResetToken.Token);
+            return $"https://{frontendUrl}/reset-password?email={Uri.EscapeDataString(user.Email)}&token={encodedToken}";
         }
 
         public string GenerateRefreshToken()
@@ -87,11 +108,6 @@ namespace MyInvestAPI.Services
             }
 
             return principal;
-        }
-
-        public Task SaveResetTokenToDatabase(string userEmail, string token)
-        {
-            return null;
         }
     }
 }

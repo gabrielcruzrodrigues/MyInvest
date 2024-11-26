@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyInvestAPI.Migrations;
 
 /// <inheritdoc />
-public partial class PasswordResetToken : Migration
+public partial class PasswordResetTokenMg : Migration
 {
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
