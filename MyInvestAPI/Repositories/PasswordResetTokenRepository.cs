@@ -31,6 +31,30 @@ namespace MyInvestAPI.Repositories
             }
         }
 
+        public async Task DeleteResetTokenPasswordAsync(string token)
+        {
+            var tokenForDelete = await _context.PasswordResetTokens
+                        .Where(p => p.Token.Equals(token))
+                        .FirstOrDefaultAsync();
+                
+            if (tokenForDelete is null)
+            {
+                throw new HttpResponseException(404, "Token inválido ou inexistente!");
+            }
+
+            try
+            {
+                _context.PasswordResetTokens.Remove(tokenForDelete);
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Erro ao tentar deletar PasswordResetToken!", ex.Message);
+                throw new HttpResponseException(400, "Erro ao tentar deletar PasswordResetToken");
+            }
+        }
+
         public async Task<PasswordResetToken> GetByTokenAsync(string userResetToken)
         {
             if (string.IsNullOrEmpty(userResetToken))

@@ -112,5 +112,17 @@ namespace MyInvestAPI.Services
 
             return principal;
         }
+
+        public async Task DeleteResetTokenPasswordAsync(string token)
+        {
+            try
+            {
+                
+            }
+            catch
+            {
+
+            }
+        }
     }
 }

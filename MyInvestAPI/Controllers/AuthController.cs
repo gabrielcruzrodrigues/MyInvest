@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyInvestAPI.Domain;
 using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.Services.Interfaces;
+using MyInvestAPI.ViewModels;
 using MyInvestAPI.ViewModels.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -63,10 +64,17 @@ public class AuthController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost("recover-password")]
-    public async Task<ActionResult> RecoverPassword(string userEmail)
+    [HttpPost("request-recover-password")]
+    public async Task<ActionResult> RequestRecoverPassword(string userEmail)
     {
-        await _authRepository.RecoverPassword(userEmail);
+        await _authRepository.RequestRecoverPassword(userEmail);
+        return Ok();
+    }
+
+    [HttpPost("recover-password")]
+    public async Task<ActionResult> RecoverPassword(RecoverPasswordViewModel request)
+    {
+        await _authRepository.RecoverPassword(request);
         return Ok();
     }
 }

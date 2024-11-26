@@ -74,6 +74,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.User.RequireUniqueEmail = true;
+    options.Tokens.PasswordResetTokenProvider = TokenOptions.DefaultProvider;
 })
 .AddEntityFrameworkStores<MyInvestContext>()
 .AddDefaultTokenProviders();
@@ -136,6 +137,8 @@ builder.Services.Configure<AuthMessageSenderCredentials>(options =>
 });
 
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
+
+//----------------------------- Email service configure -----------------------------
 
 var app = builder.Build();
 

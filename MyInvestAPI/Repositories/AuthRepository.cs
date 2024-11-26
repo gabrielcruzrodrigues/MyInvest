@@ -6,6 +6,7 @@ using System.Security.Claims;
 using MyInvestAPI.Extensions;
 using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.Services.Interfaces;
+using MyInvestAPI.ViewModels;
 
 namespace MyInvestAPI.Repositories
 {
@@ -17,10 +18,12 @@ namespace MyInvestAPI.Repositories
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IPasswordResetTokenRepository _passwordResetTokenRepository;
 
         public AuthRepository(ITokenService tokenService, UserManager<User> userManager,
                               RoleManager<IdentityRole> roleManager, IConfiguration configuration,
-                              ILogger<AuthRepository> logger, IEmailSender emailSender)
+                              ILogger<AuthRepository> logger, IEmailSender emailSender, 
+                              IPasswordResetTokenRepository passwordResetTokenRepository)
         {
             _tokenService = tokenService;
             _userManager = userManager;
@@ -28,6 +31,7 @@ namespace MyInvestAPI.Repositories
             _configuration = configuration;
             _logger = logger;
             _emailSender = emailSender;
+            _passwordResetTokenRepository = passwordResetTokenRepository;
         }
 
         public async Task<ResponseLoginViewModel> Login(LoginRequestViewModel request)
@@ -144,13 +148,43 @@ namespace MyInvestAPI.Repositories
             };
         }
 
-        public async Task RecoverPassword(string userEmail)
+        public async Task RequestRecoverPassword(string userEmail)
         {
             var completeLink = await SaveTokenAndPrepareMessageForSendToUser(userEmail);
             string toEmail = userEmail;
             string subject = "MyInvest: Email de recuperação de senha";
             string message = $"Siga o link abaixo para recuperar a sua conta: {completeLink}";
             await _emailSender.SendEmailAsync(toEmail, subject, message);
+        }
+
+        public async Task RecoverPassword(RecoverPasswordViewModel request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.UserEmail);
+            if (user is null)
+            {
+                throw new HttpResponseException(404, "Usuário não encontrado!");
+            }
+
+            var tokenVerify = await _passwordResetTokenRepository.GetByTokenAsync(request.Token);
+            if (tokenVerify is null)
+            {
+                throw new HttpResponseException(404, "Token inválido ou inexistente!");
+            }
+
+            var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            if (string.IsNullOrEmpty(resetToken))
+            {
+                throw new HttpResponseException(400, "Falha ao gerar o token de redefinição de senha.");
+            }
+
+            var removePasswordResult = await _userManager.ResetPasswordAsync(user, resetToken, request.NewPassword);
+            if (!removePasswordResult.Succeeded)
+            {
+                _logger.LogError("Erro ao tentar atualizar a senha do usuário!", removePasswordResult.Errors);
+                throw new HttpResponseException(400, $"Erro ao tentar atualizar a senha do usuário! Ex: {removePasswordResult.Errors.First().Description}");
+            }
+
+            await _passwordResetTokenRepository.DeleteResetTokenPasswordAsync(request.Token);
         }
 
         public async Task<string> SaveTokenAndPrepareMessageForSendToUser(string userEmail)

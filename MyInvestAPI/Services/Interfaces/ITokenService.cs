@@ -11,5 +11,6 @@ namespace MyInvestAPI.Services.Interfaces
         string GenerateRefreshToken();
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token, IConfiguration _config);
         Task<string> GenerateAndReturnPasswordResetLinkAsync(User user);
+        Task DeleteResetTokenPasswordAsync(string token);
     }
 }

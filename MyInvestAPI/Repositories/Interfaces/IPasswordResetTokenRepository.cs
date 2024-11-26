@@ -6,5 +6,6 @@ namespace MyInvestAPI.Repositories.Interfaces
     {
         public Task<PasswordResetToken> CreateAsync(PasswordResetToken passwordResetToken);
         public Task<PasswordResetToken> GetByTokenAsync(string userResetToken);
+        Task DeleteResetTokenPasswordAsync(string token);
     }
 }
