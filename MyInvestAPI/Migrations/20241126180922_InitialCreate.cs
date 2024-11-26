@@ -7,28 +7,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyInvestAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class databasev1 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Actives",
-                columns: table => new
-                {
-                    Active_Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Code = table.Column<string>(type: "text", nullable: false),
-                    Type = table.Column<string>(type: "text", nullable: false),
-                    DYDesiredPercentage = table.Column<float>(type: "real", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Actives", x => x.Active_Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -52,7 +35,8 @@ namespace MyInvestAPI.Migrations
                     LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     RefreshToken = table.Column<string>(type: "text", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    Enable = table.Column<int>(type: "integer", nullable: false),
+                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -179,6 +163,27 @@ namespace MyInvestAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PasswordResetTokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    Token = table.Column<string>(type: "text", nullable: false),
+                    ExpirationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PasswordResetTokens", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PasswordResetTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Purses",
                 columns: table => new
                 {
@@ -188,6 +193,7 @@ namespace MyInvestAPI.Migrations
                     Description = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Enable = table.Column<int>(type: "integer", nullable: false),
                     User_Id = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -202,33 +208,34 @@ namespace MyInvestAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ActivePurse",
+                name: "Actives",
                 columns: table => new
                 {
-                    ActivesActive_Id = table.Column<int>(type: "integer", nullable: false),
-                    PursesPurse_Id = table.Column<int>(type: "integer", nullable: false)
+                    Active_Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Code = table.Column<string>(type: "text", nullable: false),
+                    Type = table.Column<string>(type: "text", nullable: false),
+                    DYDesiredPercentage = table.Column<float>(type: "real", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastUpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Enable = table.Column<int>(type: "integer", nullable: false),
+                    PurseId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActivePurse", x => new { x.ActivesActive_Id, x.PursesPurse_Id });
+                    table.PrimaryKey("PK_Actives", x => x.Active_Id);
                     table.ForeignKey(
-                        name: "FK_ActivePurse_Actives_ActivesActive_Id",
-                        column: x => x.ActivesActive_Id,
-                        principalTable: "Actives",
-                        principalColumn: "Active_Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ActivePurse_Purses_PursesPurse_Id",
-                        column: x => x.PursesPurse_Id,
+                        name: "FK_Actives_Purses_PurseId",
+                        column: x => x.PurseId,
                         principalTable: "Purses",
                         principalColumn: "Purse_Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActivePurse_PursesPurse_Id",
-                table: "ActivePurse",
-                column: "PursesPurse_Id");
+                name: "IX_Actives_PurseId",
+                table: "Actives",
+                column: "PurseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -268,6 +275,11 @@ namespace MyInvestAPI.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_PasswordResetTokens_UserId",
+                table: "PasswordResetTokens",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Purses_User_Id",
                 table: "Purses",
                 column: "User_Id");
@@ -277,7 +289,7 @@ namespace MyInvestAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ActivePurse");
+                name: "Actives");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -295,7 +307,7 @@ namespace MyInvestAPI.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Actives");
+                name: "PasswordResetTokens");
 
             migrationBuilder.DropTable(
                 name: "Purses");

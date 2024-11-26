@@ -49,7 +49,7 @@ namespace MyInvestAPI.Services
             return Convert.ToBase64String(bytes);
         }
 
-        public async Task<string> GenerateAndReturnPasswordResetLink(User user)
+        public async Task<string> GenerateAndReturnPasswordResetLinkAsync(User user)
         {
             var frontendUrl = Environment.GetEnvironmentVariable("FRONTEND_URL");
             if (string.IsNullOrEmpty(frontendUrl))

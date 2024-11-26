@@ -192,7 +192,7 @@ namespace MyInvestAPI.Migrations
                     b.ToTable("Actives");
                 });
 
-            modelBuilder.Entity("MyInvestAPI.Domain.PasswordResetTokens", b =>
+            modelBuilder.Entity("MyInvestAPI.Domain.PasswordResetToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -396,7 +396,7 @@ namespace MyInvestAPI.Migrations
                     b.Navigation("Purse");
                 });
 
-            modelBuilder.Entity("MyInvestAPI.Domain.PasswordResetTokens", b =>
+            modelBuilder.Entity("MyInvestAPI.Domain.PasswordResetToken", b =>
                 {
                     b.HasOne("MyInvestAPI.Domain.User", "User")
                         .WithMany()

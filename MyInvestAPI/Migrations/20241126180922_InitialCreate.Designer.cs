@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyInvestAPI.Migrations
 {
     [DbContext(typeof(MyInvestContext))]
-    [Migration("20241004200041_databasev1")]
-    partial class databasev1
+    [Migration("20241126180922_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,21 +24,6 @@ namespace MyInvestAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("ActivePurse", b =>
-                {
-                    b.Property<int>("ActivesActive_Id")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PursesPurse_Id")
-                        .HasColumnType("integer");
-
-                    b.HasKey("ActivesActive_Id", "PursesPurse_Id");
-
-                    b.HasIndex("PursesPurse_Id");
-
-                    b.ToTable("ActivePurse");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -190,8 +175,14 @@ namespace MyInvestAPI.Migrations
                     b.Property<float>("DYDesiredPercentage")
                         .HasColumnType("real");
 
+                    b.Property<int>("Enable")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PurseId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -199,7 +190,35 @@ namespace MyInvestAPI.Migrations
 
                     b.HasKey("Active_Id");
 
+                    b.HasIndex("PurseId");
+
                     b.ToTable("Actives");
+                });
+
+            modelBuilder.Entity("MyInvestAPI.Domain.PasswordResetToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpirationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PasswordResetTokens");
                 });
 
             modelBuilder.Entity("MyInvestAPI.Domain.Purse", b =>
@@ -217,6 +236,9 @@ namespace MyInvestAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
+
+                    b.Property<int>("Enable")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -257,6 +279,9 @@ namespace MyInvestAPI.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<int>("Enable")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("LastUpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -312,21 +337,6 @@ namespace MyInvestAPI.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("ActivePurse", b =>
-                {
-                    b.HasOne("MyInvestAPI.Domain.Active", null)
-                        .WithMany()
-                        .HasForeignKey("ActivesActive_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MyInvestAPI.Domain.Purse", null)
-                        .WithMany()
-                        .HasForeignKey("PursesPurse_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -378,6 +388,28 @@ namespace MyInvestAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MyInvestAPI.Domain.Active", b =>
+                {
+                    b.HasOne("MyInvestAPI.Domain.Purse", "Purse")
+                        .WithMany("Actives")
+                        .HasForeignKey("PurseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Purse");
+                });
+
+            modelBuilder.Entity("MyInvestAPI.Domain.PasswordResetToken", b =>
+                {
+                    b.HasOne("MyInvestAPI.Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MyInvestAPI.Domain.Purse", b =>
                 {
                     b.HasOne("MyInvestAPI.Domain.User", "User")
@@ -387,6 +419,11 @@ namespace MyInvestAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MyInvestAPI.Domain.Purse", b =>
+                {
+                    b.Navigation("Actives");
                 });
 
             modelBuilder.Entity("MyInvestAPI.Domain.User", b =>
