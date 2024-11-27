@@ -116,6 +116,7 @@ builder.Services.AddTransient<IEmailSender, EmailSender>();
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
 builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
+builder.Services.AddScoped<IPasswordResetCodeRepository, PasswordResetCodeRepository>();
 
 //----------------------------- Database -----------------------------
 string postgreSqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");

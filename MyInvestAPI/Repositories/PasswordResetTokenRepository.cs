@@ -31,7 +31,7 @@ namespace MyInvestAPI.Repositories
             }
         }
 
-        public async Task DeleteResetTokenPasswordAsync(string token)
+        public async Task DeletePasswordResetTokenAsync(string token)
         {
             var tokenForDelete = await _context.PasswordResetTokens
                         .Where(p => p.Token.Equals(token))

@@ -12,10 +12,12 @@ namespace MyInvestAPI.Services
     public class TokenService : ITokenService
     {
         private readonly IPasswordResetTokenRepository _passwordResetTokenRepository;
+        private readonly IPasswordResetCodeRepository _passwordResetCodeRepository;
 
-        public TokenService(IPasswordResetTokenRepository passwordResetTokenRepository)
+        public TokenService(IPasswordResetTokenRepository passwordResetTokenRepository, IPasswordResetCodeRepository passwordResetCodeRepository)
         {
             _passwordResetTokenRepository = passwordResetTokenRepository;
+            _passwordResetCodeRepository = passwordResetCodeRepository;
         }
 
         public JwtSecurityToken GenerateAccessToken(IEnumerable<Claim> claims, IConfiguration _config)
@@ -113,16 +115,33 @@ namespace MyInvestAPI.Services
             return principal;
         }
 
-        public async Task DeleteResetTokenPasswordAsync(string token)
+        public async Task<string> GenerateSaveAndReturnRecoverCode(User user)
         {
-            try
-            {
-                
-            }
-            catch
-            {
+            string? code;
 
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
+            Random random = new Random();
+            char[] result = new char[5];
+
+            do
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    result[i] = chars[random.Next(chars.Length)];
+                }
+                code = new string(result);
             }
+            while (await _passwordResetCodeRepository.GetByCodeAsync(code) is not null);
+
+            var codeForSave = new PasswordResetCode
+            {
+                Code = code,
+                UserId = user.Id,
+                ExpirationTime = DateTime.UtcNow.AddMinutes(30)
+            };
+
+            var passwordResetCode = await _passwordResetCodeRepository.CreateAsync(codeForSave);
+            return passwordResetCode.Code;
         }
     }
 }

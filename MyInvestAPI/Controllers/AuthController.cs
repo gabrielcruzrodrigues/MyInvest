@@ -65,9 +65,9 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("request-recover-password")]
-    public async Task<ActionResult> RequestRecoverPassword(string userEmail)
+    public async Task<ActionResult> RequestRecoverPassword(string userId)
     {
-        await _authRepository.RequestRecoverPassword(userEmail);
+        await _authRepository.RequestRecoverPassword(userId);
         return Ok();
     }
 
@@ -75,6 +75,13 @@ public class AuthController : ControllerBase
     public async Task<ActionResult> RecoverPassword(RecoverPasswordViewModel request)
     {
         await _authRepository.RecoverPassword(request);
+        return Ok();
+    }
+
+    [HttpPost("request-forgotten-password")]
+    public async Task<ActionResult> RequestForgottenPassword(string userEmail)
+    {
+        await _authRepository.RequestCodeForForgottenPassword(userEmail);
         return Ok();
     }
 }

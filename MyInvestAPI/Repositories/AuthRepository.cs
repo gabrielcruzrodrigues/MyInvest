@@ -7,6 +7,7 @@ using MyInvestAPI.Extensions;
 using MyInvestAPI.Repositories.Interfaces;
 using MyInvestAPI.Services.Interfaces;
 using MyInvestAPI.ViewModels;
+using MyInvestAPI.Domain.Enums;
 
 namespace MyInvestAPI.Repositories
 {
@@ -148,18 +149,41 @@ namespace MyInvestAPI.Repositories
             };
         }
 
-        public async Task RequestRecoverPassword(string userEmail)
+        public async Task RequestRecoverPassword(string userId)
         {
-            var completeLink = await SaveTokenAndPrepareMessageForSendToUser(userEmail);
-            string toEmail = userEmail;
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user is null || user.Email is null)
+            {
+                throw new HttpResponseException(404, "Usuário não encontrado!");
+            }
+
+            var completeLink = await SaveTokenOrCodeAndPrepareMessageForSendToUser(user, EntityOptionEnum.PASSWORD_RESET_TOKEN);
+
+            string toEmail = user.Email;
             string subject = "MyInvest: Email de recuperação de senha";
             string message = $"Siga o link abaixo para recuperar a sua conta: {completeLink}";
             await _emailSender.SendEmailAsync(toEmail, subject, message);
         }
 
+        public async Task RequestCodeForForgottenPassword(string userEmail)
+        {
+            var user = await _userManager.FindByEmailAsync(userEmail);
+            if (user is null || user.Email is null)
+            {
+                throw new HttpResponseException(404, "Usuário não encontrado ou sem email cadastrado!");
+            }
+
+            var code = await SaveTokenOrCodeAndPrepareMessageForSendToUser(user, EntityOptionEnum.PASSWORD_RESET_CODE);
+
+            string toEmail = user.Email;
+            string subject = "MyInvest: Código para acessar a sua conta";
+            string message = $"{code}";
+            await _emailSender.SendEmailAsync(toEmail, subject, message);
+        }
+
         public async Task RecoverPassword(RecoverPasswordViewModel request)
         {
-            var user = await _userManager.FindByEmailAsync(request.UserEmail);
+            var user = await _userManager.FindByIdAsync(request.UserId);
             if (user is null)
             {
                 throw new HttpResponseException(404, "Usuário não encontrado!");
@@ -184,18 +208,22 @@ namespace MyInvestAPI.Repositories
                 throw new HttpResponseException(400, $"Erro ao tentar atualizar a senha do usuário! Ex: {removePasswordResult.Errors.First().Description}");
             }
 
-            await _passwordResetTokenRepository.DeleteResetTokenPasswordAsync(request.Token);
+            await _passwordResetTokenRepository.DeletePasswordResetTokenAsync(request.Token);
         }
 
-        public async Task<string> SaveTokenAndPrepareMessageForSendToUser(string userEmail)
+        public async Task<string> SaveTokenOrCodeAndPrepareMessageForSendToUser(User user, EntityOptionEnum option)
         {
-            var user = await _userManager.FindByEmailAsync(userEmail);
-            if (user is null)
+            if (option.Equals(EntityOptionEnum.PASSWORD_RESET_TOKEN))
             {
-                throw new HttpResponseException(404, "Usuário não encontrado!");
+                return await _tokenService.GenerateAndReturnPasswordResetLinkAsync(user);
             }
 
-            return await _tokenService.GenerateAndReturnPasswordResetLinkAsync(user);
+            if (option.Equals(EntityOptionEnum.PASSWORD_RESET_CODE))
+            {
+                return await _tokenService.GenerateSaveAndReturnRecoverCode(user);
+            }
+
+            return "";
         }
     }
 }
