@@ -9,8 +9,10 @@ namespace MyInvestAPI.Domain
         [Key]
         public int Id { get; set; }
         [Required]
+        [StringLength(10)]
         public required string Code { get; set; }
         [Required]
+        [StringLength(50)]
         public required string UserId { get; set; }
         [Required]
         public DateTime ExpirationTime { get; set; }

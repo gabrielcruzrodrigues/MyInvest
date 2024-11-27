@@ -190,7 +190,7 @@ namespace MyInvestAPI.Repositories
             }
 
             var tokenVerify = await _passwordResetTokenRepository.GetByTokenAsync(request.Token);
-            if (tokenVerify is null)
+            if (tokenVerify is null || tokenVerify.ExpirationTime < DateTime.Now)
             {
                 throw new HttpResponseException(404, "Token inválido ou inexistente!");
             }

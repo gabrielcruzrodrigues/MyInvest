@@ -121,11 +121,11 @@ namespace MyInvestAPI.Services
 
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()";
             Random random = new Random();
-            char[] result = new char[5];
+            char[] result = new char[10];
 
             do
             {
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 10; i++)
                 {
                     result[i] = chars[random.Next(chars.Length)];
                 }
