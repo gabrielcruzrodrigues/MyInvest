@@ -78,10 +78,16 @@ public class AuthController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("request-forgotten-password")]
-    public async Task<ActionResult> RequestForgottenPassword(string userEmail)
+    [HttpPost("request-login-by-code")]
+    public async Task<ActionResult> RequestLoginByCode(string userEmail)
     {
         await _authRepository.RequestCodeForForgottenPassword(userEmail);
         return Ok();
+    }
+
+    [HttpPost("login-by-code")]
+    public async Task<ActionResult<ResponseLoginViewModel>> LoginByCode(string code)
+    {
+        return Ok(await _tokenService.VerifyPasswordResetCode(code));
     }
 }

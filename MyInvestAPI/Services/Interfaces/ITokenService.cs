@@ -1,4 +1,5 @@
 ﻿using MyInvestAPI.Domain;
+using MyInvestAPI.ViewModels.Auth;
 using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,5 +13,6 @@ namespace MyInvestAPI.Services.Interfaces
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token, IConfiguration _config);
         Task<string> GenerateAndReturnPasswordResetLinkAsync(User user);
         Task<string> GenerateSaveAndReturnRecoverCode(User user);
+        Task<ResponseLoginViewModel> VerifyPasswordResetCode(string code);
     }
 }

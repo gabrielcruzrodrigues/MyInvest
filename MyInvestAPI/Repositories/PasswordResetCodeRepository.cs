@@ -63,6 +63,7 @@ namespace MyInvestAPI.Repositories
 
             var passwordResetCode = await _context.PasswordResetCodes
                                     .Where(p => p.Code.Equals(Code))
+                                    .Include(p => p.User)
                                     .FirstOrDefaultAsync();
 
             return passwordResetCode;
