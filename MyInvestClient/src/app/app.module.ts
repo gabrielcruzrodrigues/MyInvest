@@ -53,6 +53,7 @@ import { CreateActiveComponent } from './pages/create-active/create-active.compo
 import { UpdateActiveComponent } from './pages/update-active/update-active.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { EditPurseComponent } from './pages/edit-purse/edit-purse.component';
+import { RequestLoginByCodeComponent } from './pages/request-login-by-code/request-login-by-code.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -94,7 +95,8 @@ registerLocaleData(localeEn, 'en-EN');
         CreateActiveComponent,
         UpdateActiveComponent,
         LoginPageComponent,
-        EditPurseComponent
+        EditPurseComponent,
+        RequestLoginByCodeComponent
     ],
     bootstrap: [AppComponent],
     imports: [

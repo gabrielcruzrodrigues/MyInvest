@@ -13,6 +13,7 @@ import { CreateActiveComponent } from '@pages/create-active/create-active.compon
 import { UpdateActiveComponent } from '@pages/update-active/update-active.component';
 import { LoginPageComponent } from '@pages/login-page/login-page.component';
 import { EditPurseComponent } from '@pages/edit-purse/edit-purse.component';
+import { RequestLoginByCodeComponent } from '@pages/request-login-by-code/request-login-by-code.component';
 
 const routes: Routes = [
     {
@@ -64,6 +65,11 @@ const routes: Routes = [
         path: 'register',
         component: RegisterComponent,
         canActivate: [NonAuthGuard]
+    },
+    {
+        path: 'request-login-by-code',
+        component: RequestLoginByCodeComponent,
+        // canActivate: [NonAuthGuard]
     },
     {
         path: 'forgot-password',

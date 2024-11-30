@@ -67,7 +67,7 @@ export class ActivesListComponent implements OnInit{
         this.isLoading = false;
         if (err.status === 401)
         {
-          this.appService.redirectAfterExpiredAccessToken();
+          this.appService.clearLocalStorage();
           return;
         }
 

@@ -192,6 +192,7 @@ public class TokenService : ITokenService
         user.RefreshTokenExpiryTime = DateTime.UtcNow.AddMinutes(refreshTokenValidityInMinutes);
 
         await _userManager.UpdateAsync(user);
+        await _passwordResetCodeRepository.DeletePasswordResetCodeAsync(code);
 
         return new ResponseLoginViewModel
         (

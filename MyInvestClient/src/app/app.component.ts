@@ -28,15 +28,14 @@ export class AppComponent implements OnInit {
     ngOnInit(): void {
         var expirationTokenDate = this.appService.getExpirationTokenDate();
 
-        if (!expirationTokenDate) {
-            this.router.navigate(["/login"]);
-        }
-
         const expirationDate = new Date(expirationTokenDate);
         const currentDate = new Date();
 
-        if (currentDate >= expirationDate) {
-            this.appService.NewAccessToken();
+        if (expirationTokenDate) {
+            if (currentDate >= expirationDate) {
+                this.appService.NewAccessToken();
+                this.router.navigate(["/login"]);
+            } 
         }
     }
 }

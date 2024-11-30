@@ -79,7 +79,7 @@ export class CreatePurseComponent {
       },
       error: (err) => {
         if (err.status === 401) {
-          this.appService.redirectAfterExpiredAccessToken();
+          this.appService.clearLocalStorage();
           return;
         }
 

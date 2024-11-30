@@ -166,7 +166,7 @@ export class AppService {
         var refreshToken = localStorage.getItem('RefreshToken');
 
         if (!refreshToken) {
-            this.redirectAfterExpiredAccessToken();
+            this.clearLocalStorage();
             return;
         }
 
@@ -187,20 +187,18 @@ export class AppService {
             },
             error: (error: any) => {
                 if (error.status === 400) {
-                    this.redirectAfterExpiredAccessToken();
+                    this.clearLocalStorage();
                 }
                 console.log(`houve um erro ao tentar se comunicar com o servidor! err: ${error.message}`);
             }
         });
     }
 
-    redirectAfterExpiredAccessToken(): void {
+    clearLocalStorage(): void {
         localStorage.removeItem('RefreshToken');
         localStorage.removeItem('Expiration');
         localStorage.removeItem('userId');
         localStorage.removeItem('Token');
-
-        this.router.navigate(["/login"]);
     }
 
     createAccount(data: any): Observable<any> {
@@ -233,5 +231,10 @@ export class AppService {
             return new HttpHeaders().set('Authorization', `Bearer ${token}`);
         }
         return new HttpHeaders();
+    }
+
+    requestCodeToLogin(email: string) : Observable<any> {
+        const urlForRequest = this.url + "request-login-by-code";
+        return this.http.post(urlForRequest, { userEmail: email }, { observe: 'response'});
     }
 }

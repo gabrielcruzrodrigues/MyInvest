@@ -79,9 +79,9 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("request-login-by-code")]
-    public async Task<ActionResult> RequestLoginByCode(string userEmail)
+    public async Task<ActionResult> RequestLoginByCode(RequestLoginByCodeViewModel request)
     {
-        await _authRepository.RequestCodeForForgottenPassword(userEmail);
+        await _authRepository.RequestCodeForForgottenPassword(request.UserEmail);
         return Ok();
     }
 
