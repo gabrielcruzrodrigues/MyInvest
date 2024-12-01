@@ -4,7 +4,7 @@
           <span>MyInvest</span>
           <img src="/assets/img/logo-pig.png">
      </div>
-     <div class="card-body">
+     <div class="card-body" #page0>
           <p class="login-box-msg">Digite o seu email cadastrado</p>
 
           <form [formGroup]="form" (ngSubmit)="loginByCode()">
@@ -24,6 +24,32 @@
                     </div>
                     <div class="w-100 text-center mt-2">
                          <a class="bg-gray-100" href="/login">já tem uma conta? faça login</a>
+                    </div>
+               </div>
+          </form>
+     </div>
+
+     <div class="card-body hidden" #page1>
+          <p class="login-box-msg">Digite o código enviado para seu email</p>
+
+          <form [formGroup]="form" (ngSubmit)="verifyCode()">
+               <div class="input-group mb-3">
+                    <input formControlName="code" type="text" class="form-control" placeholder="Código de acesso" />
+                    <div class="input-group-append">
+                         <div class="input-group-text">
+                              <span class="fa-solid fa-key"></span>
+                         </div>
+                    </div>
+               </div>
+               <div class="request">
+                    <div class="col-12 d-flex align-content-center">
+                         <button class="btn btn-primary m-auto" type="submit">
+                              Acessar minha conta
+                         </button>
+                    </div>
+                    <div class="w-100 text-center mt-2 d-flex flex-column">
+                         <a class="bg-gray-100 d-block" href="/login">Reenviar código</a>
+                              <a class="bg-gray-100 text-muted" href="/login">já tem uma conta? faça login</a>
                     </div>
                </div>
           </form>

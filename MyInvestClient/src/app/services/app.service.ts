@@ -237,4 +237,9 @@ export class AppService {
         const urlForRequest = this.url + "request-login-by-code";
         return this.http.post(urlForRequest, { userEmail: email }, { observe: 'response'});
     }
+
+    sendCodeAndLogin(code: string) : Observable<any> {
+        const urlForRequest = this.url + "login-by-code";
+        return this.http.post(urlForRequest, { code: code }, { observe: 'response'});
+    }
 }

@@ -86,8 +86,8 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login-by-code")]
-    public async Task<ActionResult<ResponseLoginViewModel>> LoginByCode(string code)
+    public async Task<ActionResult<ResponseLoginViewModel>> LoginByCode(LoginByCodeViewModel request)
     {
-        return Ok(await _tokenService.VerifyPasswordResetCode(code));
+        return Ok(await _tokenService.VerifyPasswordResetCode(request.Code));
     }
 }
