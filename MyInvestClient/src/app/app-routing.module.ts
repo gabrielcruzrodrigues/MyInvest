@@ -5,7 +5,6 @@ import {ProfileComponent} from '@pages/profile/profile.component';
 import {RegisterComponent} from '@modules/register/register.component';
 import {NonAuthGuard} from '@guards/non-auth.guard';
 import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.component';
-import {RecoverPasswordComponent} from '@modules/recover-password/recover-password.component';
 import { PursesListComponent } from '@pages/purses-list/purses-list.component';
 import { ActivesListComponent } from '@pages/actives-list/actives-list.component';
 import { CreatePurseComponent } from '@pages/create-purse/create-purse.component';
@@ -14,6 +13,8 @@ import { UpdateActiveComponent } from '@pages/update-active/update-active.compon
 import { LoginPageComponent } from '@pages/login-page/login-page.component';
 import { EditPurseComponent } from '@pages/edit-purse/edit-purse.component';
 import { RequestLoginByCodeComponent } from '@pages/request-login-by-code/request-login-by-code.component';
+import { RecoverPasswordComponent } from '@pages/recover-password/recover-password.component';
+import { RequestRecoverPasswordComponent } from '@pages/request-recover-password/request-recover-password.component';
 
 const routes: Routes = [
     {
@@ -54,6 +55,14 @@ const routes: Routes = [
                 path: 'update-active/:activeId/:name/:percentValue',
                 component: UpdateActiveComponent
             },
+            {
+                path: 'recover-password',
+                component: RecoverPasswordComponent
+            },
+            {
+                path: 'request-recover-password',
+                component: RequestRecoverPasswordComponent
+            }
         ]
     },
     {
@@ -74,11 +83,6 @@ const routes: Routes = [
     {
         path: 'forgot-password',
         component: ForgotPasswordComponent,
-        canActivate: [NonAuthGuard]
-    },
-    {
-        path: 'recover-password',
-        component: RecoverPasswordComponent,
         canActivate: [NonAuthGuard]
     },
     {path: '**', redirectTo: ''}

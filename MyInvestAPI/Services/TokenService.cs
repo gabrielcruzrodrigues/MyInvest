@@ -55,7 +55,7 @@ public class TokenService : ITokenService
     private string GeneratePasswordResetToken()
     {
         using var rng = RandomNumberGenerator.Create();
-        var bytes = new byte[32];
+        var bytes = new byte[16];
         rng.GetBytes(bytes);
         return Convert.ToBase64String(bytes);
     }
@@ -84,7 +84,7 @@ public class TokenService : ITokenService
 
         var generatedPasswordResetToken = await _passwordResetTokenRepository.CreateAsync(passwordResetTokenForSave);
 
-        return $"{frontendUrl}/reset-password?email={Uri.EscapeDataString(user.Email)}&token={generatedPasswordResetToken.Token}";
+        return $"{frontendUrl}/recover-password?email={Uri.EscapeDataString(user.Email)}&token={generatedPasswordResetToken.Token}";
     }
 
     public string GenerateRefreshToken()

@@ -48,20 +48,15 @@ export const MENU = [
         iconClasses: 'fas fa-bookmark',
         path: ['/purses']
     },
-    // {
-    //     name: 'Menus futuros',
-    //     iconClasses: 'fas fa-folder',
-    //     children: [
-    //         {
-    //             name: 'Sub Menu',
-    //             iconClasses: 'far fa-address-book',
-    //             path: ['/sub-menu-1']
-    //         },
-    //         {
-    //             name: 'Sub Menu',
-    //             iconClasses: 'fas fa-file',
-    //             path: ['/sub-menu-2']
-    //         }
-    //     ]
-    // }
+    {
+        name: 'Gerenciamento da conta',
+        iconClasses: 'fas fa-user',
+        children: [
+            {
+                name: 'Alterar senha',
+                iconClasses: 'fas fa-key',
+                path: ['/request-recover-password']
+            },
+        ]
+    }
 ];

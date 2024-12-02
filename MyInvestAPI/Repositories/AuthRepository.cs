@@ -183,7 +183,7 @@ namespace MyInvestAPI.Repositories
 
         public async Task RecoverPassword(RecoverPasswordViewModel request)
         {
-            var user = await _userManager.FindByIdAsync(request.UserId);
+            var user = await _userManager.FindByEmailAsync(request.UserEmail);
             if (user is null)
             {
                 throw new HttpResponseException(404, "Usuário não encontrado!");

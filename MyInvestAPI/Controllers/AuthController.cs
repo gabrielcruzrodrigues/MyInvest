@@ -65,9 +65,9 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("request-recover-password")]
-    public async Task<ActionResult> RequestRecoverPassword(string userId)
+    public async Task<ActionResult> RequestRecoverPassword(RequestRecoverPasswordViewModel request)
     {
-        await _authRepository.RequestRecoverPassword(userId);
+        await _authRepository.RequestRecoverPassword(request.UserId);
         return Ok();
     }
 

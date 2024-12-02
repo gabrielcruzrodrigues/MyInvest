@@ -242,4 +242,14 @@ export class AppService {
         const urlForRequest = this.url + "login-by-code";
         return this.http.post(urlForRequest, { code: code }, { observe: 'response'});
     }
+
+    recoverPassword(data: any) : Observable<any> {
+        const urlForRequest = this.url + "recover-password";
+        return this.http.post(urlForRequest, data, { observe: 'response'});
+    }
+
+    requestRecoverPassword(id: string): Observable<any> {
+        const urlForRequest = this.url + "request-recover-password";
+        return this.http.post(urlForRequest, { userId: id }, { observe: 'response' });
+    }
 }

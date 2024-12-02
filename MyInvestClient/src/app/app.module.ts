@@ -22,7 +22,6 @@ import {CommonModule, registerLocaleData} from '@angular/common';
 import localeEn from '@angular/common/locales/en';
 import {UserComponent} from '@modules/main/header/user/user.component';
 import {ForgotPasswordComponent} from '@modules/forgot-password/forgot-password.component';
-import {RecoverPasswordComponent} from '@modules/recover-password/recover-password.component';
 import {LanguageComponent} from '@modules/main/header/language/language.component';
 import {MainMenuComponent} from './pages/main-menu/main-menu.component';
 import {SubMenuComponent} from './pages/main-menu/sub-menu/sub-menu.component';
@@ -54,6 +53,8 @@ import { UpdateActiveComponent } from './pages/update-active/update-active.compo
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { EditPurseComponent } from './pages/edit-purse/edit-purse.component';
 import { RequestLoginByCodeComponent } from './pages/request-login-by-code/request-login-by-code.component';
+import { RecoverPasswordComponent } from '@pages/recover-password/recover-password.component';
+import { RequestRecoverPasswordComponent } from './pages/request-recover-password/request-recover-password.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -72,7 +73,6 @@ registerLocaleData(localeEn, 'en-EN');
         NotificationsComponent,
         UserComponent,
         ForgotPasswordComponent,
-        RecoverPasswordComponent,
         LanguageComponent,
         MainMenuComponent,
         SubMenuComponent,
@@ -96,16 +96,18 @@ registerLocaleData(localeEn, 'en-EN');
         UpdateActiveComponent,
         LoginPageComponent,
         EditPurseComponent,
-        RequestLoginByCodeComponent
+        RequestLoginByCodeComponent,
+        RecoverPasswordComponent,
+        RequestRecoverPasswordComponent
     ],
     bootstrap: [AppComponent],
     imports: [
         ProfabricComponentsModule,
+        ReactiveFormsModule,
         CommonModule,
         BrowserModule,
         StoreModule.forRoot({auth: authReducer, ui: uiReducer}),
         AppRoutingModule,
-        ReactiveFormsModule,
         BrowserAnimationsModule,
         ToastrModule.forRoot({
             timeOut: 3000,
