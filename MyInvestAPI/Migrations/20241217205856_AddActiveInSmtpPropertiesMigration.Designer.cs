@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyInvestAPI.Data;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MyInvestAPI.Migrations
 {
     [DbContext(typeof(MyInvestContext))]
-    partial class MyInvestContextModelSnapshot : ModelSnapshot
+    [Migration("20241217205856_AddActiveInSmtpPropertiesMigration")]
+    partial class AddActiveInSmtpPropertiesMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -293,10 +296,6 @@ namespace MyInvestAPI.Migrations
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("PasswordSenderEmail")
                         .IsRequired()

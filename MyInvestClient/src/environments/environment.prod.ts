@@ -2,5 +2,5 @@ export const environment = {
     NODE_ENV: null,
     GA_ID: null,
     FIREBASE_CONFIG: null,
-    URL: "https://localhost:8080"
+    URL: "http://localhost:5140"
   };

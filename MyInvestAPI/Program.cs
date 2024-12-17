@@ -117,6 +117,8 @@ builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
 builder.Services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
 builder.Services.AddScoped<IPasswordResetCodeRepository, PasswordResetCodeRepository>();
+builder.Services.AddScoped<ISmtpPropertiesRepository, SmtpPropertiesRepository>();
+builder.Services.AddScoped<ISmtpPropertiesService, SmtpPropertiesService>();
 
 //----------------------------- Database -----------------------------
 string postgreSqlConnection = builder.Configuration.GetConnectionString("DefaultConnection");
