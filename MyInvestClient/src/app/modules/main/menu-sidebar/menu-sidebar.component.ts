@@ -58,5 +58,16 @@ export const MENU = [
                 path: ['/request-recover-password']
             },
         ]
+    },
+    {
+        name: 'Painel administrativo',
+        iconClasses: 'fa-solid fa-lock',
+        children: [
+            {
+                name: 'Gerenciamento SMTP',
+                iconClasses: 'fas fa-key',
+                path: ['/smtp-panel']
+            }
+        ]
     }
 ];

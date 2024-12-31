@@ -15,6 +15,9 @@ import { EditPurseComponent } from '@pages/edit-purse/edit-purse.component';
 import { RequestLoginByCodeComponent } from '@pages/request-login-by-code/request-login-by-code.component';
 import { RecoverPasswordComponent } from '@pages/recover-password/recover-password.component';
 import { RequestRecoverPasswordComponent } from '@pages/request-recover-password/request-recover-password.component';
+import { ListSmtpProfilesComponent } from '@pages/list-smtp-profiles/list-smtp-profiles.component';
+import { CreateSmtpProfilesComponent } from '@pages/create-smtp-profiles/create-smtp-profiles.component';
+import { SmptPanelComponent } from '@pages/smpt-panel/smpt-panel.component';
 
 const routes: Routes = [
     {
@@ -62,6 +65,18 @@ const routes: Routes = [
             {
                 path: 'request-recover-password',
                 component: RequestRecoverPasswordComponent
+            },
+            {
+                path: 'list-smtp-properties',
+                component: ListSmtpProfilesComponent
+            },
+            {
+                path: 'create-smtp-properties',
+                component: CreateSmtpProfilesComponent
+            },
+            {
+                path: 'smtp-panel',
+                component: SmptPanelComponent
             }
         ]
     },

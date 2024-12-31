@@ -55,6 +55,9 @@ import { EditPurseComponent } from './pages/edit-purse/edit-purse.component';
 import { RequestLoginByCodeComponent } from './pages/request-login-by-code/request-login-by-code.component';
 import { RecoverPasswordComponent } from '@pages/recover-password/recover-password.component';
 import { RequestRecoverPasswordComponent } from './pages/request-recover-password/request-recover-password.component';
+import { ListSmtpProfilesComponent } from './pages/list-smtp-profiles/list-smtp-profiles.component';
+import { CreateSmtpProfilesComponent } from './pages/create-smtp-profiles/create-smtp-profiles.component';
+import { SmptPanelComponent } from './pages/smpt-panel/smpt-panel.component';
 
 registerLocaleData(localeEn, 'en-EN');
 
@@ -98,7 +101,10 @@ registerLocaleData(localeEn, 'en-EN');
         EditPurseComponent,
         RequestLoginByCodeComponent,
         RecoverPasswordComponent,
-        RequestRecoverPasswordComponent
+        RequestRecoverPasswordComponent,
+        ListSmtpProfilesComponent,
+        CreateSmtpProfilesComponent,
+        SmptPanelComponent
     ],
     bootstrap: [AppComponent],
     imports: [

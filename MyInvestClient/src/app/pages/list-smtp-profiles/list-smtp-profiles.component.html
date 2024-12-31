@@ -1,0 +1,62 @@
+<app-spinner [isLoading]="isLoading"></app-spinner>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+     <div class="container-fluid">
+          <div class="row mb-2">
+               <div class="col-sm-6">
+                    <h1>Perfis Smtp disponíveis</h1>
+               </div>
+               <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                         <li class="breadcrumb-item"><a href="#">Home</a></li>
+                         <li class="breadcrumb-item active">Smtp Properties</li>
+                    </ol>
+               </div>
+          </div>
+     </div>
+     <!-- /.container-fluid -->
+</section>
+
+<section class="content">
+     <!-- Default box -->
+     <div class="container-fluid">
+          <div class="card">
+               <div class="card-header">
+                    <a href="/create-smtp-properties" class="btn btn-primary">Adicionar perfil smtp</a>
+               </div>
+
+               <table class="table table-striped    text-center">
+                    <thead class="thead-dark">
+                         <tr>
+                              <th>Nome</th>
+                              <th>Cliente Smtp</th>
+                              <th>Porta</th>
+                              <th>Sender Email</th>
+                              <th>ações</th>
+                         </tr>
+
+                    </thead>
+                    <tbody>
+                         <tr *ngFor="let smtp of smtpProperties">
+                              <td class="align-middle">{{ smtp.name }}</td>
+                              <td class="align-middle">{{ smtp.smtpClient }}</td>
+                              <td class="align-middle">{{ smtp.port }}</td>
+                              <td class="align-middle">{{ smtp.senderEmail }}</td>
+                              
+                              <td class="align-middle">
+                                   <button class="btn btn-warning mr-3"
+                                        (click)="updateSmtpPropertie(); $event.stopPropagation()">
+                                        <fa-icon [icon]="faEdit"></fa-icon>
+                                   </button>
+                                   <button class="btn btn-danger"
+                                        (click)="deleteSmtpPropertie(); $event.stopPropagation()">
+                                        <fa-icon [icon]="faTrash"></fa-icon>
+                                   </button>
+                              </td>
+                         </tr>
+
+                    </tbody>
+               </table>
+          </div>
+     </div>
+</section>
