@@ -1,12 +1,16 @@
 # 💰 MyInvest
-
-<h1 style="background-color:green;">PROJETO EM DESENVOLVIMENTO...</h1>
+<a style="color:yellow;">PROJETO EM DESENVOLVIMENTO </a>
 
 **MyInvest** é uma aplicação web composta por uma API desenvolvida em **C# | ASP.NET** e um cliente web em **Angular**. O objetivo do sistema é fornecer informações detalhadas sobre a carteira de ativos dos usuários, calculando o preço-teto (modelo de Bazin) para ações e FIIs e sugerindo a compra ou não do ativo com base no preço atual < preço-teto.
 
 ## 🎯 Objetivo
 
 O principal objetivo do **MyInvest** é ajudar investidores a tomar decisões informadas sobre a compra de ações e FIIs, com base no cálculo do preço-teto segundo o modelo de Décio Bazin. A aplicação oferece uma interface intuitiva para que os usuários possam visualizar e gerenciar suas carteiras de ativos, recebendo sugestões de compra ou venda.
+
+## 📊 Apresentação
+atributos (colunas) e os relacionamentos entre essas entidades.
+![Apresentação](imagens/myinvest-video.mp4)
+<small>Vídeo de Apresentação</small>
 
 ## ✅ Funcionalidades Principais
 
@@ -114,7 +118,7 @@ git clone https://gitlab.com/marcosmoraisjr/myinvest.net.git
 ```
 cd myinvest.net
 ```
-4. Execute o comando para acionar o Docker-compose:
+4. Com o Docker ativo, execute o comando abaixo para acionar o Docker-compose:
 ```
 docker-compose up --build
 ```
@@ -138,7 +142,7 @@ http://localhost:8080/swagger/index.html
 
 ## 🏆 Equipe de Desenvolvimento:
   
-  * Marcos Morais (Autor) <br />
+  * Marcos Morais <br />
     <mmstec@gmail.com>
   * Gabriel Rodriguez <br />
     <contatogabrielcruzrodrigues@gmail.com>
