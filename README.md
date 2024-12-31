@@ -9,7 +9,7 @@ O principal objetivo do **MyInvest** é ajudar investidores a tomar decisões in
 
 ## 📊 Apresentação
 atributos (colunas) e os relacionamentos entre essas entidades.
-![Apresentação](imagens/myinvest-video.mp4)
+![Vídeo de Apresentação](imagens/myinvest-video.mp4)
 <small>Vídeo de Apresentação</small>
 
 ## ✅ Funcionalidades Principais
