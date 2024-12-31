@@ -29,7 +29,8 @@ namespace MyInvestAPI.ViewModels
                 Port = Port,
                 SenderEmail = SenderEmail,
                 PasswordSenderEmail = PasswordSenderEmail,
-                Active = true
+                Active = true,
+                Operation = false
             };
         }
     }

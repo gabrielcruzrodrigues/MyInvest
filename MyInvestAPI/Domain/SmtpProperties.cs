@@ -38,5 +38,8 @@ namespace MyInvestAPI.Domain
 
         [Required]
         public required bool Active { get; set; }
+
+        [Required]
+        public required bool Operation { get; set; }
     }
 }
