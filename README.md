@@ -8,7 +8,6 @@
 O principal objetivo do **MyInvest** é ajudar investidores a tomar decisões informadas sobre a compra de ações e FIIs, com base no cálculo do preço-teto segundo o modelo de Décio Bazin. A aplicação oferece uma interface intuitiva para que os usuários possam visualizar e gerenciar suas carteiras de ativos, recebendo sugestões de compra ou venda.
 
 ## 📊 Apresentação
-atributos (colunas) e os relacionamentos entre essas entidades.
 ![Vídeo de Apresentação](imagens/myinvest-video.mp4)
 <small>Vídeo de Apresentação</small>
 
@@ -29,6 +28,7 @@ O sistema é composto por dois principais componentes:
 ## 📊 Diagrama do Sistema
 
 Abaixo está o diagrama do sistema **MyInvest**, que ilustra a arquitetura e os principais componentes da aplicação e o diagrama de entidade e relacionamento. Este diagrama mostra a estrutura lógica de um banco de dados, incluindo as entidades (tabelas), os atributos (colunas) e os relacionamentos entre essas entidades.
+
 ![Diagrama do Sistema](imagens/diagrama.png)
 <small>Imagem: Diagrama do Sistema</small>
 
